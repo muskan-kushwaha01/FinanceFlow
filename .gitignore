@@ -1,0 +1,17 @@
+# ASP.NET
+bin/
+obj/
+.vs/
+
+# Angular
+node_modules/
+dist/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Environment
+.env
