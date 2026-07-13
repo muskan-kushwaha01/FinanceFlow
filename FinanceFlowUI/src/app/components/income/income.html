@@ -1,0 +1,25 @@
+<h2>Income</h2>
+
+<table border="1">
+
+    <tr>
+        <th>Source</th>
+        <th>Category Id</th>
+        <th>Amount</th>
+        <th>Payment Method</th>
+        <th>Date</th>
+    </tr>
+
+    @for (income of incomes; track income.incomeId) {
+
+    <tr>
+        <td>{{ income.source }}</td>
+        <td>{{ income.categoryId }}</td>
+        <td>₹{{ income.amount }}</td>
+        <td>{{ income.paymentMethod }}</td>
+        <td>{{ income.transactionDate }}</td>
+    </tr>
+
+    }
+
+</table>

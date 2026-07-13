@@ -8,25 +8,16 @@
 
         <ul>
 
-            <li class="active">
-                Dashboard
-            </li>
-
-            <li>Income</li>
-
-            <li>Expenses</li>
-
-            <li>Budget</li>
-
-            <li>Savings Goals</li>
-
-            <li>Subscriptions</li>
-
-            <li>Reports</li>
-
-            <li>Profile</li>
-
-            <li>Logout</li>
+           <li routerLink="/dashboard" class="active">Dashboard</li>
+<li routerLink="/income">Income</li>
+<li routerLink="/expenses">Expenses</li>
+<li routerLink="/categories">Categories</li>
+<li>Budget</li>
+<li>Savings Goals</li>
+<li>Subscriptions</li>
+<li>Reports</li>
+<li routerLink="/profile">Profile</li>
+<li>Logout</li>
 
         </ul>
 
@@ -57,32 +48,28 @@
 
                 <h3>Total Balance</h3>
 
-                <h2>₹45,250</h2>
-
+<h2>₹{{ summary?.balance }}</h2>
             </div>
 
             <div class="card income">
 
                 <h3>Total Income</h3>
 
-                <h2>₹75,000</h2>
-
+<h2>₹{{ summary?.totalIncome }}</h2>
             </div>
 
             <div class="card expense">
 
                 <h3>Total Expenses</h3>
 
-                <h2>₹29,750</h2>
-
+<h2>₹{{ summary?.totalExpense }}</h2>
             </div>
 
             <div class="card savings">
 
                 <h3>Total Savings</h3>
 
-                <h2>₹18,500</h2>
-
+<h2>Coming Soon</h2>
             </div>
 
         </div>
@@ -93,11 +80,7 @@
 
             <h2>Monthly Expense Overview</h2>
 
-            <div class="chart-placeholder">
-
-                Chart will be added here
-
-            </div>
+            <canvas id="expenseChart"></canvas>
 
         </div>
 
@@ -109,39 +92,18 @@
 
             <table>
 
-                <tr>
-
-                    <th>Date</th>
-                    <th>Category</th>
-                    <th>Amount</th>
-
-                </tr>
-
-                <tr>
-
-                    <td>08 Jul</td>
-                    <td>Groceries</td>
-                    <td>₹1,250</td>
-
-                </tr>
-
-                <tr>
-
-                    <td>07 Jul</td>
-                    <td>Netflix</td>
-                    <td>₹649</td>
-
-                </tr>
-
-                <tr>
-
-                    <td>05 Jul</td>
-                    <td>Salary</td>
-                    <td>₹35,000</td>
-
-                </tr>
-
-            </table>
+    <tr>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Amount</th>
+    </tr>
+@for (transaction of recentTransactions; track transaction.transactionDate) {
+<tr>
+<td>{{ transaction.transactionDate | date:'dd MMM yyyy' }}</td>    <td>{{ transaction.title }}</td>
+    <td>₹{{ transaction.amount }}</td>
+</tr>
+}
+</table>
 
         </div>
 

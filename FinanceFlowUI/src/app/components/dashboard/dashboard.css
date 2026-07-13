@@ -155,15 +155,8 @@ body{
     margin-bottom:20px;
 }
 
-.chart-placeholder{
-    height:280px;
-    border:2px dashed #CBD5E1;
-    border-radius:12px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color:#64748B;
-    font-size:18px;
+.chart-box canvas{
+    max-height:320px;
 }
 
 /* ===========================

@@ -1,0 +1,37 @@
+<h2>Expenses</h2>
+
+<table border="1">
+
+<tr>
+
+<th>Merchant</th>
+
+<th>Category Id</th>
+
+<th>Amount</th>
+
+<th>Payment</th>
+
+<th>Date</th>
+
+</tr>
+
+@for(expense of expenses; track expense.expenseId){
+
+<tr>
+
+<td>{{expense.merchant}}</td>
+
+<td>{{expense.categoryId}}</td>
+
+<td>{{expense.amount}}</td>
+
+<td>{{expense.paymentMethod}}</td>
+
+<td>{{expense.transactionDate}}</td>
+
+</tr>
+
+}
+
+</table>
