@@ -16,4 +16,8 @@ public partial class Category
     public string? ColorCode { get; set; }
 
     public bool? IsActive { get; set; }
+
+    public virtual ICollection<Expense> Expenses { get; set; } = new List<Expense>();
+
+    public virtual ICollection<Income> Incomes { get; set; } = new List<Income>();
 }
