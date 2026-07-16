@@ -1,25 +1,553 @@
-<h2>Income</h2>
+<div class="income-page">
 
-<table border="1">
+    <!-- ================= HEADER ================= -->
 
-    <tr>
-        <th>Source</th>
-        <th>Category Id</th>
-        <th>Amount</th>
-        <th>Payment Method</th>
-        <th>Date</th>
-    </tr>
+    <div class="navbar">
 
-    @for (income of incomes; track income.incomeId) {
+        <div class="nav-left">
 
-    <tr>
-        <td>{{ income.source }}</td>
-        <td>{{ income.categoryId }}</td>
-        <td>₹{{ income.amount }}</td>
-        <td>{{ income.paymentMethod }}</td>
-        <td>{{ income.transactionDate }}</td>
-    </tr>
+            <h2>Income Management</h2>
 
-    }
+            <p>Monitor and manage your income efficiently.</p>
 
-</table>
+        </div>
+
+        <div class="nav-right">
+
+            <button class="add-btn" (click)="showModal=true">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Income
+
+            </button>
+
+            <div class="profile">
+
+                <i class="fa-solid fa-user-circle"></i>
+
+                <span>Welcome, Mansi</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= SUMMARY CARDS ================= -->
+
+    <div class="cards">
+
+        <!-- Card 1 -->
+
+        <div class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-wallet"></i>
+
+            </div>
+
+            <div>
+
+                <p>Total Income</p>
+
+                <h2>₹95,500</h2>
+
+                <small>Current Month</small>
+
+            </div>
+
+        </div>
+
+        <!-- Card 2 -->
+
+        <div class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+            </div>
+
+            <div>
+
+                <p>Average Income</p>
+
+                <h2>₹15,928</h2>
+
+                <small>Per Entry</small>
+
+            </div>
+
+        </div>
+
+        <!-- Card 3 -->
+
+        <div class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-trophy"></i>
+
+            </div>
+
+            <div>
+
+                <p>Highest Income</p>
+
+                <h2>₹50,000</h2>
+
+                <small>Salary</small>
+
+            </div>
+
+        </div>
+
+        <!-- Card 4 -->
+
+        <div class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+            </div>
+
+            <div>
+
+                <p>This Month</p>
+
+                <h2>7</h2>
+
+                <small>Income Entries</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= CHART SECTION ================= -->
+
+    <div class="chart-section">
+
+        <!-- Line Chart -->
+
+        <div class="line-chart">
+
+            <div class="section-header">
+
+                <h3>Income Trend</h3>
+
+                <select (change)="changeFilter($event)">
+
+                    <option value="6">
+
+                        Last 6 Months
+
+                    </option>
+
+                    <option value="12">
+
+                        Last 12 Months
+
+                    </option>
+
+                    <option value="all">
+
+                        View All
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <canvas id="incomeChart"></canvas>
+
+        </div>
+
+        <!-- Pie Chart -->
+
+        <div class="pie-chart">
+
+            <div class="section-header">
+
+                <h3>Income Sources</h3>
+
+                <span class="badge">
+
+                    3 Sources
+
+                </span>
+
+            </div>
+
+            <canvas id="incomePieChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <!-- ================= BOTTOM SECTION ================= -->
+
+    <div class="bottom-section">
+
+        <!-- Recent Income -->
+
+        <div class="recent-income">
+
+            <div class="section-header">
+
+                <h3>Recent Income</h3>
+
+                <div class="actions">
+
+                    <input
+                        type="text"
+                        placeholder="Search income..."
+                        class="search-box">
+
+                    <button class="view-btn">
+
+                        View All
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Source</th>
+
+                        <th>Category</th>
+
+                        <th>Payment</th>
+
+                        <th>Amount</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>01 Jul</td>
+
+                        <td>Salary</td>
+
+                        <td>Salary</td>
+
+                        <td>Bank Transfer</td>
+
+                        <td class="amount">₹50,000</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>03 Jul</td>
+
+                        <td>Freelancing</td>
+
+                        <td>Freelancing</td>
+
+                        <td>UPI</td>
+
+                        <td class="amount">₹12,000</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>05 Jul</td>
+
+                        <td>Business</td>
+
+                        <td>Business</td>
+
+                        <td>Bank Transfer</td>
+
+                        <td class="amount">₹18,000</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>08 Jul</td>
+
+                        <td>Freelancing</td>
+
+                        <td>Freelancing</td>
+
+                        <td>Google Pay</td>
+
+                        <td class="amount">₹8,500</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>10 Jul</td>
+
+                        <td>Bonus</td>
+
+                        <td>Salary</td>
+
+                        <td>Bank Transfer</td>
+
+                        <td class="amount">₹3,000</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>12 Jul</td>
+
+                        <td>Business</td>
+
+                        <td>Business</td>
+
+                        <td>Cash</td>
+
+                        <td class="amount">₹15,000</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>14 Jul</td>
+
+                        <td>Freelancing</td>
+
+                        <td>Freelancing</td>
+
+                        <td>PhonePe</td>
+
+                        <td class="amount">₹7,000</td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+                <!-- ================= RIGHT SIDE ================= -->
+
+        <div class="income-summary">
+
+            <h3>Income Insights</h3>
+
+            <div class="info-box">
+
+                <div class="info-top">
+
+                    <i class="fa-solid fa-medal"></i>
+
+                    <h4>Top Income Source</h4>
+
+                </div>
+
+                <h2>Salary</h2>
+
+                <small>₹50,000 earned this month</small>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-top">
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+                    <h4>Income Sources</h4>
+
+                </div>
+
+                <h2>3 Active</h2>
+
+                <small>Salary • Business • Freelancing</small>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-top">
+
+                    <i class="fa-solid fa-bullseye"></i>
+
+                    <h4>Monthly Goal</h4>
+
+                </div>
+
+                <h2>95%</h2>
+
+                <div class="progress">
+
+                    <div class="progress-fill"></div>
+
+                </div>
+
+                <small>₹95,500 / ₹1,00,000</small>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-top">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    <h4>Upcoming Income</h4>
+
+                </div>
+
+                <h2>01 Aug</h2>
+
+                <small>Salary Expected</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= ADD INCOME MODAL ================= -->
+
+   <div class="modal-overlay" *ngIf="showModal">
+
+        <div class="income-modal">
+
+            <div class="modal-header">
+
+          <button class="add-btn" (click)="openModal()">
+    <i class="fa-solid fa-plus"></i>
+    Add Income
+</button>
+
+         <button class="close-btn"
+            (click)="closeModal()">
+
+        ✕
+
+    </button>
+
+            </div>
+
+            <form>
+
+                <div class="form-group">
+
+                    <label>Income Source</label>
+<input
+    type="text"
+    [value]="newIncome.source"
+    (input)="newIncome.source = $any($event.target).value"
+    name="source">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Category</label>
+
+                   <select
+                    [value]="newIncome.category"
+                    (change)="newIncome.category = $any($event.target).value"
+                    name="category">
+
+                        <option>Salary</option>
+
+                        <option>Freelancing</option>
+
+                        <option>Business</option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Amount</label>
+
+                    <input
+type="number"
+[value]="newIncome.amount"
+(input)="newIncome.amount = +$any($event.target).value"
+name="amount">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Payment Method</label>
+
+                    <select (change)="newIncome.payment = $any($event.target).value" name="payment">
+                        <option value="Cash">Cash</option>
+                        <option value="UPI">UPI</option>
+                        <option value="PhonePe">PhonePe</option>
+                        <option value="Google Pay">Google Pay</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Description</label>
+                <textarea name="description" [value]="newIncome.description || ''" (input)="newIncome.description = $any($event.target).value"></textarea>
+
+                </div>
+
+                <!-- Date is automatic -->
+
+                <div class="form-note">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    <span>
+                        Transaction date will be added automatically.
+                    </span>
+
+                </div>
+
+                <div class="modal-buttons">
+
+                 <button
+                    type="button"
+                    class="cancel-btn"
+                    (click)="closeModal()">
+
+                    Cancel
+
+                </button>
+
+                    <button
+                        type="button"
+                        class="save-btn"
+                        (click)="saveIncome()">
+
+                            Save Income
+
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
