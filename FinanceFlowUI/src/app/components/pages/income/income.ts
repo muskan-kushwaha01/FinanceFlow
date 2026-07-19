@@ -24,7 +24,9 @@ export class IncomeComponent implements OnInit, AfterViewInit {
   // ===========================
   // Dashboard Cards
   // ===========================
+isEditMode = false;
 
+editingIncomeId: number | null = null;
 totalIncome = 0;
 averageIncome = 0;
 highestIncome = 0;
@@ -431,11 +433,60 @@ loadPieChart() {
   // CLOSE MODAL
   // =====================================
 
-  closeModal(){
+  closeModal() {
 
-    this.showModal=false;
+  this.showModal = false;
 
-  }
+  this.isEditMode = false;
+
+  this.editingIncomeId = null;
+
+  this.newIncome = {
+
+    userId: Number(localStorage.getItem("userId")),
+
+    categoryId: 0,
+
+    amount: 0,
+
+    source: '',
+
+    paymentMethod: '',
+
+    transactionDate: '',
+
+    description: ''
+
+  };
+
+}
+  editIncome(income: any) {
+
+  this.isEditMode = true;
+
+  this.editingIncomeId = income.incomeId;
+
+  this.newIncome = {
+
+    userId: income.userId,
+
+    categoryId: income.categoryId,
+
+    amount: income.amount,
+
+    source: income.source,
+
+    paymentMethod: income.paymentMethod,
+
+    transactionDate: income.transactionDate,
+
+    description: income.description
+
+  };
+
+  this.showModal = true;
+
+}
 
   // =====================================
   // ADD INCOME
@@ -466,71 +517,100 @@ loadPieChart() {
   description: ''
 
 };
+deleteIncome(id: number) {
 
- saveIncome() {
+  const confirmDelete = confirm(
+    "Are you sure you want to delete this income?"
+  );
 
-  if (!this.newIncome.source.trim()) {
-    alert("Enter Income Source");
+  if (!confirmDelete) {
     return;
   }
 
-  if (this.newIncome.categoryId === 0) {
-    alert("Please select a category");
-    return;
-  }
+  this.incomeService.deleteIncome(id).subscribe({
 
-  if (this.newIncome.amount <= 0) {
-    alert("Enter Valid Amount");
-    return;
-  }
+    next: () => {
 
-  this.newIncome.userId = Number(localStorage.getItem("userId"));
+      alert("Income deleted successfully.");
 
-  // Send only the date (YYYY-MM-DD)
-  this.newIncome.transactionDate = new Date().toISOString().split('T')[0];
+      this.loadIncomes();
 
-  console.log("Sending:", this.newIncome);
-
-  this.incomeService.addIncome(this.newIncome).subscribe({
-
-   next: () => {
-
-  this.closeModal();
-
-  this.newIncome = {
-
-    userId: Number(localStorage.getItem("userId")),
-
-    categoryId: 0,
-
-    amount: 0,
-
-    source: '',
-
-    paymentMethod: '',
-
-    transactionDate: '',
-
-    description: ''
-
-  };
-
-  this.loadIncomes();
-
-  alert("Income Added Successfully");
-
-},
-
+    },
 
     error: (err) => {
 
-      console.log("Status:", err.status);
-      console.log("Backend Error:", err.error);
-      console.log("Validation:", err.error.errors);
+      console.error(err);
+
+      alert("Failed to delete income.");
 
     }
 
   });
+
+}
+
+ saveIncome() {
+
+  // Your existing validations
+  // Example:
+  // if (this.newIncome.source.trim() === '') return;
+  // if (this.newIncome.categoryId === 0) return;
+if (!this.isEditMode) {
+  this.newIncome.transactionDate =
+    new Date().toISOString().split('T')[0];
+}
+
+  if (this.isEditMode) {
+
+    this.incomeService.updateIncome(
+      this.editingIncomeId!,
+      this.newIncome
+    ).subscribe({
+
+      next: () => {
+
+        alert("Income Updated Successfully");
+
+        this.closeModal();
+
+        this.loadIncomes();
+
+        this.isEditMode = false;
+        this.editingIncomeId = null;
+
+      },
+
+      error: (err) => {
+
+        console.error(err);
+
+      }
+
+    });
+
+  } else {
+
+    this.incomeService.addIncome(this.newIncome).subscribe({
+
+      next: () => {
+
+        alert("Income Added Successfully");
+
+        this.closeModal();
+
+        this.loadIncomes();
+
+      },
+
+      error: (err) => {
+
+        console.error(err);
+
+      }
+
+    });
+
+  }
 
 }
 }

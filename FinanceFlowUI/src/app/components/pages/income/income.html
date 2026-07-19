@@ -18,7 +18,7 @@
 
                 <i class="fa-solid fa-plus"></i>
 
-                Add Income
+                 Add Income
 
             </button>
 
@@ -222,25 +222,25 @@
 
                 <thead>
 
-                    <tr>
+    <tr>
 
-                        <th>Date</th>
+        <th>Date</th>
 
-                        <th>Source</th>
+        <th>Source</th>
 
-                        <th>Category</th>
+        <th>Category</th>
 
-                        <th>Payment</th>
+        <th>Payment</th>
 
-                        <th>Amount</th>
+        <th>Amount</th>
 
-                    </tr>
+        <th>Actions</th>
 
-                </thead>
+    </tr>
+
+</thead>
 
                 <tbody>
-
-                   
 
 <tr *ngFor="let income of incomes">
 
@@ -255,6 +255,28 @@
     <td class="amount">
         ₹{{ income.amount }}
     </td>
+
+   <td class="action-buttons">
+
+    <button
+        class="edit-btn"
+        (click)="editIncome(income)"
+        title="Edit Income">
+
+✏️
+
+    </button>
+
+    <button
+        class="delete-btn"
+        (click)="deleteIncome(income.incomeId)"
+        title="Delete Income">
+
+        🗑️
+
+    </button>
+
+</td>
 
 </tr>
 
@@ -351,7 +373,7 @@
 
            <div class="modal-header">
 
-    <h2>Add New Income</h2>
+        {{ isEditMode ? 'Edit Income' : 'Add New Income' }}
 
     <button
         class="close-btn"
@@ -464,7 +486,7 @@
         (click)="saveIncome()">
 
         <i class="fa-solid fa-floppy-disk"></i>
-        Save Income
+       {{ isEditMode ? 'Update Income' : 'Save Income' }}
 
     </button>
 
