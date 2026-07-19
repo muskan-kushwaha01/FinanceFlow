@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 namespace FinanceTrackerApp.Controllers
 {
@@ -25,11 +26,25 @@ namespace FinanceTrackerApp.Controllers
         public IActionResult Login([FromBody] LoginModel login)
         {
             var user = _context.Users.AsNoTracking()
-                .FirstOrDefault(u =>
-                    u.Email == login.Email &&
-                    u.PasswordHash == login.PasswordHash);
+                .FirstOrDefault(u => u.Email == login.Email);
 
             if (user == null)
+            {
+                return Unauthorized(new
+                {
+                    message = "Invalid Email or Password"
+                });
+            }
+
+            var passwordHasher = new PasswordHasher<User>();
+
+            var result = passwordHasher.VerifyHashedPassword(
+                user,
+                user.PasswordHash,
+                login.Password
+            );
+
+            if (result == PasswordVerificationResult.Failed)
             {
                 return Unauthorized(new
                 {
@@ -49,7 +64,6 @@ namespace FinanceTrackerApp.Controllers
                 email = user.Email
             });
         }
-
         private string GenerateJwtToken(User user)
         {
             var claims = new[]

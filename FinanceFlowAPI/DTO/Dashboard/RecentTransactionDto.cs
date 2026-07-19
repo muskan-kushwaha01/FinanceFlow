@@ -4,10 +4,12 @@
     {
         public string Type { get; set; } = string.Empty;
 
-        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+
+        public string Category { get; set; } = string.Empty;
 
         public decimal Amount { get; set; }
 
-        public DateOnly TransactionDate { get; set; }
+        public DateOnly Date { get; set; }
     }
 }
