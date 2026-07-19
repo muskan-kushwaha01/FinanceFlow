@@ -14,22 +14,27 @@ public class IncomesController : ControllerBase
     }
 
     // GET: api/Income
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<IncomeDto>>> GetIncome()
-    {
+    public async Task<ActionResult<IEnumerable<IncomeDto>>> GetIncomesByUser([FromQuery] int userId) {       
         var incomes = await _context.Incomes
-            .Select(i => new IncomeDto
-            {
-                IncomeId = i.IncomeId,
-                UserId = i.UserId,
-                CategoryId = i.CategoryId,
-                Amount = i.Amount,
-                Source = i.Source,
-                PaymentMethod = i.PaymentMethod,
-                TransactionDate = i.TransactionDate,
-                Description = i.Description
-            })
-            .ToListAsync();
+    .Where(i => i.UserId == userId)
+    .Include(i => i.Category)
+    .Select(i => new IncomeDto
+    {
+        IncomeId = i.IncomeId,
+        UserId = i.UserId,
+
+        CategoryId = i.CategoryId,
+        Category = i.Category.CategoryName,
+
+        Amount = i.Amount,
+        Source = i.Source,
+        PaymentMethod = i.PaymentMethod,
+        TransactionDate = i.TransactionDate,
+        Description = i.Description
+    })
+    .ToListAsync();
 
         return Ok(incomes);
     }
@@ -122,9 +127,9 @@ public class IncomesController : ControllerBase
             Description = income.Description
         };
 
-        return CreatedAtAction(nameof(GetIncome),
-            new { incomeid = income.IncomeId },
-            incomeDto);
+        return CreatedAtAction(nameof(GetIncomesByUser),
+    new { userId = income.UserId },
+    incomeDto);
     }
 
     // DELETE: api/Income/5

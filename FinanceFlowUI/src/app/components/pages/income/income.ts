@@ -1,7 +1,9 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { Chart } from 'chart.js/auto';
+import { Component, OnInit, AfterViewInit } from '@angular/core';import { Chart } from 'chart.js/auto';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';import { FormsModule } from '@angular/forms';
+import { IncomeService } from '../../../services/income.service';
+import { CategoryService } from '../../../services/category.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-income',
@@ -10,8 +12,9 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './income.html',
   styleUrls: ['./income.css']
 })
-export class IncomeComponent implements AfterViewInit {
 
+
+export class IncomeComponent implements OnInit, AfterViewInit {
   // ===========================
   // Modal
   // ===========================
@@ -22,11 +25,18 @@ export class IncomeComponent implements AfterViewInit {
   // Dashboard Cards
   // ===========================
 
-  totalIncome: number = 95500;
-  averageIncome: number = 15928;
-  highestIncome: number = 50000;
-  totalEntries: number = 7;
+totalIncome = 0;
+averageIncome = 0;
+highestIncome = 0;
+totalEntries = 0;
+topIncomeCategory = '';
+topIncomeAmount = 0;
 
+activeCategories = 0;
+categoryList = '';
+
+latestIncomeDate = '';
+latestIncomeSource = '';
   // ===========================
   // Search
   // ===========================
@@ -37,236 +47,321 @@ export class IncomeComponent implements AfterViewInit {
   // Income List
   // ===========================
 
-  incomes = [
+incomes: any[] = [];
+categories: any[] = [];
 
-    {
-      date: '01 Jul 2026',
-      source: 'Salary',
-      category: 'Salary',
-      payment: 'Bank Transfer',
-      amount: 50000
-    },
+constructor(
+  private incomeService: IncomeService,
+  private categoryService: CategoryService,
+  private cdr: ChangeDetectorRef
+) {}
+incomeChart: any;
+incomePieChart: any;
+ngOnInit(): void {
+this.loadCategories();
 
-    {
-      date: '03 Jul 2026',
-      source: 'Freelancing',
-      category: 'Freelancing',
-      payment: 'UPI',
-      amount: 12000
-    },
+this.loadIncomes();}
 
-    {
-      date: '05 Jul 2026',
-      source: 'Business',
-      category: 'Business',
-      payment: 'Bank Transfer',
-      amount: 18000
-    },
+loadIncomes() {
 
-    {
-      date: '08 Jul 2026',
-      source: 'Freelancing',
-      category: 'Freelancing',
-      payment: 'Google Pay',
-      amount: 8500
-    },
+  console.log("Loading incomes...");
 
-    {
-      date: '10 Jul 2026',
-      source: 'Bonus',
-      category: 'Salary',
-      payment: 'Bank Transfer',
-      amount: 3000
-    },
+  this.incomeService.getIncomes().subscribe({
 
-    {
-      date: '12 Jul 2026',
-      source: 'Business',
-      category: 'Business',
-      payment: 'Cash',
-      amount: 15000
-    },
+    next: (data: any[]) => {
 
-    {
-      date: '14 Jul 2026',
-      source: 'Freelancing',
-      category: 'Freelancing',
-      payment: 'PhonePe',
-      amount: 7000
+  this.incomes = data;
+
+this.calculateSummary();
+this.loadIncomeInsights();
+
+this.cdr.detectChanges();   // Update the template first
+
+setTimeout(() => {
+  this.loadIncomeChart();
+  this.loadPieChart();
+});
+
+},
+    error: (err) => {
+      console.error(err);
     }
 
-  ];
+  });
 
-  constructor() { }
+}
+loadCategories() {
 
-  ngAfterViewInit(): void {
+  this.categoryService.getIncomeCategories().subscribe({
 
-    this.loadIncomeChart();
+    next: (data) => {
 
-    this.loadPieChart();
+      this.categories = data;
+
+    },
+
+    error: (err) => {
+
+      console.error(err);
+
+    }
+
+  });
+
+}
+  
+calculateSummary() {
+
+  console.log("calculateSummary called");
+
+  console.log("Incomes:", this.incomes);
+
+  this.totalEntries = this.incomes.length;
+
+  this.totalIncome = this.incomes.reduce(
+    (sum, income) => sum + income.amount,
+    0
+  );
+
+  this.averageIncome = this.totalEntries
+    ? Math.round(this.totalIncome / this.totalEntries)
+    : 0;
+
+  this.highestIncome = this.totalEntries
+    ? Math.max(...this.incomes.map(x => x.amount))
+    : 0;
+
+  console.log("Total Income:", this.totalIncome);
+  console.log("Entries:", this.totalEntries);
+  console.log("Average:", this.averageIncome);
+  console.log("Highest:", this.highestIncome);
+}
+loadIncomeInsights() {
+
+  const categoryTotals: any = {};
+
+  this.incomes.forEach(income => {
+
+    if (!categoryTotals[income.category]) {
+      categoryTotals[income.category] = 0;
+    }
+
+    categoryTotals[income.category] += income.amount;
+
+  });
+
+  const categories = Object.keys(categoryTotals);
+
+  this.activeCategories = categories.length;
+
+  this.categoryList = categories.join(' • ');
+
+  if (categories.length > 0) {
+
+    this.topIncomeCategory = categories.reduce((a, b) =>
+      categoryTotals[a] > categoryTotals[b] ? a : b
+    );
+
+    this.topIncomeAmount = categoryTotals[this.topIncomeCategory];
+
+  }
+
+  if (this.incomes.length > 0) {
+
+    const latest = [...this.incomes].sort((a, b) =>
+      new Date(b.transactionDate).getTime() -
+      new Date(a.transactionDate).getTime()
+    )[0];
+
+    this.latestIncomeDate = new Date(latest.transactionDate)
+      .toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short'
+      });
+
+    this.latestIncomeSource = latest.source;
+
+  }
+
+}
+
+ngAfterViewInit(): void {
+
+
 
   }
 
   // ===========================
   // Income Trend Chart
   // ===========================
+loadIncomeChart() {
 
-  loadIncomeChart() {
+  if (this.incomeChart) {
+    this.incomeChart.destroy();
+  }
 
-    new Chart('incomeChart', {
+  const monthTotals: any = {};
 
-      type: 'line',
+  this.incomes.forEach(income => {
 
-      data: {
+    const month = new Date(income.transactionDate)
+      .toLocaleString('default', { month: 'short' });
 
-        labels: [
+    if (!monthTotals[month]) {
+      monthTotals[month] = 0;
+    }
 
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul'
+    monthTotals[month] += income.amount;
 
-        ],
+  });
 
-        datasets: [
+  const monthOrder = [
+    'Jan','Feb','Mar','Apr','May','Jun',
+    'Jul','Aug','Sep','Oct','Nov','Dec'
+  ];
 
-          {
+  const labels = monthOrder.filter(month => monthTotals[month]);
 
-            label: 'Income',
+  const values = labels.map(month => monthTotals[month]);
 
-            data: [
+  this.incomeChart = new Chart('incomeChart', {
 
-              45000,
-              52000,
-              38000,
-              60000,
-              48000,
-              71000,
-              95500
+    type: 'line',
 
-            ],
+    data: {
 
-            borderColor: '#4CAF50',
+      labels: labels,
 
-            backgroundColor: 'rgba(167,196,160,0.3)',
+      datasets: [
 
-            borderWidth: 3,
+        {
 
-            fill: true,
+          label: 'Income',
 
-            tension: .4,
+          data: values,
 
-            pointRadius: 5,
+          borderColor: '#4CAF50',
 
-            pointBackgroundColor: '#2E7D32'
+          backgroundColor: 'rgba(167,196,160,0.3)',
 
-          }
+          borderWidth: 3,
 
-        ]
+          fill: true,
 
-      },
+          tension: 0.4,
 
-      options: {
+          pointRadius: 5,
 
-        responsive: true,
+          pointBackgroundColor: '#2E7D32'
 
-        maintainAspectRatio: false,
+        }
 
-        plugins: {
+      ]
 
-          legend: {
+    },
 
-            display: true
+    options: {
 
-          }
+      responsive: true,
+
+      maintainAspectRatio: false,
+
+      plugins: {
+
+        legend: {
+
+          display: true
 
         }
 
       }
 
-    });
+    }
 
-  }
+  });
+
+}
     // =====================================
   // PIE CHART
   // =====================================
+loadPieChart() {
 
-  loadPieChart() {
+  if (this.incomePieChart) {
+    this.incomePieChart.destroy();
+  }
 
-    new Chart('incomePieChart', {
+  const categoryTotals: any = {};
 
-      type: 'pie',
+  this.incomes.forEach(income => {
 
-      data: {
+    if (!categoryTotals[income.category]) {
+      categoryTotals[income.category] = 0;
+    }
 
-        labels: [
+    categoryTotals[income.category] += income.amount;
 
-          'Salary',
+  });
 
-          'Freelancing',
+  const labels = Object.keys(categoryTotals);
 
-          'Business'
+  const values = Object.values(categoryTotals);
 
-        ],
+  this.incomePieChart = new Chart('incomePieChart', {
 
-        datasets: [
+    type: 'pie',
 
-          {
+    data: {
 
-            data: [
+      labels: labels,
 
-              53000,
+      datasets: [
 
-              27500,
+        {
 
-              15000
+          data: values,
 
-            ],
+          backgroundColor: [
 
-            backgroundColor: [
+            '#4CAF50',
+            '#81C784',
+            '#AED581',
+            '#66BB6A',
+            '#A5D6A7',
+            '#388E3C'
 
-              '#4CAF50',
+          ],
 
-              '#81C784',
+          borderWidth: 2,
 
-              '#AED581'
+          hoverOffset: 15
 
-            ],
+        }
 
-            borderWidth:2,
+      ]
 
-            hoverOffset:15
+    },
 
-          }
+    options: {
 
-        ]
+      responsive: true,
 
-      },
+      maintainAspectRatio: false,
 
-      options:{
+      plugins: {
 
-        responsive:true,
+        legend: {
 
-        maintainAspectRatio:false,
-
-        plugins:{
-
-          legend:{
-
-            position:'bottom'
-
-          }
+          position: 'bottom'
 
         }
 
       }
 
-    });
+    }
 
-  }
+  });
+
+}
 
   // =====================================
   // FILTER
@@ -346,94 +441,96 @@ export class IncomeComponent implements AfterViewInit {
   // ADD INCOME
   // =====================================
 
-  newIncome={
+ newIncome: {
+  userId: number;
+  categoryId: number | null;
+  amount: number;
+  source: string;
+  paymentMethod: string;
+  transactionDate: string;
+  description: string;
+} = {
 
-    source:'',
+  userId: Number(localStorage.getItem("userId")),
 
-    category:'',
+  categoryId: null,
 
-    amount:0,
+  amount: 0,
 
-    payment:'',
+  source: '',
 
-    description:''
+  paymentMethod: '',
+
+  transactionDate: '',
+
+  description: ''
+
+};
+
+ saveIncome() {
+
+  if (!this.newIncome.source.trim()) {
+    alert("Enter Income Source");
+    return;
+  }
+
+  if (this.newIncome.categoryId === 0) {
+    alert("Please select a category");
+    return;
+  }
+
+  if (this.newIncome.amount <= 0) {
+    alert("Enter Valid Amount");
+    return;
+  }
+
+  this.newIncome.userId = Number(localStorage.getItem("userId"));
+
+  // Send only the date (YYYY-MM-DD)
+  this.newIncome.transactionDate = new Date().toISOString().split('T')[0];
+
+  console.log("Sending:", this.newIncome);
+
+  this.incomeService.addIncome(this.newIncome).subscribe({
+
+   next: () => {
+
+  this.closeModal();
+
+  this.newIncome = {
+
+    userId: Number(localStorage.getItem("userId")),
+
+    categoryId: 0,
+
+    amount: 0,
+
+    source: '',
+
+    paymentMethod: '',
+
+    transactionDate: '',
+
+    description: ''
 
   };
 
-  saveIncome(){
+  this.loadIncomes();
 
-    if(this.newIncome.source==""){
+  alert("Income Added Successfully");
 
-      alert("Enter Income Source");
+},
 
-      return;
 
-    }
+    error: (err) => {
 
-    if(this.newIncome.amount<=0){
-
-      alert("Enter Valid Amount");
-
-      return;
+      console.log("Status:", err.status);
+      console.log("Backend Error:", err.error);
+      console.log("Validation:", err.error.errors);
 
     }
 
-    const today=new Date();
+  });
 
-    const date=today.toLocaleDateString('en-GB',{
-
-      day:'2-digit',
-
-      month:'short',
-
-      year:'numeric'
-
-    });
-
-    this.incomes.unshift({
-
-      date:date,
-
-      source:this.newIncome.source,
-
-      category:this.newIncome.category,
-
-      payment:this.newIncome.payment,
-
-      amount:this.newIncome.amount
-
-    });
-
-    this.totalIncome+=this.newIncome.amount;
-
-    this.totalEntries=this.incomes.length;
-
-    this.averageIncome=Math.round(this.totalIncome/this.totalEntries);
-
-    if(this.newIncome.amount>this.highestIncome){
-
-      this.highestIncome=this.newIncome.amount;
-
-    }
-
-    this.newIncome={
-
-      source:'',
-
-      category:'',
-
-      amount:0,
-
-      payment:'',
-
-      description:''
-
-    };
-
-    this.showModal=false;
-
-    alert("Income Added Successfully");
-
-  }
-
+}
 }

@@ -8,14 +8,16 @@ import { Income } from '../models/income';
 })
 export class IncomeService {
 
-  private apiUrl = 'https://localhost:7144/api/Income';
-
+private apiUrl = 'https://localhost:7144/api/Incomes';
   constructor(private http: HttpClient) { }
 
   getIncomes(): Observable<Income[]> {
-    return this.http.get<Income[]>(this.apiUrl);
-  }
 
+  const userId = localStorage.getItem("userId");
+
+  return this.http.get<Income[]>(`${this.apiUrl}?userId=${userId}`);
+
+}
   getIncome(id: number): Observable<Income> {
     return this.http.get<Income>(`${this.apiUrl}/${id}`);
   }

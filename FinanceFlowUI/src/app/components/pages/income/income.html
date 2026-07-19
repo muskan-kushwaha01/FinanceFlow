@@ -52,7 +52,7 @@
 
                 <p>Total Income</p>
 
-                <h2>₹95,500</h2>
+<h2>₹{{ totalIncome }}</h2>
 
                 <small>Current Month</small>
 
@@ -74,7 +74,7 @@
 
                 <p>Average Income</p>
 
-                <h2>₹15,928</h2>
+<h2>₹{{ averageIncome }}</h2>
 
                 <small>Per Entry</small>
 
@@ -96,7 +96,7 @@
 
                 <p>Highest Income</p>
 
-                <h2>₹50,000</h2>
+<h2>₹{{ highestIncome }}</h2>
 
                 <small>Salary</small>
 
@@ -118,8 +118,7 @@
 
                 <p>This Month</p>
 
-                <h2>7</h2>
-
+<h2>{{ totalEntries }}</h2>
                 <small>Income Entries</small>
 
             </div>
@@ -241,105 +240,27 @@
 
                 <tbody>
 
-                    <tr>
+                   
 
-                        <td>01 Jul</td>
+<tr *ngFor="let income of incomes">
 
-                        <td>Salary</td>
+    <td>{{ income.transactionDate | date:'dd MMM' }}</td>
 
-                        <td>Salary</td>
+    <td>{{ income.source }}</td>
 
-                        <td>Bank Transfer</td>
+    <td>{{ income.category }}</td>
 
-                        <td class="amount">₹50,000</td>
+    <td>{{ income.paymentMethod }}</td>
 
-                    </tr>
+    <td class="amount">
+        ₹{{ income.amount }}
+    </td>
 
-                    <tr>
+</tr>
 
-                        <td>03 Jul</td>
+</tbody>
 
-                        <td>Freelancing</td>
-
-                        <td>Freelancing</td>
-
-                        <td>UPI</td>
-
-                        <td class="amount">₹12,000</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>05 Jul</td>
-
-                        <td>Business</td>
-
-                        <td>Business</td>
-
-                        <td>Bank Transfer</td>
-
-                        <td class="amount">₹18,000</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>08 Jul</td>
-
-                        <td>Freelancing</td>
-
-                        <td>Freelancing</td>
-
-                        <td>Google Pay</td>
-
-                        <td class="amount">₹8,500</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>10 Jul</td>
-
-                        <td>Bonus</td>
-
-                        <td>Salary</td>
-
-                        <td>Bank Transfer</td>
-
-                        <td class="amount">₹3,000</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>12 Jul</td>
-
-                        <td>Business</td>
-
-                        <td>Business</td>
-
-                        <td>Cash</td>
-
-                        <td class="amount">₹15,000</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>14 Jul</td>
-
-                        <td>Freelancing</td>
-
-                        <td>Freelancing</td>
-
-                        <td>PhonePe</td>
-
-                        <td class="amount">₹7,000</td>
-
-                    </tr>
-
-                </tbody>
+            
 
             </table>
 
@@ -360,10 +281,9 @@
 
                 </div>
 
-                <h2>Salary</h2>
+                <h2>{{ topIncomeCategory }}</h2>
 
-                <small>₹50,000 earned this month</small>
-
+<small>₹{{ topIncomeAmount }} earned</small>
             </div>
 
             <div class="info-box">
@@ -376,10 +296,9 @@
 
                 </div>
 
-                <h2>3 Active</h2>
+              <h2>{{ activeCategories }} Active</h2>
 
-                <small>Salary • Business • Freelancing</small>
-
+<small>{{ categoryList }}</small>
             </div>
 
             <div class="info-box">
@@ -414,9 +333,9 @@
 
                 </div>
 
-                <h2>01 Aug</h2>
+               <h2>{{ latestIncomeDate }}</h2>
 
-                <small>Salary Expected</small>
+<small>{{ latestIncomeSource }}</small>
 
             </div>
 
@@ -430,121 +349,129 @@
 
         <div class="income-modal">
 
-            <div class="modal-header">
+           <div class="modal-header">
 
-          <button class="add-btn" (click)="openModal()">
-    <i class="fa-solid fa-plus"></i>
-    Add Income
-</button>
+    <h2>Add New Income</h2>
 
-         <button class="close-btn"
-            (click)="closeModal()">
+    <button
+        class="close-btn"
+        (click)="closeModal()">
 
         ✕
 
     </button>
 
-            </div>
+</div>
 
             <form>
 
-                <div class="form-group">
+                <div class="form-row">
 
-                    <label>Income Source</label>
-<input
-    type="text"
-    [value]="newIncome.source"
-    (input)="newIncome.source = $any($event.target).value"
-    name="source">
+    <div class="form-group">
+        <label>Income Source</label>
+        <input
+            type="text"
+            [value]="newIncome.source"
+            (input)="newIncome.source = $any($event.target).value">
+    </div>
 
-                </div>
+    <div class="form-group">
+        <label>Category</label>
 
-                <div class="form-group">
+        <select
+            [(ngModel)]="newIncome.categoryId"
+            name="categoryId">
 
-                    <label>Category</label>
+            <option [ngValue]="0">Select Category</option>
 
-                   <select
-                    [value]="newIncome.category"
-                    (change)="newIncome.category = $any($event.target).value"
-                    name="category">
+            <option
+                *ngFor="let category of categories"
+                [ngValue]="category.categoryId">
 
-                        <option>Salary</option>
+                {{category.categoryName}}
 
-                        <option>Freelancing</option>
+            </option>
 
-                        <option>Business</option>
+        </select>
+    </div>
 
-                    </select>
+</div>
 
-                </div>
+<div class="form-row">
 
-                <div class="form-group">
+    <div class="form-group">
+        <label>Amount</label>
 
-                    <label>Amount</label>
+        <input
+            type="number"
+            [value]="newIncome.amount"
+            (input)="newIncome.amount = +$any($event.target).value">
+    </div>
 
-                    <input
-type="number"
-[value]="newIncome.amount"
-(input)="newIncome.amount = +$any($event.target).value"
-name="amount">
+    <div class="form-group">
+        <label>Payment Method</label>
 
-                </div>
+        <select
+            [(ngModel)]="newIncome.paymentMethod"
+            name="paymentMethod">
 
-                <div class="form-group">
+            <option value="Cash">Cash</option>
+            <option value="UPI">UPI</option>
+            <option value="PhonePe">PhonePe</option>
+            <option value="Google Pay">Google Pay</option>
+            <option value="Bank Transfer">Bank Transfer</option>
 
-                    <label>Payment Method</label>
+        </select>
+    </div>
 
-                    <select (change)="newIncome.payment = $any($event.target).value" name="payment">
-                        <option value="Cash">Cash</option>
-                        <option value="UPI">UPI</option>
-                        <option value="PhonePe">PhonePe</option>
-                        <option value="Google Pay">Google Pay</option>
-                        <option value="Bank Transfer">Bank Transfer</option>
-                    </select>
+</div>
 
-                </div>
+<div class="form-group">
 
-                <div class="form-group">
+    <label>Description</label>
 
-                    <label>Description</label>
-                <textarea name="description" [value]="newIncome.description || ''" (input)="newIncome.description = $any($event.target).value"></textarea>
+    <textarea
+        rows="4"
+        [value]="newIncome.description"
+        (input)="newIncome.description=$any($event.target).value">
+    </textarea>
 
-                </div>
+</div>
+<div class="form-note">
 
-                <!-- Date is automatic -->
+    <i class="fa-solid fa-circle-info"></i>
 
-                <div class="form-note">
+    <span>
+        Transaction date will be added automatically.
+    </span>
 
-                    <i class="fa-solid fa-circle-info"></i>
+</div>
 
-                    <span>
-                        Transaction date will be added automatically.
-                    </span>
+<div class="modal-buttons">
 
-                </div>
+    <button
+        type="button"
+        class="cancel-btn"
+        (click)="closeModal()">
 
-                <div class="modal-buttons">
+        Cancel
 
-                 <button
-                    type="button"
-                    class="cancel-btn"
-                    (click)="closeModal()">
+    </button>
 
-                    Cancel
+    <button
+        type="button"
+        class="save-btn"
+        (click)="saveIncome()">
 
-                </button>
+        <i class="fa-solid fa-floppy-disk"></i>
+        Save Income
 
-                    <button
-                        type="button"
-                        class="save-btn"
-                        (click)="saveIncome()">
+    </button>
 
-                            Save Income
+</div>
 
-                    </button>
-                </div>
-
-            </form>
+</form>
+           
 
         </div>
 

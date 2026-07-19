@@ -1,21 +1,21 @@
-﻿namespace FinanceTrackerApp.DTOs.Income
+﻿public class IncomeDto
 {
-    public class IncomeDto
-    {
-        public int IncomeId { get; set; }
+    public int IncomeId { get; set; }
 
-        public int UserId { get; set; }
+    public int UserId { get; set; }
 
-        public int CategoryId { get; set; }
+    public int CategoryId { get; set; }
 
-        public decimal Amount { get; set; }
 
-        public string Source { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty;
 
-        public string PaymentMethod { get; set; } = string.Empty;
+    public decimal Amount { get; set; }
 
-        public DateOnly TransactionDate { get; set; }
+    public string Source { get; set; } = string.Empty;
 
-        public string? Description { get; set; }
-    }
+    public string PaymentMethod { get; set; } = string.Empty;
+
+    public DateOnly TransactionDate { get; set; }
+
+    public string? Description { get; set; }
 }
