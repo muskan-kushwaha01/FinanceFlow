@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+html,
+body{
+    font-family:'Inter',sans-serif;
+}
+
+h1,h2,h3,h4,h5{
+    font-family:'Poppins',sans-serif;
+}
+
+:root{
+
+--primary:#2563EB;
+--primary-light:#EEF4FF;
+
+--background:#F8FAFC;
+
+--card:#FFFFFF;
+
+--text:#0F172A;
+
+--muted:#64748B;
+
+--border:#E5E7EB;
+
+--success:#22C55E;
+
+--danger:#EF4444;
+
+--warning:#F59E0B;
+
+--shadow:0 10px 30px rgba(15,23,42,.06);
+
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+button,
+a,
+.card,
+.summary-card{
+    transition:.25s ease;
+}

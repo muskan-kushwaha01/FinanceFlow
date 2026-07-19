@@ -1,6 +1,7 @@
 export interface RecentTransaction {
-  type: string;
-  title: string;
+  date: Date;
+  description: string;
+  category: string;
   amount: number;
-  transactionDate: string;
+  type: string;
 }

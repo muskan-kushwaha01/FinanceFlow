@@ -1,0 +1,175 @@
+<div class="expense-page">
+
+  <!-- ================= NAVBAR ================= -->
+
+  <div class="navbar">
+
+    <div class="nav-left">
+      <h2>Expense Management</h2>
+      <p>Track and manage your expenses efficiently.</p>
+    </div>
+
+    <div class="nav-right">
+
+      <button class="add-btn" (click)="openModal()">
+        <i class="fa-solid fa-plus"></i>
+        Add Expense
+      </button>
+
+      <div class="profile">
+        <i class="fa-solid fa-user-circle"></i>
+        <span>Welcome, Mansi</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= SUMMARY CARDS ================= -->
+
+  <div class="cards">
+
+    <div class="card">
+
+      <div class="icon-box expense-icon">
+        <i class="fa-solid fa-wallet"></i>
+      </div>
+
+      <div class="card-content">
+        <p>Total Expenses</p>
+        <h2>₹28,500</h2>
+        <small>This Month</small>
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="icon-box yearly-icon">
+        <i class="fa-solid fa-chart-column"></i>
+      </div>
+
+      <div class="card-content">
+        <p>Total Expenses</p>
+        <h2>₹1,35,200</h2>
+        <small>This Year</small>
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="icon-box average-icon">
+        <i class="fa-solid fa-chart-line"></i>
+      </div>
+
+      <div class="card-content">
+        <p>Average Expense</p>
+        <h2>₹4,750</h2>
+        <small>Per Month</small>
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="icon-box category-icon">
+        <i class="fa-solid fa-layer-group"></i>
+      </div>
+
+      <div class="card-content">
+        <p>Categories</p>
+        <h2>7</h2>
+        <small>Active</small>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= CHARTS ================= -->
+
+  <div class="chart-grid">
+
+    <!-- Expense Trend -->
+
+    <div class="chart-card">
+
+      <div class="chart-header">
+
+        <h3>Expense Trend</h3>
+
+        <select (change)="changeFilter($event)">
+          <option value="6">Last 6 Months</option>
+          <option value="12">Last 12 Months</option>
+          <option value="all">View All</option>
+        </select>
+
+      </div>
+
+      <div class="chart-container">
+        <canvas id="expenseChart"></canvas>
+      </div>
+
+    </div>
+
+    <!-- Expense Category -->
+
+    <div class="chart-card">
+
+      <div class="chart-header">
+        <h3>Expense by Category</h3>
+      </div>
+
+      <div class="pie-wrapper">
+
+        <div class="pie-chart">
+          <canvas id="expensePieChart"></canvas>
+        </div>
+
+        <div class="legend-list">
+
+          <div class="legend-item">
+            <span class="dot food"></span>
+            Food & Dining
+            <strong>₹9,675</strong>
+          </div>
+
+          <div class="legend-item">
+            <span class="dot transport"></span>
+            Transportation
+            <strong>₹4,845</strong>
+          </div>
+
+          <div class="legend-item">
+            <span class="dot shopping"></span>
+            Shopping
+            <strong>₹5,130</strong>
+          </div>
+
+          <div class="legend-item">
+            <span class="dot bills"></span>
+            Bills & Utilities
+            <strong>₹3,360</strong>
+          </div>
+
+          <div class="legend-item">
+            <span class="dot entertainment"></span>
+            Entertainment
+            <strong>₹2,280</strong>
+          </div>
+
+          <div class="legend-item">
+            <span class="dot other"></span>
+            Others
+            <strong>₹885</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  

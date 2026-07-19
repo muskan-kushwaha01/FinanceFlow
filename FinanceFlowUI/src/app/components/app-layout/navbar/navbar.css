@@ -1,0 +1,259 @@
+:host{
+    display:block;
+}
+
+/* ===========================================
+   Navbar
+=========================================== */
+
+.navbar{
+
+    height:78px;
+
+    background:#ffffff;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 32px;
+
+    border-bottom:1px solid #E5E7EB;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+}
+
+/* ===========================================
+   Left
+=========================================== */
+
+.navbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.page-title{
+
+    margin:0;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    color:#0F172A;
+
+    letter-spacing:-0.5px;
+
+}
+
+/* ===========================================
+   Right
+=========================================== */
+
+.navbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+/* ===========================================
+   Notification
+=========================================== */
+
+.icon-btn{
+
+    width:46px;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#F8FAFC;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    position:relative;
+
+}
+
+.icon-btn:hover{
+
+    background:#EEF4FF;
+
+    transform:translateY(-2px);
+
+}
+
+.icon-btn mat-icon{
+
+    color:#475569;
+
+}
+
+.notification-dot{
+
+    position:absolute;
+
+    top:12px;
+
+    right:12px;
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:#EF4444;
+
+    border:2px solid white;
+
+}
+
+/* ===========================================
+   Profile
+=========================================== */
+
+.profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:8px 14px;
+
+    border-radius:16px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.profile:hover{
+
+    background:#F8FAFC;
+
+}
+
+.avatar{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:50%;
+
+    background:linear-gradient(135deg,#2563EB,#3B82F6);
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:16px;
+
+    font-weight:700;
+
+}
+
+.user-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.user-info h4{
+
+    margin:0;
+
+    font-size:15px;
+
+    color:#0F172A;
+
+    font-weight:600;
+
+}
+
+.user-info span{
+
+    margin-top:2px;
+
+    font-size:12px;
+
+    color:#94A3B8;
+
+}
+
+.arrow{
+
+    color:#94A3B8;
+
+    transition:.25s;
+
+}
+
+.profile:hover .arrow{
+
+    transform:rotate(180deg);
+
+}
+
+/* ===========================================
+   Responsive
+=========================================== */
+
+@media(max-width:768px){
+
+    .navbar{
+
+        padding:0 18px;
+
+        height:70px;
+
+    }
+
+    .page-title{
+
+        font-size:22px;
+
+    }
+
+    .user-info{
+
+        display:none;
+
+    }
+
+}

@@ -1,0 +1,84 @@
+:host{
+    display:block;
+    height:100vh;
+}
+
+.layout-container{
+
+    height:100vh;
+
+    background:#F8FAFC;
+
+}
+
+/* Sidebar */
+
+.sidebar{
+
+    width:270px;
+
+    background:#FFFFFF;
+
+    border-right:1px solid #E5E7EB;
+
+    overflow:hidden;
+
+}
+
+/* Main Content */
+
+mat-sidenav-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#F8FAFC;
+
+}
+
+/* Page */
+
+.page-content{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:30px;
+
+    background:#F8FAFC;
+
+}
+
+/* Scrollbar */
+
+.page-content::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.page-content::-webkit-scrollbar-thumb{
+
+    background:#CBD5E1;
+
+    border-radius:20px;
+
+}
+
+.page-content::-webkit-scrollbar-track{
+
+    background:transparent;
+
+}
+
+@media(max-width:992px){
+
+.page-content{
+
+padding:20px;
+
+}
+
+}

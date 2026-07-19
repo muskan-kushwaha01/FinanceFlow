@@ -1,0 +1,786 @@
+/* ---------------- Dashboard ---------------- */
+
+.dashboard-container{
+    padding:32px;
+    background:#f6f8fc;
+    min-height:100vh;
+    font-family:Inter, sans-serif;
+}
+
+/* ---------------- Header ---------------- */
+
+.dashboard-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:38px;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+
+}
+
+.header-left{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.page-title{
+
+    font-size:13px;
+
+    color:#2563EB;
+
+    font-weight:600;
+
+    letter-spacing:.6px;
+
+    text-transform:uppercase;
+
+    margin-bottom:8px;
+
+}
+
+.dashboard-header h1{
+
+    margin:0;
+
+    font-size:34px;
+
+    font-weight:700;
+
+    color:#0F172A;
+
+    font-family:'Poppins',sans-serif;
+
+}
+
+.dashboard-header p{
+
+    margin-top:8px;
+
+    color:#64748B;
+
+    font-size:15px;
+
+    max-width:550px;
+
+    line-height:1.6;
+
+}
+
+
+.header-right{
+    display:flex;
+    gap:15px;
+    align-items:center;
+}
+
+.filter-btn,
+.primary-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 18px;
+    border-radius:12px;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+    transition:.3s;
+}
+
+.filter-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:#fff;
+
+    border:1px solid #E5E7EB;
+
+    padding:12px 18px;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    color:#334155;
+
+    transition:.3s;
+
+    box-shadow:0 8px 20px rgba(15,23,42,.05);
+
+}
+
+.filter-btn:hover{
+
+    transform:translateY(-2px);
+
+    border-color:#2563EB;
+
+}
+
+.primary-btn{
+    background:#4f46e5;
+    color:white;
+    box-shadow:0 8px 22px rgba(79,70,229,.25);
+}
+
+.primary-btn:hover{
+    background:#4338ca;
+    transform:translateY(-2px);
+}
+
+/* ---------------- Summary ---------------- */
+
+.summary-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:24px;
+
+    margin-bottom:32px;
+
+}
+
+/* Card */
+
+.summary-card{
+    background:#fff;
+    border-radius:20px;
+    padding:18px 20px;
+    min-height:170px;   /* was 220px */
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    border:1px solid #EEF2F7;
+    box-shadow:0 8px 24px rgba(15,23,42,.05);
+    transition:.3s;
+}
+
+.summary-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 45px rgba(15,23,42,.12);
+
+}
+
+/* Top */
+
+.card-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+}
+
+/* Icon */
+
+.icon-wrapper{
+
+    width:56px;
+
+    height:56px;
+
+    border-radius:16px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.icon-wrapper mat-icon{
+
+    color:#fff;
+
+   font-size:26px;
+
+    width:26px;
+
+    height:26px;
+
+}
+
+/* Gradients */
+
+.balance .icon-wrapper{
+
+    background:linear-gradient(135deg,#2563EB,#4F46E5);
+
+}
+
+.income .icon-wrapper{
+
+    background:linear-gradient(135deg,#10B981,#22C55E);
+
+}
+
+.expense .icon-wrapper{
+
+    background:linear-gradient(135deg,#EF4444,#F97316);
+
+}
+
+.savings .icon-wrapper{
+
+    background:linear-gradient(135deg,#7C3AED,#A855F7);
+
+}
+
+/* Trend */
+
+.trend{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.trend mat-icon{
+
+    width:16px;
+
+    height:16px;
+
+    font-size:16px;
+
+}
+
+.trend.positive{
+
+    background:#ECFDF5;
+
+    color:#16A34A;
+
+}
+
+.trend.negative{
+
+    background:#FEF2F2;
+
+    color:#DC2626;
+
+}
+
+/* Bottom */
+
+.card-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.card-label{
+
+    color:#64748B;
+
+    font-size:14px;
+
+    margin-bottom:10px;
+
+}
+
+.balance{
+
+    border-top:5px solid #2563EB;
+
+}
+
+.income{
+
+    border-top:5px solid #22C55E;
+
+}
+
+.expense{
+
+    border-top:5px solid #EF4444;
+
+}
+
+.savings{
+
+    border-top:5px solid #7C3AED;
+
+}
+
+.card-content h2{
+    margin:6px 0;
+    font-size:24px;
+    font-weight:700;
+    color:#0F172A;
+}
+
+.card-content small{
+
+    margin-top:8px;
+
+    color:#94A3B8;
+
+    font-size:13px;
+
+}
+
+/* ---------------- Charts ---------------- */
+/* ---------------- Charts ---------------- */
+
+.charts-grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:24px;
+
+    margin-bottom:24px;
+
+}
+
+.chart-card{
+
+    background:#ffffff;
+
+    border-radius:20px;
+
+    padding:24px;
+
+    border:1px solid #EEF2F7;
+
+    box-shadow:0 8px 24px rgba(15,23,42,.05);
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+}
+
+.card-header h3{
+    font-size:20px;
+    font-weight:700;
+    color:#111827;
+    margin:0;
+}
+
+.card-header p{
+    color:#6B7280;
+    font-size:14px;
+    margin-top:4px;
+}
+
+.view-btn{
+    border:none;
+    background:#EEF2FF;
+    color:#2563EB;
+    padding:8px 16px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.view-btn:hover{
+    background:#2563EB;
+    color:#fff;
+}
+
+.chart-btn{
+
+    background:#EEF2FF;
+
+    color:#4F46E5;
+
+    border:none;
+
+    padding:8px 16px;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.chart-btn:hover{
+
+    background:#4F46E5;
+
+    color:white;
+
+}
+
+.chart-container{
+
+    position:relative;
+
+    height:320px;
+
+}
+
+.chart-container.doughnut{
+
+    height:320px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+/* ---------------- Bottom Grid ---------------- */
+
+.bottom-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:24px;
+    margin-top:24px;
+}
+
+/* ---------------- Transactions ---------------- */
+
+.transaction-card{
+    background:#fff;
+    border-radius:20px;
+    padding:24px;
+    border:1px solid #EEF2F7;
+    box-shadow:0 8px 24px rgba(15,23,42,.05);
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+.transaction-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px;
+    border-radius:16px;
+    transition:.25s;
+}
+
+.transaction-item:hover{
+    background:#F8FAFC;
+}
+.transaction-left{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+th{
+    text-align:left;
+    padding:15px;
+    color:#64748b;
+    font-size:14px;
+}
+
+td{
+    padding:18px 15px;
+    border-top:1px solid #edf2f7;
+}
+
+tbody tr:hover{
+    background:#f8fafc;
+}
+
+.category-chip{
+    background:#eef2ff;
+    color:#4f46e5;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.amount-income{
+    color:#16a34a;
+    font-weight:700;
+}
+
+.amount-expense{
+    color:#dc2626;
+    font-weight:700;
+}
+.transaction-icon{
+    width:52px;
+    height:52px;
+    border-radius:16px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.transaction-icon mat-icon{
+    font-size:24px;
+    color:white;
+}
+.transaction-details h4{
+    margin:0;
+    font-size:16px;
+    font-weight:600;
+    color:#111827;
+}
+.transaction-right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+}
+
+.transaction-amount{
+    font-size:18px;
+    font-weight:700;
+}
+.transaction-details p{
+    margin-top:4px;
+    color:#6B7280;
+    font-size:13px;
+}
+.income-icon{
+    background:#10B981;
+}
+
+.expense-icon{
+    background:#EF4444;
+}
+
+.badge-income,
+.badge-expense{
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.badge-income{
+    background:#DCFCE7;
+    color:#15803D;
+}
+
+.badge-expense{
+    background:#FEE2E2;
+    color:#B91C1C;
+}
+
+.empty{
+    text-align:center;
+    padding:40px;
+    color:#94a3b8;
+}
+
+/* ---------------- Sidebar Widgets ---------------- */
+
+.side-panel{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.right-widgets{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.widget-card{
+    background:white;
+    border-radius:20px;
+    padding:22px;
+    border:1px solid #EEF2F7;
+    box-shadow:0 8px 24px rgba(15,23,42,.05);
+}
+
+.widget-card h3{
+    margin-top:0;
+    margin-bottom:20px;
+    color:#1e293b;
+}
+
+/* ---------------- Progress ---------------- */
+
+.progress-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+    font-weight:600;
+}
+
+.progress-value{
+    display:block;
+    margin:18px 0;
+    font-size:32px;
+    font-weight:700;
+    color:#2563EB;
+}
+
+.progress-bar{
+    width:100%;
+    height:10px;
+    background:#E5E7EB;
+    border-radius:999px;
+    overflow:hidden;
+    margin-bottom:12px;
+}
+
+.progress-fill{
+    width:72%;
+    height:100%;
+    background:#2563EB;
+    border-radius:999px;
+}
+
+/* ---------------- Action Buttons ---------------- */
+.action-btn{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-top:12px;
+    border:none;
+    background:#F8FAFC;
+    padding:14px;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:600;
+    transition:.25s;
+}
+
+.action-btn:hover{
+    background:#2563EB;
+    color:white;
+}
+
+.action-btn mat-icon{
+    font-size:22px;
+}
+/* ---------------- AI ---------------- */
+
+.ai-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.ai-header mat-icon{
+    color:#7C3AED;
+}
+
+.tip{
+    margin-top:18px;
+    background:#F5F3FF;
+    border-radius:12px;
+    padding:14px;
+    font-size:14px;
+    color:#5B21B6;
+}
+
+.ai-card p{
+    color:#64748b;
+    line-height:1.7;
+}
+
+.empty-state{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:50px 20px;
+    text-align:center;
+}
+
+.empty-state mat-icon{
+    font-size:48px;
+    color:#CBD5E1;
+    margin-bottom:12px;
+}
+/* ---------------- Responsive ---------------- */
+
+@media(max-width:1200px){
+
+.summary-grid{
+grid-template-columns:repeat(2,1fr);
+margin-bottom:20px;
+}
+
+.bottom-grid,
+.charts-grid{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:768px){
+
+.dashboard-container{
+    padding:28px 32px;
+    max-width:1400px;
+    margin:0 auto;
+}
+
+.summary-grid{
+grid-template-columns:1fr;
+}
+
+.dashboard-header{
+flex-direction:column;
+align-items:flex-start;
+margin-bottom:55px;
+}
+
+.header-right{
+width:100%;
+justify-content:space-between;
+}
+
+table{
+display:block;
+overflow-x:auto;
+}
+
+}

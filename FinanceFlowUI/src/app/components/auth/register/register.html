@@ -1,0 +1,198 @@
+<div class="login-container">
+
+    <!-- Left Section -->
+
+    <div class="left-panel">
+
+        <div class="content">
+
+            <h1>FinanceFlow</h1>
+
+            <h2>
+                Begin Your Financial Journey.<br>
+                Build Better Money Habits.
+            </h2>
+
+            <p>
+                Create your FinanceFlow account and take control of your income,
+                expenses, budgets, subscriptions and savings goals.
+            </p>
+
+            <div class="features">
+
+                <div class="feature">
+                    <div class="icon">✔</div>
+                    <span>Expense Tracking</span>
+                </div>
+
+                <div class="feature">
+                    <div class="icon">✔</div>
+                    <span>Budget Planning</span>
+                </div>
+
+                <div class="feature">
+                    <div class="icon">✔</div>
+                    <span>Subscription Management</span>
+                </div>
+
+                <div class="feature">
+                    <div class="icon">✔</div>
+                    <span>Smart Financial Insights</span>
+                </div>
+
+            </div>
+
+            <div class="illustration">
+
+                <div class="straight">
+
+                    <div class="wallet-card">
+
+                        <div class="wallet-top"></div>
+
+                        <div class="wallet-body">
+
+                            <div class="coin"></div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="graph">
+
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                        <div class="bar bar4"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Right Panel -->
+
+    <div class="right-panel">
+
+        <div class="login-card">
+
+            <div class="logo-circle">
+                ₹
+            </div>
+
+            <h2>Create Account 🚀</h2>
+
+            <p class="subtitle">
+                Start your financial journey today.
+            </p>
+
+            <!-- Full Name -->
+
+            <div class="input-group">
+
+                <label>Full Name</label>
+
+                <input
+                    type="text"
+                    placeholder="Enter your full name"
+                    [(ngModel)]="fullName">
+
+            </div>
+
+            <!-- Email -->
+
+            <div class="input-group">
+
+                <label>Email Address</label>
+
+                <input
+                    type="email"
+                    placeholder="Enter your email"
+                    [(ngModel)]="email">
+
+            </div>
+
+            <!-- Password -->
+
+            <div class="input-group">
+
+                <label>Password</label>
+
+                <div class="password-box">
+
+                    <input
+                        [type]="showPassword ? 'text' : 'password'"
+                        placeholder="Create a password"
+                        [(ngModel)]="password">
+
+                    <button
+                        type="button"
+                        class="eye-btn"
+                        (click)="togglePassword()">
+
+                        {{ showPassword ? 'Hide' : 'Show' }}
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Confirm Password -->
+
+            <div class="input-group">
+
+                <label>Confirm Password</label>
+
+                <div class="password-box">
+
+                    <input
+                        [type]="showConfirmPassword ? 'text' : 'password'"
+                        placeholder="Confirm password"
+                        [(ngModel)]="confirmPassword">
+
+                    <button
+                        type="button"
+                        class="eye-btn"
+                        (click)="toggleConfirmPassword()">
+
+                        {{ showConfirmPassword ? 'Hide' : 'Show' }}
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <button
+                class="login-btn"
+                (click)="register()">
+
+                Create Account
+
+            </button>
+
+            <div class="divider">
+
+                <span>OR</span>
+
+            </div>
+
+            <p class="register">
+
+                Already have an account?
+
+                <a routerLink="/login">Login</a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

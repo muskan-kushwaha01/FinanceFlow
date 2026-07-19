@@ -1,0 +1,289 @@
+:host{
+    display:block;
+    height:100%;
+}
+
+/* ===============================
+   Sidebar Content
+================================= */
+
+.sidebar-content{
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    box-sizing:border-box;
+
+    padding:24px;
+
+    background:#fff;
+}
+
+/* ===============================
+   Logo
+================================= */
+
+.logo-section{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    margin-bottom:32px;
+
+}
+
+.logo-icon{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:14px;
+
+    background:#EEF4FF;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+.logo-icon mat-icon{
+
+    color:#2563EB;
+
+    font-size:28px;
+
+    width:28px;
+
+    height:28px;
+
+}
+
+.logo-text h2{
+
+    margin:0;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#1E293B;
+
+}
+
+.logo-text p{
+
+    margin-top:4px;
+
+    color:#94A3B8;
+
+    font-size:13px;
+
+}
+
+/* ===============================
+   Navigation
+================================= */
+
+.menu{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+    overflow:hidden;
+
+}
+
+.menu a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    text-decoration:none;
+
+    color:#475569;
+
+    padding:12px 16px;
+
+    border-radius:14px;
+
+    font-weight:500;
+
+    transition:.25s;
+
+}
+
+.menu a mat-icon{
+
+    font-size:22px;
+
+    width:22px;
+
+    height:22px;
+
+}
+
+.menu a:hover{
+
+    background:#EEF4FF;
+
+    color:#2563EB;
+
+}
+
+.menu a.active{
+
+    background:linear-gradient(135deg,#2563EB,#3B82F6);
+
+    color:white;
+
+    box-shadow:0 10px 25px rgba(37,99,235,.25);
+
+}
+
+.menu a.active mat-icon{
+
+    color:white;
+
+}
+
+/* ===============================
+   Bottom Section
+================================= */
+
+.bottom-section{
+
+    border-top:1px solid #E5E7EB;
+
+    margin-top:20px;
+
+    padding-top:20px;
+
+}
+
+.profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:18px;
+
+}
+
+.avatar{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:50%;
+
+    background:linear-gradient(135deg,#2563EB,#3B82F6);
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:700;
+
+    font-size:16px;
+
+}
+
+.profile h4{
+
+    margin:0;
+
+    color:#1E293B;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+.profile p{
+
+    margin-top:4px;
+
+    color:#94A3B8;
+
+    font-size:13px;
+
+}
+
+.logout-btn{
+
+    width:100%;
+
+    border:none;
+
+    background:#F8FAFC;
+
+    color:#EF4444;
+
+    padding:13px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.logout-btn:hover{
+
+    background:#FEE2E2;
+
+}
+
+/* ===============================
+   Responsive
+================================= */
+
+@media(max-width:992px){
+
+    .sidebar-content{
+
+        padding:20px;
+
+    }
+
+}
