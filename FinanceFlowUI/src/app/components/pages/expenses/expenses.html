@@ -1,175 +1,528 @@
 <div class="expense-page">
 
-  <!-- ================= NAVBAR ================= -->
+    <!-- ================= HEADER ================= -->
 
-  <div class="navbar">
+    <div class="navbar">
 
-    <div class="nav-left">
-      <h2>Expense Management</h2>
-      <p>Track and manage your expenses efficiently.</p>
-    </div>
+        <div class="nav-left">
 
-    <div class="nav-right">
+            <h2>Expense Management</h2>
 
-      <button class="add-btn" (click)="openModal()">
-        <i class="fa-solid fa-plus"></i>
-        Add Expense
-      </button>
+            <p>Track, manage and analyze your expenses efficiently.</p>
 
-      <div class="profile">
-        <i class="fa-solid fa-user-circle"></i>
-        <span>Welcome, Mansi</span>
-      </div>
+        </div>
 
-    </div>
+        <div class="nav-right">
 
-  </div>
+<button class="add-btn" (click)="openModal()">
+                <i class="fa-solid fa-plus"></i>
 
-  <!-- ================= SUMMARY CARDS ================= -->
+                Add Expense
 
-  <div class="cards">
+            </button>
 
-    <div class="card">
 
-      <div class="icon-box expense-icon">
-        <i class="fa-solid fa-wallet"></i>
-      </div>
 
-      <div class="card-content">
-        <p>Total Expenses</p>
-        <h2>₹28,500</h2>
-        <small>This Month</small>
-      </div>
+        </div>
 
     </div>
 
-    <div class="card">
+    <!-- ================= SUMMARY CARDS ================= -->
 
-      <div class="icon-box yearly-icon">
-        <i class="fa-solid fa-chart-column"></i>
-      </div>
+    <div class="cards">
 
-      <div class="card-content">
-        <p>Total Expenses</p>
-        <h2>₹1,35,200</h2>
-        <small>This Year</small>
-      </div>
+        <div class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-wallet"></i>
+
+            </div>
+
+            <div>
+
+                <p>Total Expense</p>
+
+                <h2>₹{{ totalExpense }}</h2>
+
+                <small>This Month</small>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+            </div>
+
+            <div>
+
+                <p>Average Expense</p>
+
+                <h2>₹{{ averageExpense }}</h2>
+
+                <small>Per Entry</small>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-arrow-trend-up"></i>
+
+            </div>
+
+            <div>
+
+                <p>Highest Expense</p>
+
+                <h2>₹2800</h2>
+
+                <small>Electricity</small>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="icon">
+
+                <i class="fa-solid fa-receipt"></i>
+
+            </div>
+
+            <div>
+
+                <p>Total Entries</p>
+
+                <h2>{{ expenses.length }}</h2>
+
+                <small>Transactions</small>
+
+            </div>
+
+        </div>
 
     </div>
 
-    <div class="card">
+    <!-- ================= CHART SECTION ================= -->
 
-      <div class="icon-box average-icon">
-        <i class="fa-solid fa-chart-line"></i>
-      </div>
+    <div class="chart-section">
 
-      <div class="card-content">
-        <p>Average Expense</p>
-        <h2>₹4,750</h2>
-        <small>Per Month</small>
-      </div>
+        <!-- Expense Trend -->
 
-    </div>
+        <div class="line-chart">
 
-    <div class="card">
+            <div class="section-header">
 
-      <div class="icon-box category-icon">
-        <i class="fa-solid fa-layer-group"></i>
-      </div>
+                <h3>Expense Trend</h3>
 
-      <div class="card-content">
-        <p>Categories</p>
-        <h2>7</h2>
-        <small>Active</small>
-      </div>
+                <select (change)="changeFilter($event)">
 
-    </div>
+                    <option value="6">
 
-  </div>
+                        Last 6 Months
 
-  <!-- ================= CHARTS ================= -->
+                    </option>
 
-  <div class="chart-grid">
+                    <option value="12">
 
-    <!-- Expense Trend -->
+                        Last 12 Months
 
-    <div class="chart-card">
+                    </option>
 
-      <div class="chart-header">
+                    <option value="all">
 
-        <h3>Expense Trend</h3>
+                        View All
 
-        <select (change)="changeFilter($event)">
-          <option value="6">Last 6 Months</option>
-          <option value="12">Last 12 Months</option>
-          <option value="all">View All</option>
-        </select>
+                    </option>
 
-      </div>
+                </select>
 
-      <div class="chart-container">
-        <canvas id="expenseChart"></canvas>
-      </div>
+            </div>
 
-    </div>
+            <canvas id="expenseChart"></canvas>
 
-    <!-- Expense Category -->
+        </div>
 
-    <div class="chart-card">
-
-      <div class="chart-header">
-        <h3>Expense by Category</h3>
-      </div>
-
-      <div class="pie-wrapper">
+        <!-- Expense Categories -->
 
         <div class="pie-chart">
-          <canvas id="expensePieChart"></canvas>
+
+            <div class="section-header">
+
+                <h3>Expense Categories</h3>
+
+                <span class="badge">
+
+                    {{ totalCategories }} Categories
+
+                </span>
+
+            </div>
+
+            <canvas id="expensePieChart"></canvas>
+
         </div>
 
-        <div class="legend-list">
+    </div>
 
-          <div class="legend-item">
-            <span class="dot food"></span>
-            Food & Dining
-            <strong>₹9,675</strong>
-          </div>
+    <!-- ================= BOTTOM SECTION ================= -->
 
-          <div class="legend-item">
-            <span class="dot transport"></span>
-            Transportation
-            <strong>₹4,845</strong>
-          </div>
+    <div class="bottom-section">
+      <!-- ================= RECENT EXPENSE ================= -->
 
-          <div class="legend-item">
-            <span class="dot shopping"></span>
-            Shopping
-            <strong>₹5,130</strong>
-          </div>
+<div class="recent-income">
 
-          <div class="legend-item">
-            <span class="dot bills"></span>
-            Bills & Utilities
-            <strong>₹3,360</strong>
-          </div>
+    <div class="section-header">
 
-          <div class="legend-item">
-            <span class="dot entertainment"></span>
-            Entertainment
-            <strong>₹2,280</strong>
-          </div>
+        <h3>Recent Expenses</h3>
 
-          <div class="legend-item">
-            <span class="dot other"></span>
-            Others
-            <strong>₹885</strong>
-          </div>
+        <div class="actions">
+
+            <input
+                type="text"
+                placeholder="Search expenses..."
+                class="search-box">
+
+            <button
+                class="view-btn"
+                (click)="viewAll()">
+
+                View All
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Date</th>
+
+                <th>Merchant</th>
+
+                <th>Category</th>
+
+                <th>Payment</th>
+
+                <th>Amount</th>
+
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr *ngFor="let expense of expenses; let i=index">
+
+                <td>
+
+{{ expense.transactionDate | date:'dd MMM yyyy' }}
+                </td>
+
+                <td>
+
+                    {{ expense.merchant }}
+
+                </td>
+
+                <td>
+
+                    <span class="category-chip">
+
+{{ getCategoryName(expense.categoryId) }}
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <span class="payment-chip">
+
+{{ expense.paymentMethod }}
+                    </span>
+
+                </td>
+
+                <td class="expense-amount">
+
+                    ₹{{ expense.amount }}
+
+                </td>
+
+                <td class="action-buttons">
+
+                    <button
+    class="edit-btn"
+    (click)="editExpense(expense)"
+    title="Edit Expense">
+
+    ✏️
+
+</button>
+
+                    <button
+                        class="delete-btn"
+(click)="deleteExpense(expense.expenseId)">
+                        🗑️
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<!-- ================= RIGHT PANEL ================= -->
+
+<div class="income-summary">
+
+    <h3>Expense Insights</h3>
+
+    <div class="info-box">
+
+        <div class="info-top">
+
+            <i class="fa-solid fa-fire"></i>
+
+            <h4>Top Category</h4>
+
+        </div>
+
+       <h2>{{ topExpenseCategory }}</h2>
+<small>₹{{ topExpenseAmount }} spent</small>
+
+    </div>
+
+    <div class="info-box">
+
+    <div class="info-top">
+
+        <i class="fa-solid fa-layer-group"></i>
+
+        <h4>Categories Used</h4>
+
+    </div>
+
+    <h2>{{ activeCategories }} Active</h2>
+
+    <small>{{ categoryList }}</small>
+
+</div>
+
+    <div class="info-box">
+
+        <div class="info-top">
+
+            <i class="fa-solid fa-bullseye"></i>
+
+            <h4>Monthly Budget</h4>
+
+        </div>
+
+        <h2>72%</h2>
+
+        <div class="progress">
+
+            <div
+                class="progress-fill"
+                style="width:72%">
+
+            </div>
+
+        </div>
+
+        <small>
+
+            ₹28,500 / ₹40,000
+
+        </small>
+
+    </div>
+
+ <div class="info-box">
+
+    <div class="info-top">
+
+        <i class="fa-solid fa-calendar-days"></i>
+
+        <h4>Latest Expense</h4>
+
+    </div>
+
+    <h2>{{ latestExpenseDate }}</h2>
+
+    <small>{{ latestExpenseMerchant }}</small>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= ADD / EDIT EXPENSE MODAL ================= -->
+
+<div class="modal-overlay" *ngIf="showModal">
+
+  <div class="expense-modal">
+
+    <div class="modal-header">
+
+      {{ isEditMode ? 'Edit Expense' : 'Add New Expense' }}
+
+      <button
+        class="close-btn"
+        (click)="closeModal()">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <form>
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>Merchant</label>
+
+          <input
+            type="text"
+            [(ngModel)]="newExpense.merchant"
+            name="merchant">
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Category</label>
+
+          <select
+            [(ngModel)]="newExpense.categoryId"
+            name="categoryId">
+
+            <option [ngValue]="0">Select Category</option>
+
+            <option
+              *ngFor="let category of categories"
+              [ngValue]="category.categoryId">
+
+              {{ category.categoryName }}
+
+            </option>
+
+          </select>
 
         </div>
 
       </div>
 
-    </div>
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>Amount</label>
+
+          <input
+            type="number"
+            [(ngModel)]="newExpense.amount"
+            name="amount">
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Payment Method</label>
+
+          <select
+            [(ngModel)]="newExpense.paymentMethod"
+            name="paymentMethod">
+
+            <option value="Cash">Cash</option>
+            <option value="UPI">UPI</option>
+            <option value="PhonePe">PhonePe</option>
+            <option value="Google Pay">Google Pay</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Description</label>
+
+        <textarea
+          rows="4"
+          [(ngModel)]="newExpense.description"
+          name="description">
+
+        </textarea>
+
+      </div>
+
+      <div class="form-note">
+
+        <i class="fa-solid fa-circle-info"></i>
+
+        <span>
+          Transaction date will be added automatically.
+        </span>
+
+      </div>
+
+      <div class="modal-buttons">
+
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="closeModal()">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="button"
+          class="save-btn"
+          (click)="saveExpense()">
+
+          <i class="fa-solid fa-floppy-disk"></i>
+
+          {{ isEditMode ? 'Update Expense' : 'Save Expense' }}
+
+        </button>
+
+      </div>
+
+    </form>
 
   </div>
-  
+
+</div>
+</div>

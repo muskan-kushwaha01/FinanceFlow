@@ -15,9 +15,10 @@ public class ExpensesController : ControllerBase
 
     // GET: api/Expense
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetExpense()
+    public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetExpensesByUser([FromQuery] int userId)
     {
         var expenses = await _context.Expenses
+            .Where(e => e.UserId == userId)
             .Select(e => new ExpenseDto
             {
                 ExpenseId = e.ExpenseId,
@@ -127,22 +128,23 @@ public class ExpensesController : ControllerBase
 
     // DELETE: api/Expense/5
     [HttpDelete("{expenseid}")]
-    public async Task<IActionResult> DeleteExpense(int? expenseid)
+    public async Task<IActionResult> DeleteExpense(int expenseid)
     {
         var expense = await _context.Expenses.FindAsync(expenseid);
+
         if (expense == null)
         {
-            return NotFound();
+            return NotFound("Expense not found.");
         }
 
         _context.Expenses.Remove(expense);
-        await _context.SaveChangesAsync();
 
-        return NoContent();
-    }
+        int rowsAffected = await _context.SaveChangesAsync();
 
-    private bool ExpenseExists(int? expenseid)
-    {
-        return _context.Expenses.Any(e => e.ExpenseId == expenseid);
+        return Ok(new
+        {
+            message = "Expense deleted successfully",
+            rowsAffected = rowsAffected
+        });
     }
 }

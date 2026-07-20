@@ -20,4 +20,12 @@ export class CategoryService {
 
   }
 
+  getExpenseCategories(): Observable<Category[]> {
+
+    return this.http.get<Category[]>(
+      `${this.apiUrl}?type=Expense`
+    );
+
+  }
+
 }

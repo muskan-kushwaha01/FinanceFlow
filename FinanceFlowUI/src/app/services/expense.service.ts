@@ -12,9 +12,11 @@ export class ExpenseService {
 
   constructor(private http: HttpClient) {}
 
-  getExpenses(): Observable<Expense[]> {
-    return this.http.get<Expense[]>(this.apiUrl);
-  }
+getExpenses(userId: number): Observable<Expense[]> {
+  return this.http.get<Expense[]>(
+    `${this.apiUrl}?userId=${userId}`
+  );
+}
 
   getExpense(id:number): Observable<Expense> {
     return this.http.get<Expense>(`${this.apiUrl}/${id}`);
@@ -24,12 +26,14 @@ export class ExpenseService {
     return this.http.post(this.apiUrl, expense);
   }
 
-  updateExpense(id:number, expense:any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, expense);
-  }
-
-  deleteExpense(id:number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
-  }
+ updateExpense(id: number, expense: Expense) {
+  return this.http.put(
+    `${this.apiUrl}/${id}`,
+    expense
+  );
+}
+deleteExpense(id: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/${id}`);
+}
 
 }
