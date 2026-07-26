@@ -15,6 +15,8 @@ public partial class FinanceContext : DbContext
     {
     }
 
+    public virtual DbSet<Budget> Budgets { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Expense> Expenses { get; set; }
@@ -25,10 +27,34 @@ public partial class FinanceContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=LAPTOP-NN05QNVV;Initial Catalog=Finance;Integrated Security=True;Encrypt=False;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=LAPTOP-NN05QNVV;Initial Catalog=Finance;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Budget>(entity =>
+        {
+            entity.HasKey(e => e.BudgetId).HasName("PK__Budget__E38E79240669B13A");
+
+            entity.ToTable("Budget");
+
+            entity.HasIndex(e => new { e.UserId, e.CategoryId, e.Month, e.Year }, "UQ_Budget_User_Category_Month_Year").IsUnique();
+
+            entity.Property(e => e.BudgetAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.Budgets)
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Budget_Category");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Budgets)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Budget_User");
+        });
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0BFA2CC0DE");
@@ -114,8 +140,6 @@ public partial class FinanceContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C20B722FD");
-
-            entity.HasIndex(e => e.PhoneNumber, "UQ__Users__85FB4E388F4EA4A2").IsUnique();
 
             entity.HasIndex(e => e.Email, "UQ__Users__A9D105345FF21D30").IsUnique();
 

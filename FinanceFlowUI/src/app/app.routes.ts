@@ -6,6 +6,7 @@ import { LayoutComponent } from './components/app-layout/layout/layout';
 import { Dashboard } from './components/pages/dashboard/dashboard';
 import { IncomeComponent } from './components/pages/income/income';
 import { ExpenseComponent } from './components/pages/expenses/expenses';
+import { BudgetComponent } from './components/pages/budget/budget';
 
 export const routes: Routes = [
 
@@ -34,7 +35,10 @@ export const routes: Routes = [
         path: 'income',
         component: IncomeComponent
       },
-
+      {
+        path: 'budget',
+        component: BudgetComponent
+      },
       {
         path: 'expenses',
         component: ExpenseComponent

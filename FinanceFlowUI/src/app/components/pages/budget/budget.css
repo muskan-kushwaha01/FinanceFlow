@@ -1,0 +1,1169 @@
+/* ==========================================================
+   BUDGET PAGE
+========================================================== */
+
+*{
+    box-sizing:border-box;
+}
+
+.budget-page{
+    padding:30px;
+    background:#F8FAFC;
+    min-height:100vh;
+    font-family:'Poppins',sans-serif;
+}
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.budget-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.header-left h2{
+    font-size:34px;
+    color:#0F172A;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.header-left p{
+    color:#64748B;
+    font-size:15px;
+}
+
+.create-btn{
+    background:linear-gradient(135deg,#2563EB,#4F46E5);
+    color:white;
+    border:none;
+    border-radius:14px;
+    padding:14px 24px;
+    font-size:15px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    transition:.3s;
+    box-shadow:0 10px 30px rgba(37,99,235,.25);
+}
+
+.create-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 18px 40px rgba(37,99,235,.35);
+}
+
+/* ==========================================================
+   OVERVIEW
+========================================================== */
+
+.overview-section{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:24px;
+    margin-bottom:35px;
+}
+
+/* ==========================================================
+   DOUGHNUT CARD
+========================================================== */
+
+.overview-chart{
+    background:white;
+    border-radius:22px;
+    padding:28px;
+    box-shadow:0 10px 30px rgba(15,23,42,.06);
+    border:1px solid #EEF2F7;
+    transition:.3s;
+}
+
+.overview-chart:hover{
+    transform:translateY(-5px);
+    box-shadow:0 18px 45px rgba(15,23,42,.10);
+}
+
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.card-header h3{
+    font-size:20px;
+    color:#1E293B;
+    margin:0;
+}
+
+.card-header span{
+    background:#EEF4FF;
+    color:#2563EB;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.overview-chart canvas{
+    width:100% !important;
+    height:340px !important;
+}
+
+/* ==========================================================
+   SUMMARY COLUMN
+========================================================== */
+
+.overview-summary{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+/* ==========================================================
+   SUMMARY CARD
+========================================================== */
+
+.summary-card{
+    background:white;
+    border-radius:20px;
+    padding:22px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    border:1px solid #EEF2F7;
+    box-shadow:0 8px 24px rgba(15,23,42,.05);
+    transition:.3s;
+}
+
+.summary-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 18px 40px rgba(15,23,42,.10);
+}
+
+.summary-icon{
+    width:58px;
+    height:58px;
+    border-radius:18px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:22px;
+    flex-shrink:0;
+}
+
+/* Different Colors */
+
+.summary-icon.blue{
+    background:linear-gradient(135deg,#2563EB,#4F46E5);
+}
+
+.summary-icon.green{
+    background:linear-gradient(135deg,#10B981,#22C55E);
+}
+
+.summary-icon.orange{
+    background:linear-gradient(135deg,#F59E0B,#F97316);
+}
+
+.summary-card small{
+    display:block;
+    color:#64748B;
+    margin-bottom:6px;
+    font-size:13px;
+}
+
+.summary-card h3{
+    margin:0;
+    font-size:28px;
+    color:#0F172A;
+    font-weight:700;
+}
+
+/* ==========================================================
+   BUDGET SECTION
+========================================================== */
+
+.budget-section{
+    margin-bottom:35px;
+}
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.section-title h3{
+    font-size:26px;
+    color:#0F172A;
+    margin-bottom:5px;
+}
+
+.section-title p{
+    color:#64748B;
+    font-size:14px;
+}
+
+.category-count{
+    background:#EEF4FF;
+    color:#2563EB;
+    padding:10px 18px;
+    border-radius:25px;
+    font-size:14px;
+    font-weight:600;
+}
+
+/* ==========================================================
+   GRID
+========================================================== */
+
+.budget-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+
+    gap:24px;
+
+}
+
+/* ==========================================================
+   CARD
+========================================================== */
+
+.budget-card{
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:24px;
+
+    border:1px solid #EEF2F7;
+
+    box-shadow:0 8px 25px rgba(15,23,42,.05);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+.budget-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 45px rgba(15,23,42,.12);
+
+}
+
+/* Blue Accent */
+
+.budget-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:5px;
+
+    background:linear-gradient(90deg,#2563EB,#4F46E5);
+
+}
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+.budget-card-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    margin-bottom:22px;
+
+}
+
+.budget-card-header h4{
+
+    margin:0;
+
+    font-size:22px;
+
+    color:#0F172A;
+
+}
+
+.budget-card-header small{
+
+    color:#94A3B8;
+
+    font-size:13px;
+
+}
+
+/* ==========================================================
+   STATUS BADGE
+========================================================== */
+
+.status{
+
+    padding:7px 14px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+.status.safe{
+
+    background:#DCFCE7;
+
+    color:#15803D;
+
+}
+
+.status.warning{
+
+    background:#FEF3C7;
+
+    color:#B45309;
+
+}
+
+.status.danger{
+
+    background:#FEE2E2;
+
+    color:#DC2626;
+
+}
+
+/* ==========================================================
+   AMOUNTS
+========================================================== */
+
+.amount-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:20px;
+
+}
+
+.amount-row small{
+
+    display:block;
+
+    color:#64748B;
+
+    margin-bottom:5px;
+
+}
+
+.amount-row h5{
+
+    margin:0;
+
+    font-size:24px;
+
+    color:#0F172A;
+
+    font-weight:700;
+
+}
+
+/* ==========================================================
+   PROGRESS
+========================================================== */
+
+.progress-wrapper{
+
+    margin:18px 0;
+
+}
+
+.progress-track{
+
+    width:100%;
+
+    height:10px;
+
+    background:#E5E7EB;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+}
+
+.progress-fill{
+
+    height:100%;
+
+    border-radius:999px;
+
+    transition:width .8s ease;
+
+}
+
+.progress-fill.green{
+
+    background:linear-gradient(90deg,#10B981,#22C55E);
+
+}
+
+.progress-fill.orange{
+
+    background:linear-gradient(90deg,#F59E0B,#F97316);
+
+}
+
+.progress-fill.red{
+
+    background:linear-gradient(90deg,#EF4444,#DC2626);
+
+}
+
+/* ==========================================================
+   PROGRESS INFO
+========================================================== */
+
+.progress-info{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:12px;
+
+    color:#64748B;
+
+    font-size:14px;
+
+}
+
+.progress-info span:first-child{
+
+    font-weight:700;
+
+    color:#2563EB;
+
+}
+
+/* ==========================================================
+   ACTIONS
+========================================================== */
+
+.card-actions{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:24px;
+
+}
+
+.card-actions button{
+
+    flex:1;
+
+    border:none;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.card-actions .edit-btn{
+
+    background:#EEF4FF;
+
+    color:#2563EB;
+
+}
+
+.card-actions .edit-btn:hover{
+
+    background:#2563EB;
+
+    color:white;
+
+}
+
+.card-actions .delete-btn{
+
+    background:#FEECEC;
+
+    color:#DC2626;
+
+}
+
+.card-actions .delete-btn:hover{
+
+    background:#DC2626;
+
+    color:white;
+
+}
+/* ==========================================================
+   BUDGET HEALTH
+========================================================== */
+
+.health-section{
+    margin-bottom:35px;
+}
+
+.health-card{
+    background:white;
+    border-radius:24px;
+    padding:28px;
+    border:1px solid #EEF2F7;
+    box-shadow:0 10px 30px rgba(15,23,42,.05);
+}
+
+.health-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:28px;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.health-header h3{
+    margin:0;
+    font-size:26px;
+    color:#0F172A;
+}
+
+.health-header p{
+    color:#64748B;
+    margin-top:5px;
+}
+
+.health-score{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2563EB,#4F46E5);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:24px;
+    font-weight:700;
+    box-shadow:0 12px 25px rgba(37,99,235,.25);
+}
+
+.health-stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:20px;
+
+}
+
+.health-item{
+
+    border-radius:18px;
+
+    padding:24px;
+
+    text-align:center;
+
+}
+
+.health-item h2{
+
+    margin:0;
+
+    font-size:36px;
+
+}
+
+.health-item span{
+
+    display:block;
+
+    margin-top:8px;
+
+    font-weight:600;
+
+}
+
+.health-item.safe{
+
+    background:#ECFDF5;
+
+}
+
+.health-item.safe h2{
+
+    color:#16A34A;
+
+}
+
+.health-item.warning{
+
+    background:#FFFBEB;
+
+}
+
+.health-item.warning h2{
+
+    color:#D97706;
+
+}
+
+.health-item.danger{
+
+    background:#FEF2F2;
+
+}
+
+.health-item.danger h2{
+
+    color:#DC2626;
+
+}
+
+/* ==========================================================
+   PANEL OVERLAY
+========================================================== */
+
+.panel-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(15,23,42,.45);
+
+    backdrop-filter:blur(5px);
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    z-index:9999;
+
+    animation:fadeIn .25s ease;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+/* ==========================================================
+   SLIDE PANEL
+========================================================== */
+
+.budget-panel{
+
+    width:420px;
+
+    max-width:100%;
+
+    background:white;
+
+    height:100vh;
+
+    padding:30px;
+
+    overflow:auto;
+
+    box-shadow:-10px 0 40px rgba(0,0,0,.12);
+
+    animation:slidePanel .35s ease;
+
+}
+
+@keyframes slidePanel{
+
+    from{
+
+        transform:translateX(100%);
+
+    }
+
+    to{
+
+        transform:translateX(0);
+
+    }
+
+}
+
+/* ==========================================================
+   PANEL HEADER
+========================================================== */
+
+.panel-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+    padding-bottom:18px;
+
+    border-bottom:1px solid #EEF2F7;
+
+}
+
+.panel-header h2{
+
+    margin:0;
+
+    color:#0F172A;
+
+    font-size:28px;
+
+}
+
+.close-btn{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#F8FAFC;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.close-btn:hover{
+
+    background:#EF4444;
+
+    color:white;
+
+}
+
+/* ==========================================================
+   FORM
+========================================================== */
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    margin-bottom:22px;
+
+}
+
+.form-group label{
+
+    margin-bottom:8px;
+
+    color:#475569;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.form-group input,
+.form-group select{
+
+    padding:13px 14px;
+
+    border:1px solid #D9D9D9;
+
+    border-radius:12px;
+
+    font-size:14px;
+
+    background:#FAFAFA;
+
+    transition:.25s;
+
+}
+
+.form-group input:focus,
+.form-group select:focus{
+
+    outline:none;
+
+    border-color:#2563EB;
+
+    background:white;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+.form-row{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:18px;
+
+}
+
+/* ==========================================================
+   PANEL BUTTONS
+========================================================== */
+
+.panel-buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:35px;
+
+}
+
+.panel-buttons button{
+
+    flex:1;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.cancel-btn{
+
+    background:#EEF2F7;
+
+    color:#475569;
+
+}
+
+.cancel-btn:hover{
+
+    background:#E2E8F0;
+
+}
+
+.save-btn{
+
+    background:linear-gradient(135deg,#2563EB,#4F46E5);
+
+    color:white;
+
+}
+
+.save-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 25px rgba(37,99,235,.25);
+
+}
+
+/* ==========================================================
+   CARD ANIMATIONS
+========================================================== */
+
+.budget-card,
+.summary-card,
+.overview-chart,
+.health-card{
+
+    transition:all .35s ease;
+
+}
+
+.budget-card:hover,
+.summary-card:hover,
+.overview-chart:hover,
+.health-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.progress-fill{
+
+    animation:progressLoad 1.2s ease;
+
+}
+
+@keyframes progressLoad{
+
+    from{
+
+        width:0;
+
+    }
+
+}
+
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+.budget-panel::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.budget-panel::-webkit-scrollbar-thumb{
+
+    background:#CBD5E1;
+
+    border-radius:20px;
+
+}
+
+.budget-panel::-webkit-scrollbar-thumb:hover{
+
+    background:#94A3B8;
+
+}
+
+.month-selector{
+    display:flex;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.month-selector select{
+    padding:10px 16px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    font-size:15px;
+    cursor:pointer;
+    background:white;
+}
+
+/* ==========================================================
+   BUTTON EFFECTS
+========================================================== */
+
+.create-btn,
+.save-btn,
+.cancel-btn,
+.edit-btn,
+.delete-btn{
+
+    transition:.25s;
+
+}
+
+.create-btn:active,
+.save-btn:active{
+
+    transform:scale(.98);
+
+}
+
+/* ==========================================================
+   INPUT PLACEHOLDER
+========================================================== */
+
+input::placeholder{
+
+    color:#94A3B8;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:1200px){
+
+.overview-section{
+
+grid-template-columns:1fr;
+
+}
+
+.health-stats{
+
+grid-template-columns:repeat(3,1fr);
+
+}
+
+}
+
+@media(max-width:992px){
+
+.budget-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.budget-page{
+
+padding:20px;
+
+}
+
+.budget-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+.create-btn{
+
+width:100%;
+
+justify-content:center;
+
+}
+
+.form-row{
+
+grid-template-columns:1fr;
+
+}
+
+.health-stats{
+
+grid-template-columns:1fr;
+
+}
+
+.budget-panel{
+
+width:100%;
+
+}
+
+.summary-card{
+
+padding:18px;
+
+}
+
+}
+
+@media(max-width:500px){
+
+.header-left h2{
+
+font-size:28px;
+
+}
+
+.card-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:10px;
+
+}
+
+.budget-card{
+
+padding:20px;
+
+}
+
+.amount-row{
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+.progress-info{
+
+flex-direction:column;
+
+gap:8px;
+
+}
+
+.card-actions{
+
+flex-direction:column;
+
+}
+
+}
+
+

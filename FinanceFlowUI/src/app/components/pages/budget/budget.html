@@ -1,1 +1,415 @@
-<p>budget works!</p>
+<div class="budget-page">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="budget-header">
+
+        <div class="header-left">
+
+            <h2>Budget Planner</h2>
+
+            <p>Stay on track with your monthly spending goals.</p>
+
+        </div>
+
+        <button class="create-btn" (click)="openPanel()">
+
+            <i class="fa-solid fa-plus"></i>
+            Create Budget
+
+        </button>
+
+    </div>
+
+
+    <!-- ================= OVERVIEW ================= -->
+<div class="month-selector">
+
+  <select [(ngModel)]="selectedMonth" (change)="onFilterChange()">
+    <option *ngFor="let month of months; let i = index" [value]="i + 1">
+      {{ month }}
+    </option>
+  </select>
+
+  <select [(ngModel)]="selectedYear" (change)="onFilterChange()">
+    <option *ngFor="let year of years" [value]="year">
+      {{ year }}
+    </option>
+  </select>
+
+</div>
+    <div class="overview-section">
+        
+
+        <!-- Left : Doughnut -->
+
+        <div class="overview-chart">
+
+            <div class="card-header">
+
+                <h3>Overall Budget Usage</h3>
+
+                <span>{{currentMonth}}</span>
+
+            </div>
+
+            <canvas id="budgetChart"></canvas>
+
+        </div>
+
+
+        <!-- Right : Summary -->
+
+        <div class="overview-summary">
+
+            <div class="summary-card">
+
+                <div class="summary-icon blue">
+
+                    <i class="fa-solid fa-wallet"></i>
+
+                </div>
+
+                <div>
+
+                    <small>Total Budget</small>
+
+                    <h3>₹{{totalBudget}}</h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon green">
+
+                    <i class="fa-solid fa-money-bill-wave"></i>
+
+                </div>
+
+                <div>
+
+                    <small>Total Spent</small>
+
+                    <h3>₹{{totalSpent}}</h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-icon orange">
+
+                    <i class="fa-solid fa-piggy-bank"></i>
+
+                </div>
+
+                <div>
+
+                    <small>Remaining</small>
+
+                    <h3>₹{{remainingBudget}}</h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= BUDGET CATEGORIES ================= -->
+
+        <div class="budget-section">
+
+            <div class="section-title">
+
+                <div>
+
+                    <h3>Monthly Budget Categories</h3>
+
+                    <p>Track spending across all your budget categories.</p>
+
+                </div>
+
+                <span class="category-count">
+
+                    {{ budgets.length }} Categories
+
+                </span>
+
+            </div>
+
+            <div class="budget-grid">
+
+                <div class="budget-card" *ngFor="let budget of budgetSummary">
+
+                    <!-- Card Header -->
+
+                    <div class="budget-card-header">
+
+                        <div>
+
+                            <h4>{{ budget.categoryName }}</h4>
+
+                            <small>Monthly Budget</small>
+
+                        </div>
+
+                        <span class="status" [ngClass]="{
+                            'safe': budget.percentageUsed < 70,
+                            'warning': budget.percentageUsed >= 70 && budget.percentageUsed < 100,
+                            'danger': budget.percentageUsed >= 100
+                        }">
+
+                            {{
+                            budget.percentageUsed >= 100
+                            ? 'Over Budget'
+                            : budget.percentageUsed >= 70
+                            ? 'Near Limit'
+                            : 'Safe'
+                            }}
+
+                        </span>
+
+                    </div>
+
+                    <!-- Budget Numbers -->
+
+                    <div class="amount-row">
+
+                        <div>
+
+                            <small>Budget</small>
+
+                            <h5>₹{{ budget.budgetAmount }}</h5>
+
+                        </div>
+
+                        <div>
+
+                            <small>Spent</small>
+
+                            <h5>₹{{ budget.spentAmount }}</h5>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Progress -->
+
+                    <div class="progress-wrapper">
+
+                        <div class="progress-track">
+
+                            <div class="progress-fill"
+                                [style.width.%]="budget.percentageUsed > 100 ? 100 : budget.percentageUsed" [ngClass]="{
+                                'green': budget.percentageUsed < 70,
+                                'orange': budget.percentageUsed >= 70 && budget.percentageUsed < 100,
+                                'red': budget.percentageUsed >= 100
+                            }">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="progress-info">
+
+                        <span>{{ budget.percentageUsed | number:'1.0-0' }}%</span>
+
+                        <span>
+
+                            Remaining ₹{{ budget.remainingAmount }}
+
+                        </span>
+
+                    </div>
+
+                    <!-- Actions -->
+
+                    <div class="card-actions">
+
+                        <button class="edit-btn" (click)="editBudget(budget)">
+
+                            ✏️ Edit
+
+                        </button>
+
+                        <button class="delete-btn" (click)="deleteBudget(budget.budgetId)">
+
+                            🗑 Delete
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- ================= BUDGET HEALTH ================= -->
+
+        <div class="health-section">
+
+            <div class="health-card">
+
+                <div class="health-header">
+
+                    <div>
+
+                        <h3>Budget Health</h3>
+
+                        <p>Quick overview of this month's budget performance</p>
+
+                    </div>
+
+                    <div class="health-score">
+
+                        {{ overallHealth }}%
+
+                    </div>
+
+                </div>
+
+                <div class="health-stats">
+
+                    <div class="health-item safe">
+
+                        <h2>{{ safeCount }}</h2>
+
+                        <span>Safe</span>
+
+                    </div>
+
+                    <div class="health-item warning">
+
+                        <h2>{{ warningCount }}</h2>
+
+                        <span>Near Limit</span>
+
+                    </div>
+
+                    <div class="health-item danger">
+
+                        <h2>{{ dangerCount }}</h2>
+
+                        <span>Over Budget</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= ADD / EDIT PANEL ================= -->
+
+        <div class="panel-overlay" *ngIf="showPanel" (click)="closePanel()">
+
+            <div class="budget-panel" (click)="$event.stopPropagation()">
+
+                <div class="panel-header">
+
+                    <h2>
+
+                        {{ isEditMode ? 'Edit Budget' : 'Create Budget' }}
+
+                    </h2>
+
+                    <button class="close-btn" (click)="closePanel()">
+
+                        ✕
+
+                    </button>
+
+                </div>
+
+                <form>
+
+                    <div class="form-group">
+
+                        <label>Category</label>
+
+                        <select [(ngModel)]="newBudget.categoryId" name="categoryId">
+
+                            <option [ngValue]="0">
+
+                                Select Category
+
+                            </option>
+
+                            <option *ngFor="let category of categories" [ngValue]="category.categoryId">
+
+                                {{ category.categoryName }}
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label>Month</label>
+
+                            <select [(ngModel)]="newBudget.month" name="month">
+
+                                <option *ngFor="let month of months; let i=index" [ngValue]="i+1">
+
+                                    {{ month }}
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Year</label>
+
+                            <input type="number" [(ngModel)]="newBudget.year" name="year">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Budget Amount</label>
+
+                        <input type="number" [(ngModel)]="newBudget.budgetAmount" name="budgetAmount">
+
+                    </div>
+
+                    <div class="panel-buttons">
+
+                        <button type="button" class="cancel-btn" (click)="closePanel()">
+
+                            Cancel
+
+                        </button>
+
+                        <button type="button" class="save-btn" (click)="saveBudget()">
+
+                            {{ isEditMode ? 'Update Budget' : 'Save Budget' }}
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
