@@ -1,9 +1,11 @@
 <div class="sidebar-content">
+
   <!-- Logo -->
   <div class="logo-section">
 
     <div class="logo-icon">
-<mat-icon>account_balance_wallet</mat-icon>    </div>
+      <mat-icon>account_balance_wallet</mat-icon>
+    </div>
 
     <div class="logo-text">
       <h2>FinanceFlow</h2>
@@ -13,68 +15,84 @@
   </div>
 
   <!-- Navigation -->
-
   <nav class="menu">
 
-    <a routerLink="/app/dashboard"
-       routerLinkActive="active"
-       [routerLinkActiveOptions]="{exact:true}">
+    <a
+      routerLink="/app/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
 
-<mat-icon>dashboard</mat-icon>   
-   <span>Dashboard</span>
+      <mat-icon>dashboard</mat-icon>
+      <span>Dashboard</span>
 
     </a>
 
-    <a routerLink="/app/income"
-       routerLinkActive="active">
+    <a
+      routerLink="/app/income"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
 
-<mat-icon>trending_up</mat-icon>
+      <mat-icon>paid</mat-icon>
       <span>Income</span>
 
     </a>
 
-    <a routerLink="/app/expenses"
-       routerLinkActive="active">
+    <a
+      routerLink="/app/expenses"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
 
-<mat-icon>trending_down</mat-icon>
+      <mat-icon>payments</mat-icon>
       <span>Expenses</span>
 
     </a>
 
-    <a routerLink="/app/budget"
-       routerLinkActive="active">
+    <a
+      routerLink="/app/budget"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
 
-<mat-icon>account_balance_wallet</mat-icon>      <span>Budget</span>
-
-    </a>
-
-    <a routerLink="/app/goals"
-       routerLinkActive="active">
-
-<mat-icon>savings</mat-icon>    <span>Savings Goals</span>
+      <mat-icon>account_balance</mat-icon>
+      <span>Budget</span>
 
     </a>
 
-    <a routerLink="/app/subscriptions"
-       routerLinkActive="active">
+    <a
+      routerLink="/app/saving-goals"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
 
-<mat-icon>credit_card</mat-icon>
+      <mat-icon>savings</mat-icon>
+      <span>Saving Goals</span>
+
+    </a>
+
+    <a
+      routerLink="/app/subscriptions"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
+
+      <mat-icon>subscriptions</mat-icon>
       <span>Subscriptions</span>
 
     </a>
 
-    <a routerLink="/app/reports"
-       routerLinkActive="active">
+    <a
+      routerLink="/app/reports"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
 
-<mat-icon>analytics</mat-icon>
+      <mat-icon>bar_chart</mat-icon>
       <span>Reports</span>
 
     </a>
 
-    <a routerLink="/app/settings"
-       routerLinkActive="active">
+    <a
+      routerLink="/app/settings"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
 
-<mat-icon>settings</mat-icon>
+      <mat-icon>settings</mat-icon>
       <span>Settings</span>
 
     </a>
@@ -82,29 +100,27 @@
   </nav>
 
   <!-- Bottom -->
-
   <div class="bottom-section">
 
     <div class="profile">
 
       <div class="avatar">
-        M
+        {{ userInitial }}
       </div>
 
       <div>
-
-        <h4>Muskan</h4>
+        <h4>{{ userName }}</h4>
         <p>Premium User</p>
-
       </div>
 
     </div>
 
-    <button class="logout-btn">
+    <button
+      class="logout-btn"
+      (click)="logout()">
 
-<mat-icon>logout</mat-icon>
-
-      Logout
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
 
     </button>
 

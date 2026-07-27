@@ -18,7 +18,7 @@ import { NavbarComponent } from '../../app-layout/navbar/navbar';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-
+import { Router } from '@angular/router';
 import {
   Chart,
   ChartConfiguration,
@@ -56,7 +56,8 @@ export class Dashboard implements OnInit, AfterViewInit {
 
 constructor(
   private dashboardService: DashboardService,
-  private cdr: ChangeDetectorRef
+  private cdr: ChangeDetectorRef,
+  private router: Router
 ) {}
 ngOnInit(): void {
 
@@ -99,6 +100,10 @@ loadSummary() {
   });
 
 }
+goTo(route: string) {
+  this.router.navigate(['/app', route]);
+}
+
 
   //---------------- Transactions ----------------//
 

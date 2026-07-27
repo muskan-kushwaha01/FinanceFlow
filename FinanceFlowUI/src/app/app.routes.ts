@@ -7,7 +7,8 @@ import { Dashboard } from './components/pages/dashboard/dashboard';
 import { IncomeComponent } from './components/pages/income/income';
 import { ExpenseComponent } from './components/pages/expenses/expenses';
 import { BudgetComponent } from './components/pages/budget/budget';
-
+import { SubscriptionsComponent } from './components/pages/subscriptions/subscriptions';
+import { SavingGoalsComponent } from './components/pages/saving-goals/saving-goals';
 export const routes: Routes = [
 
   {
@@ -42,7 +43,15 @@ export const routes: Routes = [
       {
         path: 'expenses',
         component: ExpenseComponent
-      }
+      },
+      {
+  path: 'subscriptions',
+  component: SubscriptionsComponent
+},
+{
+  path: 'saving-goals',
+  component: SavingGoalsComponent
+}
 
     ]
   },

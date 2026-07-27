@@ -24,6 +24,8 @@ public partial class FinanceContext : DbContext
     public virtual DbSet<Income> Incomes { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<SavingGoal> SavingGoals { get; set; }
+    public virtual DbSet<Subscription> Subscriptions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -167,6 +169,57 @@ public partial class FinanceContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
         });
+
+        modelBuilder.Entity<SavingGoal>(entity =>
+        {
+            entity.HasKey(e => e.GoalId).HasName("PK__SavingGo__8A4FFFD19B563694");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.GoalColor).HasMaxLength(20);
+            entity.Property(e => e.GoalName).HasMaxLength(100);
+            entity.Property(e => e.SavedAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.TargetAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Subscription>(entity =>
+        {
+            entity.HasKey(e => e.SubscriptionId);
+
+            entity.ToTable("Subscription");
+
+            entity.Property(e => e.SubscriptionName)
+                .HasMaxLength(100);
+
+            entity.Property(e => e.Category)
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Amount)
+                .HasColumnType("decimal(18, 2)");
+
+            entity.Property(e => e.BillingCycle)
+                .HasMaxLength(20);
+
+            entity.Property(e => e.PaymentMethod)
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Status)
+                .HasMaxLength(20);
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.User)
+                .WithMany(p => p.Subscriptions)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Subscription_User");
+        });
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -382,25 +382,23 @@
 
         <div class="widget-card">
 
-            <h3>Quick Actions</h3>
+    <h3>Recommended Actions</h3>
 
-            <button class="action-btn">
-                <mat-icon>add_circle</mat-icon>
-                Add Income
-            </button>
+    <button class="action-btn" (click)="goTo('income')">
+    <mat-icon>add_circle</mat-icon>
+    Add Income
+</button>
 
-            <button class="action-btn">
-                <mat-icon>remove_circle</mat-icon>
-                Add Expense
-            </button>
+<button class="action-btn" (click)="goTo('saving-goals')">
+    <mat-icon>savings</mat-icon>
+    Saving Goals
+</button>
 
-            <button class="action-btn">
-                <mat-icon>flag</mat-icon>
-                Savings Goal
-            </button>
-
-        </div>
-
+<button class="action-btn" (click)="goTo('subscriptions')">
+    <mat-icon>subscriptions</mat-icon>
+    Subscriptions
+</button>
+</div>
         <div class="widget-card ai-card">
 
             <div class="ai-header">

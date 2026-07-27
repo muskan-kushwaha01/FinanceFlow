@@ -1,0 +1,279 @@
+<div class="saving-page">
+
+  <!-- Header -->
+
+  <div class="page-header">
+
+    <div>
+      <h1>🎯 Saving Goals</h1>
+      <p>Track your dreams and reach your financial milestones.</p>
+    </div>
+
+    <div class="header-actions">
+
+      <input
+        type="text"
+        placeholder="Search Goal..."
+        [(ngModel)]="searchText"
+        (input)="searchGoals()">
+
+      <button class="add-btn" (click)="openPanel()">
+        + New Goal
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Main Content -->
+
+  <div class="content">
+
+    <!-- LEFT SIDE -->
+
+    <div class="goal-section">
+
+      <div
+class="goal-card"
+[class.completed-card]="item.completed"
+*ngFor="let item of summary">
+        <div
+          class="color-strip"
+         [style.background]="getProgressColor(item.progress)">
+        </div>
+
+       <div class="goal-top">
+
+  <h2>
+    {{ getGoalIcon(item.goalName) }}
+    {{ item.goalName }}
+  </h2>
+
+  <div>
+
+    <span
+      class="percentage"
+      *ngIf="!item.completed">
+
+      {{ item.progress | number:'1.0-0' }}%
+
+    </span>
+
+    <span
+      class="completed"
+      *ngIf="item.completed">
+
+      🏆 Goal Achieved
+
+    </span>
+
+  </div>
+
+</div>
+
+   <div class="amounts">
+
+  ₹{{ item.savedAmount | number:'1.0-0' }}
+
+  <span>
+
+    / ₹{{ item.targetAmount | number:'1.0-0' }}
+
+  </span>
+
+</div>
+
+        <div class="progress-container">
+
+          <div
+            class="progress-fill"
+            [style.width.%]="item.progress"
+            [style.background]="getProgressColor(item.progress)">
+
+          </div>
+
+        </div>
+
+        <div class="goal-footer">
+
+    <div>
+
+        <strong>{{ daysLeft(item) }}</strong>
+
+    </div>
+
+    <div>
+
+        Remaining ₹{{ item.remainingAmount | number:'1.0-0' }}
+
+    </div>
+
+</div>
+
+<div class="motivation">
+
+    {{ getMotivation(item) }}
+
+</div>
+
+        <div class="actions">
+
+          <button
+            class="edit-btn"
+            (click)="editGoal(goals.find(g=>g.goalId==item.goalId)!)">
+
+            ✏ 
+
+          </button>
+
+          <button
+            class="delete-btn"
+            (click)="deleteGoal(item.goalId)">
+
+            🗑 
+
+          </button>
+
+        </div>
+
+      </div>
+      </div>
+
+  
+<div
+class="empty-state"
+*ngIf="summary.length===0">
+
+<div class="empty-icon">
+
+🎯
+
+</div>
+
+<h2>No Saving Goals Yet</h2>
+
+<p>
+
+Start planning your future by creating your first saving goal.
+
+</p>
+
+<button
+class="add-btn"
+(click)="openPanel()">
+
+Create First Goal
+
+</button>
+
+</div>
+    <!-- RIGHT PANEL -->
+
+    <div class="overview-panel">
+
+      <h2>Savings Overview</h2>
+
+      <canvas id="goalChart"></canvas>
+
+      <div class="overview-item">
+
+        <span>Total Target</span>
+
+        <strong>₹{{totalTarget}}</strong>
+
+      </div>
+
+      <div class="overview-item">
+
+        <span>Total Saved</span>
+
+        <strong>₹{{totalSaved}}</strong>
+
+      </div>
+
+      <div class="overview-item">
+
+        <span>Remaining</span>
+
+        <strong>₹{{totalRemaining}}</strong>
+
+      </div>
+
+      <div class="overview-item">
+
+        <span>Completed Goals</span>
+
+        <strong>{{completedGoals}}</strong>
+
+      </div>
+
+    </div>
+    </div>
+    </div>
+
+
+
+
+
+<!-- Side Panel -->
+
+<div
+class="overlay"
+*ngIf="showPanel"
+(click)="closePanel()">
+
+</div>
+
+<div
+class="side-panel"
+[class.open]="showPanel">
+
+  <h2>
+
+    {{isEditing ? 'Edit Goal' : 'New Goal'}}
+
+  </h2>
+
+  <input
+    [(ngModel)]="goal.goalName"
+    placeholder="Goal Name">
+
+  <input
+    type="number"
+    [(ngModel)]="goal.targetAmount"
+    placeholder="Target Amount">
+
+  <input
+    type="number"
+    [(ngModel)]="goal.savedAmount"
+    placeholder="Saved Amount">
+
+  <input
+    type="date"
+    [(ngModel)]="goal.targetDate">
+
+  <label>Goal Color</label>
+
+  <div class="color-picker">
+
+    <div
+      *ngFor="let c of colors"
+      class="color-circle"
+      [style.background]="c"
+      (click)="goal.goalColor=c">
+
+    </div>
+
+  </div>
+
+  <button
+    class="save-btn"
+    (click)="saveGoal()">
+
+    Save Goal
+
+  </button>
+
+</div>
+
+
