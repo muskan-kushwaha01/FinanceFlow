@@ -15,26 +15,39 @@ public class IncomesController : ControllerBase
 
     // GET: api/Income
 
+    // GET: api/Incomes?userId=2&month=8&year=2026
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<IncomeDto>>> GetIncomesByUser([FromQuery] int userId) {       
-        var incomes = await _context.Incomes
-    .Where(i => i.UserId == userId)
-    .Include(i => i.Category)
-    .Select(i => new IncomeDto
+    public async Task<ActionResult<IEnumerable<IncomeDto>>> GetIncomesByUser(
+        [FromQuery] int userId,
+        [FromQuery] int month,
+        [FromQuery] int year)
     {
-        IncomeId = i.IncomeId,
-        UserId = i.UserId,
+        var startDate = new DateOnly(year, month, 1);
+        var endDate = startDate.AddMonths(1);
 
-        CategoryId = i.CategoryId,
-        Category = i.Category.CategoryName,
+        var incomes = await _context.Incomes
+            .Where(i =>
+                i.UserId == userId &&
+                i.TransactionDate >= startDate &&
+                i.TransactionDate < endDate)
+            .Include(i => i.Category)
+            .Select(i => new IncomeDto
+            {
+                IncomeId = i.IncomeId,
+                UserId = i.UserId,
 
-        Amount = i.Amount,
-        Source = i.Source,
-        PaymentMethod = i.PaymentMethod,
-        TransactionDate = i.TransactionDate,
-        Description = i.Description
-    })
-    .ToListAsync();
+                CategoryId = i.CategoryId,
+                Category = i.Category.CategoryName,
+
+                Amount = i.Amount,
+                Source = i.Source,
+                PaymentMethod = i.PaymentMethod,
+                TransactionDate = i.TransactionDate,
+                Description = i.Description
+            })
+            .OrderByDescending(i => i.TransactionDate)
+            .ToListAsync();
 
         return Ok(incomes);
     }

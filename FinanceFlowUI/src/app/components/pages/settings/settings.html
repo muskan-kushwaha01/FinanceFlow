@@ -1,0 +1,97 @@
+<div class="settings-page">  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Settings</h1>
+      <p>Manage your FinanceFlow preferences</p>
+    </div>
+  </div>
+
+  <!-- Account -->
+  <div class="settings-card">
+    <div class="card-header">
+      <div class="icon">👤</div>
+      <div>
+        <h2>Account</h2>
+        <p>Your account information</p>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <h3>Profile</h3>
+        <p>Manage your personal information</p>
+      </div>
+<button class="outline-btn" (click)="goToProfile()">
+  Edit Profile
+</button>    </div>
+  </div>
+
+  <!-- Appearance -->
+  <div class="settings-card">
+    <div class="card-header">
+      <div class="icon">🎨</div>
+      <div>
+        <h2>Appearance</h2>
+        <p>Customize how FinanceFlow looks</p>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <h3>Dark Mode</h3>
+        <p>Switch between light and dark theme</p>
+      </div>
+
+      <label class="switch">
+  <input
+  type="checkbox"
+  [checked]="darkMode"
+  (change)="toggleDarkMode()"
+/>
+  <span class="slider"></span>
+</label>
+    </div>
+  </div>
+
+ 
+  <!-- Notifications -->
+  <div class="settings-card">
+    <div class="card-header">
+      <div class="icon">🔔</div>
+      <div>
+        <h2>Notifications</h2>
+        <p>Manage your notification preferences</p>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <h3>Notifications</h3>
+        <p>Receive financial reminders and alerts</p>
+      </div>
+
+      <label class="switch">
+        <input
+          type="checkbox"
+          [checked]="notifications"
+          (change)="toggleNotifications()">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Logout -->
+  <div class="settings-card danger-card">
+    <div class="setting-row">
+      <div>
+        <h3>Logout</h3>
+        <p>Sign out from your FinanceFlow account</p>
+      </div>
+
+      <button class="logout-btn" (click)="logout()">
+        Logout
+      </button>
+    </div>
+  </div>
+
+</div>

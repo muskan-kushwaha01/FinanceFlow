@@ -32,4 +32,10 @@ updateSubscription(id: number, subscription: Subscription): Observable<any> {
   deleteSubscription(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+  processRenewals(userId: number): Observable<any> {
+  return this.http.post(
+    `${this.apiUrl}/process-renewals/${userId}`,
+    {}
+  );
+}
 }

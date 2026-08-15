@@ -1,24 +1,39 @@
 <div class="subscription-page">
 
-    <!-- HEADER -->
+    <!-- ================= HEADER ================= -->
+
     <div class="subscription-header">
 
         <div class="header-left">
-            <h2>Subscription Manager</h2>
-            <p>Track and manage all your recurring subscriptions in one place.</p>
+
+            <h2>
+                <i class="fa-solid fa-repeat"></i>
+                Subscription Manager
+            </h2>
+
+            <p>
+                Track and manage all your recurring subscriptions in one place.
+            </p>
+
         </div>
 
         <button class="create-btn" (click)="openPanel()">
+
             <i class="fa-solid fa-plus"></i>
+
             Add Subscription
+
         </button>
 
     </div>
 
-    <!-- SUMMARY -->
+
+    <!-- ================= SUMMARY ================= -->
+
     <div class="summary-grid">
 
         <div class="summary-card">
+
             <div class="summary-icon blue">
                 <i class="fa-solid fa-wallet"></i>
             </div>
@@ -27,9 +42,12 @@
                 <small>Monthly Cost</small>
                 <h3>₹{{ summary.totalMonthlyCost }}</h3>
             </div>
+
         </div>
 
+
         <div class="summary-card">
+
             <div class="summary-icon green">
                 <i class="fa-solid fa-sack-dollar"></i>
             </div>
@@ -38,9 +56,12 @@
                 <small>Yearly Cost</small>
                 <h3>₹{{ summary.totalYearlyCost }}</h3>
             </div>
+
         </div>
 
+
         <div class="summary-card">
+
             <div class="summary-icon purple">
                 <i class="fa-solid fa-layer-group"></i>
             </div>
@@ -49,9 +70,12 @@
                 <small>Active Plans</small>
                 <h3>{{ summary.activeSubscriptions }}</h3>
             </div>
+
         </div>
 
+
         <div class="summary-card">
+
             <div class="summary-icon orange">
                 <i class="fa-solid fa-bell"></i>
             </div>
@@ -60,55 +84,87 @@
                 <small>Upcoming Renewals</small>
                 <h3>{{ summary.upcomingRenewals }}</h3>
             </div>
+
         </div>
 
     </div>
 
-    <!-- TOOLBAR -->
+
+    <!-- ================= TOOLBAR ================= -->
+
     <div class="subscription-toolbar">
 
         <div class="search-box">
+
             <i class="fa-solid fa-magnifying-glass"></i>
 
             <input
                 type="text"
                 placeholder="Search subscriptions..."
                 [(ngModel)]="searchText">
+
         </div>
 
-        <select [(ngModel)]="selectedCategory">
-            <option value="">All Categories</option>
 
-            <option
-                *ngFor="let category of subscriptionCategories"
-                [value]="category">
+        <div class="category-filter">
 
-                {{ category }}
+            <i class="fa-solid fa-filter"></i>
 
-            </option>
-        </select>
+            <select [(ngModel)]="selectedCategory">
+
+                <option value="">
+                    All Categories
+                </option>
+
+                <option
+                    *ngFor="let category of subscriptionCategories"
+                    [value]="category">
+
+                    {{ category }}
+
+                </option>
+
+            </select>
+
+        </div>
 
     </div>
 
-    <!-- MAIN CONTENT -->
+
+    <!-- ================= MAIN CONTENT ================= -->
+
     <div class="subscription-content">
 
-        <!-- LEFT -->
+
+        <!-- ================= LEFT ================= -->
+
         <div class="subscriptions-section">
 
             <div class="section-header">
 
                 <div>
-                    <h3>My Subscriptions</h3>
-                    <p>Monitor all your recurring subscriptions.</p>
+
+                    <h3>
+                        <i class="fa-solid fa-list-check"></i>
+                        My Subscriptions
+                    </h3>
+
+                    <p>
+                        Monitor all your recurring subscriptions.
+                    </p>
+
                 </div>
 
                 <button class="view-all-btn">
+
                     View All
+
                     <i class="fa-solid fa-arrow-right"></i>
+
                 </button>
 
             </div>
+
 
             <div class="subscription-grid">
 
@@ -116,18 +172,64 @@
                     class="subscription-card"
                     *ngFor="let sub of filteredSubscriptions">
 
+
+                    <!-- CARD TOP -->
+
                     <div class="card-top">
 
-                        <div class="subscription-icon">
-                            <i class="fa-solid fa-repeat"></i>
-                        </div>
+                        <div
+    class="subscription-icon"
+    [ngClass]="'icon-' + sub.category.toLowerCase().replace(' ', '-')">
+
+    <i
+        class="fa-solid"
+        [ngClass]="{
+            'fa-film': sub.category === 'Entertainment',
+            'fa-play': sub.category === 'Streaming',
+            'fa-music': sub.category === 'Music',
+            'fa-gamepad': sub.category === 'Gaming',
+            'fa-laptop': sub.category === 'Technology',
+            'fa-graduation-cap': sub.category === 'Education',
+            'fa-bolt': sub.category === 'Productivity',
+            'fa-book': sub.category === 'Books',
+            'fa-heart-pulse': sub.category === 'Health & Fitness',
+            'fa-plane': sub.category === 'Travel',
+            'fa-cart-shopping': sub.category === 'Shopping',
+            'fa-house': sub.category === 'Bills',
+            'fa-repeat': ![
+                'Entertainment',
+                'Streaming',
+                'Music',
+                'Gaming',
+                'Technology',
+                'Education',
+                'Productivity',
+                'Books',
+                'Health & Fitness',
+                'Travel',
+                'Shopping',
+                'Bills'
+            ].includes(sub.category)
+        }">
+    </i>
+</div>
+
 
                         <span
                             class="status"
                             [ngClass]="{
-                              'active': sub.status === 'Active',
-                              'inactive': sub.status !== 'Active'
+                                'active': sub.status === 'Active',
+                                'inactive': sub.status !== 'Active'
                             }">
+
+                            <i
+                                class="fa-solid"
+                                [ngClass]="
+                                    sub.status === 'Active'
+                                    ? 'fa-circle-check'
+                                    : 'fa-circle-xmark'
+                                ">
+                            </i>
 
                             {{ sub.status }}
 
@@ -135,59 +237,99 @@
 
                     </div>
 
-                    <h4>{{ sub.subscriptionName }}</h4>
+
+                    <!-- NAME -->
+
+                    <h4>
+                        {{ sub.subscriptionName }}
+                    </h4>
+
+
+                    <!-- CATEGORY -->
 
                     <p class="category">
+
+                        <i class="fa-solid fa-tag"></i>
+
                         {{ sub.category }}
+
                     </p>
+
+
+                    <!-- DETAILS -->
 
                     <div class="subscription-details">
 
                         <div>
-                            <small>Amount</small>
-                            <h5>₹{{ sub.amount }}</h5>
+
+                            <small>
+                                <i class="fa-solid fa-indian-rupee-sign"></i>
+                                Amount
+                            </small>
+
+                            <h5>
+                                ₹{{ sub.amount }}
+                            </h5>
+
                         </div>
 
+
                         <div>
-                            <small>Billing</small>
-                            <h5>{{ sub.billingCycle }}</h5>
+
+                            <small>
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                                Billing
+                            </small>
+
+                            <h5>
+                                {{ sub.billingCycle }}
+                            </h5>
+
                         </div>
 
                     </div>
+
+
+                    <!-- NEXT PAYMENT -->
 
                     <div class="next-payment">
 
                         <i class="fa-solid fa-calendar-days"></i>
 
-                        Next Payment :
+                        <span>
+                            Next Payment
+                        </span>
 
                         <strong>
-
                             {{ sub.nextPayment | date:'dd MMM yyyy' }}
-
                         </strong>
 
                     </div>
 
-                    <div class="card-actions">
 
-                        <button
-                            class="edit-btn"
-                            (click)="editSubscription(sub)">
+                    <!-- ACTIONS -->
 
-                            <i class="fa-solid fa-pen"></i>
+                   <div class="card-actions">
 
-                        </button>
+    <button
+        class="edit-btn"
+        (click)="editSubscription(sub)"
+        title="Edit Subscription">
 
-                        <button
-                            class="delete-btn"
-                            (click)="deleteSubscription(sub.subscriptionId)">
+        <i class="fa-solid fa-pen"></i>
 
-                            <i class="fa-solid fa-trash"></i>
+    </button>
 
-                        </button>
+    <button
+        class="delete-btn"
+        (click)="deleteSubscription(sub.subscriptionId)"
+        title="Delete Subscription">
 
-                    </div>
+        <i class="fa-solid fa-trash"></i>
+
+    </button>
+
+</div>
 
                 </div>
 
@@ -195,46 +337,101 @@
 
         </div>
 
-        <!-- RIGHT -->
+
+        <!-- ================= RIGHT SIDEBAR ================= -->
+
         <div class="subscription-sidebar">
+
+
+            <!-- CHART -->
 
             <div class="chart-card">
 
                 <div class="card-header">
-                    <h3>Subscription Overview</h3>
+
+                    <h3>
+                        <i class="fa-solid fa-chart-pie"></i>
+                        Subscription Overview
+                    </h3>
+
                 </div>
 
                 <canvas id="subscriptionChart"></canvas>
 
             </div>
 
+
+            <!-- UPCOMING RENEWALS -->
+
             <div class="renewal-card">
 
-                <h3>Upcoming Renewals</h3>
+                <h3>
+
+                    <i class="fa-solid fa-bell"></i>
+
+                    Upcoming Renewals
+
+                </h3>
+
 
                 <div
-    class="renewal-item"
-    *ngFor="let sub of upcomingSubscriptions">
+                    class="renewal-item"
+                    *ngFor="let sub of upcomingSubscriptions">
 
-    <div>
 
-        <h4>{{ sub.subscriptionName }}</h4>
+                    <div class="renewal-left">
 
-        <small>
+                        <div class="renewal-icon">
 
-            {{ sub.nextPayment | date:'dd MMM yyyy' }}
+                            <i class="fa-solid fa-repeat"></i>
 
-        </small>
+                        </div>
 
-    </div>
+                        <div>
 
-    <span>
+                            <h4>
+                                {{ sub.subscriptionName }}
+                            </h4>
 
-        {{ getDaysRemaining(sub.nextPayment) }}
+                            <small>
 
-    </span>
+                                <i class="fa-solid fa-calendar-days"></i>
 
-</div>
+                                {{ sub.nextPayment | date:'dd MMM yyyy' }}
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="days-remaining">
+
+                        <i class="fa-regular fa-clock"></i>
+
+                        {{ getDaysRemaining(sub.nextPayment) }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- EMPTY STATE -->
+
+                <div
+                    class="empty-renewals"
+                    *ngIf="upcomingSubscriptions.length === 0">
+
+                    <i class="fa-regular fa-calendar-check"></i>
+
+                    <h4>No Upcoming Renewals</h4>
+
+                    <p>
+                        No active subscriptions are due in the next 7 days.
+                    </p>
+
+                </div>
 
             </div>
 
@@ -242,154 +439,275 @@
 
     </div>
 
-    <!-- ADD / EDIT PANEL -->
-  <!-- ================= ADD / EDIT PANEL ================= -->
 
-<div class="panel-overlay" *ngIf="showPanel" (click)="closePanel()">
+    <!-- ================= ADD / EDIT PANEL ================= -->
 
-    <div class="subscription-panel" (click)="$event.stopPropagation()">
+    <div
+        class="panel-overlay"
+        *ngIf="showPanel"
+        (click)="closePanel()">
 
-        <div class="panel-header">
 
-            <h2>
-                {{ isEditMode ? 'Edit Subscription' : 'Add Subscription' }}
-            </h2>
+        <div
+            class="subscription-panel"
+            (click)="$event.stopPropagation()">
 
-            <button
-                type="button"
-                class="close-btn"
-                (click)="closePanel()">
-                ✕
-            </button>
 
-        </div>
+            <!-- PANEL HEADER -->
 
-        <form>
+            <div class="panel-header">
 
-            <div class="form-group">
+                <h2>
 
-                <label>Subscription Name</label>
+                    <i
+                        class="fa-solid"
+                        [ngClass]="
+                            isEditMode
+                            ? 'fa-pen-to-square'
+                            : 'fa-circle-plus'
+                        ">
+                    </i>
 
-                <input
-                    type="text"
-                    name="subscriptionName"
-                    [(ngModel)]="newSubscription.subscriptionName">
+                    {{ isEditMode
+                        ? 'Edit Subscription'
+                        : 'Add Subscription'
+                    }}
 
-            </div>
+                </h2>
 
-            <div class="form-group">
-
-                <label>Category</label>
-
-                <select
-                    name="category"
-                    [(ngModel)]="newSubscription.category">
-
-                    <option value="">Select Category</option>
-
-                    <option
-                        *ngFor="let category of subscriptionCategories"
-                        [value]="category">
-
-                        {{ category }}
-
-                    </option>
-
-                </select>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>Amount</label>
-
-                <input
-                    type="number"
-                    name="amount"
-                    [(ngModel)]="newSubscription.amount">
-
-            </div>
-
-            <div class="form-group">
-
-                <label>Billing Cycle</label>
-
-                <select
-                    name="billingCycle"
-                    [(ngModel)]="newSubscription.billingCycle">
-
-                    <option value="Monthly">Monthly</option>
-                    <option value="Yearly">Yearly</option>
-
-                </select>
-
-            </div>
-
-            <div class="form-group">
-
-                <label>Next Payment</label>
-
-                <input
-                    type="date"
-                    name="nextPayment"
-                    [(ngModel)]="newSubscription.nextPayment">
-
-            </div>
-
-            <div class="form-group">
-
-                <label>Payment Method</label>
-
-                <input
-                    type="text"
-                    name="paymentMethod"
-                    [(ngModel)]="newSubscription.paymentMethod">
-
-            </div>
-
-            <div class="form-group">
-
-                <label>Status</label>
-
-                <select
-                    name="status"
-                    [(ngModel)]="newSubscription.status">
-
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-
-                </select>
-
-            </div>
-
-            <div class="panel-buttons">
 
                 <button
                     type="button"
-                    class="cancel-btn"
+                    class="close-btn"
                     (click)="closePanel()">
 
-                    Cancel
-
-                </button>
-
-                <button
-                    type="button"
-                    class="save-btn"
-                    (click)="saveSubscription()">
-
-                    {{ isEditMode ? 'Update Subscription' : 'Save Subscription' }}
+                    <i class="fa-solid fa-xmark"></i>
 
                 </button>
 
             </div>
 
-        </form>
+
+            <form>
+
+
+                <!-- SUBSCRIPTION NAME -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        <i class="fa-solid fa-heading"></i>
+
+                        Subscription Name
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="subscriptionName"
+                        placeholder="e.g. Netflix"
+                        [(ngModel)]="newSubscription.subscriptionName">
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        <i class="fa-solid fa-tags"></i>
+
+                        Category
+
+                    </label>
+
+                    <select
+                        name="category"
+                        [(ngModel)]="newSubscription.category">
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option
+                            *ngFor="let category of subscriptionCategories"
+                            [value]="category">
+
+                            {{ category }}
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- AMOUNT -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                        Amount
+
+                    </label>
+
+                    <input
+                        type="number"
+                        name="amount"
+                        placeholder="Enter amount"
+                        [(ngModel)]="newSubscription.amount">
+
+                </div>
+
+
+                <!-- BILLING CYCLE -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        <i class="fa-solid fa-arrows-rotate"></i>
+
+                        Billing Cycle
+
+                    </label>
+
+                    <select
+                        name="billingCycle"
+                        [(ngModel)]="newSubscription.billingCycle">
+
+                        <option value="Monthly">
+                            Monthly
+                        </option>
+
+                        <option value="Yearly">
+                            Yearly
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- NEXT PAYMENT -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        <i class="fa-solid fa-calendar-days"></i>
+
+                        Next Payment
+
+                    </label>
+
+                    <input
+                        type="date"
+                        name="nextPayment"
+                        [(ngModel)]="newSubscription.nextPayment">
+
+                </div>
+
+
+                <!-- PAYMENT METHOD -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        <i class="fa-solid fa-credit-card"></i>
+
+                        Payment Method
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="paymentMethod"
+                        placeholder="e.g. UPI, Card, Bank"
+                        [(ngModel)]="newSubscription.paymentMethod">
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        <i class="fa-solid fa-toggle-on"></i>
+
+                        Status
+
+                    </label>
+
+                    <select
+                        name="status"
+                        [(ngModel)]="newSubscription.status">
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="panel-buttons">
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        (click)="closePanel()">
+
+                        <i class="fa-solid fa-xmark"></i>
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="save-btn"
+                        (click)="saveSubscription()">
+
+                        <i
+                            class="fa-solid"
+                            [ngClass]="
+                                isEditMode
+                                ? 'fa-pen-to-square'
+                                : 'fa-floppy-disk'
+                            ">
+                        </i>
+
+                        {{ isEditMode
+                            ? 'Update Subscription'
+                            : 'Save Subscription'
+                        }}
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 
 </div>
-
-</div>
-
-

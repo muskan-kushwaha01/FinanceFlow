@@ -16,35 +16,140 @@
 
         <!-- Notification -->
 
-        <button class="icon-btn">
+        <!-- Notification -->
 
-            <mat-icon>notifications_none</mat-icon>
+<div class="notification-wrapper">
 
-            <span class="notification-dot"></span>
+  <button
+    class="icon-btn"
+    (click)="toggleNotifications()">
 
-        </button>
+    <mat-icon>
+      {{ unreadCount > 0 ? 'notifications' : 'notifications_none' }}
+    </mat-icon>
 
-        <!-- Profile -->
+    <span
+      class="notification-dot"
+      *ngIf="unreadCount > 0">
+    </span>
 
-        <div class="profile">
+  </button>
 
-            <div class="avatar">
-                M
-            </div>
 
-            <div class="user-info">
+  <!-- Notification Dropdown -->
 
-                <h4>Muskan</h4>
+  <div
+    class="notification-dropdown"
+    *ngIf="notificationOpen">
 
-                <span>Premium User</span>
+    <!-- Header -->
 
-            </div>
+    <div class="notification-header">
 
-            <mat-icon class="arrow">
-                expand_more
-            </mat-icon>
+      <div>
+        <h3>Notifications</h3>
+
+        <span *ngIf="unreadCount > 0">
+          {{ unreadCount }} unread
+        </span>
+
+        <span *ngIf="unreadCount === 0">
+          All caught up
+        </span>
+      </div>
+
+      <button
+        *ngIf="unreadCount > 0"
+        class="mark-read-btn"
+        (click)="markAllAsRead()">
+
+        Mark all read
+
+      </button>
+
+    </div>
+
+
+    <!-- Notifications -->
+
+    <div class="notification-list">
+
+      <div
+        class="notification-item"
+        *ngFor="let notification of notifications"
+        [class.unread]="!notification.read"
+        (click)="markAsRead(notification)">
+
+        <div class="notification-icon">
+
+          <mat-icon>
+            {{ notification.icon }}
+          </mat-icon>
 
         </div>
+
+        <div class="notification-content">
+
+          <h4>
+            {{ notification.title }}
+          </h4>
+
+          <p>
+            {{ notification.message }}
+          </p>
+
+          <span>
+            {{ notification.time }}
+          </span>
+
+        </div>
+
+        <div
+          class="unread-indicator"
+          *ngIf="!notification.read">
+        </div>
+
+      </div>
+
+
+      <!-- Empty state -->
+
+      <div
+        class="empty-notifications"
+        *ngIf="notifications.length === 0">
+
+        <mat-icon>notifications_none</mat-icon>
+
+        <p>No notifications</p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+        <!-- Profile -->
+
+       <div
+  class="profile"
+  routerLink="/app/profile"
+  routerLinkActive="profile-active">
+
+  <div class="avatar">
+    {{ userInitial }}
+  </div>
+
+  <div class="user-info">
+    <h4>{{ userName }}</h4>
+    <span>Premium User</span>
+  </div>
+
+  <mat-icon class="arrow">
+    expand_more
+  </mat-icon>
+
+</div>
 
     </div>
 

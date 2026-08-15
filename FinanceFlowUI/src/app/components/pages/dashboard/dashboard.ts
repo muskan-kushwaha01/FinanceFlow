@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { DashboardService } from '../../../services/dashboard.service';
+import { DashboardService, MonthlyReport } from '../../../services/dashboard.service';
 
 import { DashboardSummary } from '../../../models/dashboard-summary';
 import { RecentTransaction } from '../../../models/recent-transaction';
@@ -24,7 +24,7 @@ import {
   ChartConfiguration,
   registerables
 } from 'chart.js';
-
+import { FormsModule } from '@angular/forms';
 Chart.register(...registerables);
 
 @Component({
@@ -35,7 +35,8 @@ Chart.register(...registerables);
     RouterLink,
     NavbarComponent,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
@@ -44,7 +45,35 @@ export class Dashboard implements OnInit, AfterViewInit {
 
   today = new Date();
 
-  summary: DashboardSummary | null = null;
+selectedMonth = new Date().getMonth() + 1;
+selectedYear = new Date().getFullYear();
+userId = Number(localStorage.getItem('userId'));
+years: number[] = [];
+monthlyReport: MonthlyReport[] = [];
+months = [
+  { value: 1, name: 'January' },
+  { value: 2, name: 'February' },
+  { value: 3, name: 'March' },
+  { value: 4, name: 'April' },
+  { value: 5, name: 'May' },
+  { value: 6, name: 'June' },
+  { value: 7, name: 'July' },
+  { value: 8, name: 'August' },
+  { value: 9, name: 'September' },
+  { value: 10, name: 'October' },
+  { value: 11, name: 'November' },
+  { value: 12, name: 'December' }
+];
+
+topExpenseCategory = '';
+topExpenseAmount = 0;
+
+budgetSummary: any[] = [];
+
+totalBudget = 0;
+totalBudgetSpent = 0;
+budgetPercentage = 0;
+summary: DashboardSummary | null = null;
 
   recentTransactions: RecentTransaction[] = [];
 
@@ -63,31 +92,66 @@ ngOnInit(): void {
 
   console.log("Dashboard Loaded");
 
+  const currentYear = new Date().getFullYear();
+
+  for (let year = currentYear - 2; year <= currentYear; year++) {
+    this.years.push(year);
+  }
+
+  this.loadDashboard();
+}
+loadDashboard(): void {
+
   this.loadSummary();
 
   this.loadRecentTransactions();
 
   this.loadExpenseCategories();
 
+  this.loadMonthlyReport();
+    this.loadBudgetProgress();
+
 }
+loadMonthlyReport(): void {
 
-  ngAfterViewInit(): void {
+  this.dashboardService
+    .getMonthlyReport(
+      this.userId,
+      this.selectedYear
+    )
+    .subscribe({
 
-    // Wait until HTML is rendered
+      next: (data) => {
 
-    setTimeout(() => {
+        this.monthlyReport = data;
 
-      this.createFinancialChart();
+        this.cdr.detectChanges();
+
+        setTimeout(() => {
+          this.createFinancialChart();
+        }, 0);
+
+      },
+
+      error: (err) => {
+        console.error(
+          'Monthly Report Error:',
+          err
+        );
+      }
 
     });
-
-  }
-
+}
+  ngAfterViewInit(): void {
+  // Charts are created after API data loads.
+}
+onFilterChange(): void {
+  this.loadDashboard();
+}
   //---------------- Summary ----------------//
 loadSummary() {
 
-  this.dashboardService.getSummary().subscribe({
-
+this.dashboardService.getSummary(this.selectedMonth,this.selectedYear).subscribe({
     next: (data) => {
       this.summary = data;
       this.cdr.detectChanges();
@@ -104,13 +168,59 @@ goTo(route: string) {
   this.router.navigate(['/app', route]);
 }
 
+loadBudgetProgress(): void {
 
+  this.dashboardService
+    .getBudgetSummary(
+      this.userId,
+      this.selectedMonth,
+      this.selectedYear
+    )
+    .subscribe({
+
+      next: (data) => {
+
+        this.budgetSummary = data;
+
+        this.totalBudget = data.reduce(
+          (sum, item) => sum + item.budgetAmount,
+          0
+        );
+
+        this.totalBudgetSpent = data.reduce(
+          (sum, item) => sum + item.spentAmount,
+          0
+        );
+
+       const actualPercentage =
+  this.totalBudget > 0
+    ? (this.totalBudgetSpent / this.totalBudget) * 100
+    : 0;
+
+this.budgetPercentage = Math.round(actualPercentage);
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+        console.error(
+          'Budget Progress Error:',
+          err
+        );
+      }
+
+    });
+}
   //---------------- Transactions ----------------//
 
  loadRecentTransactions() {
 
-  this.dashboardService.getRecentTransactions().subscribe({
-
+this.dashboardService
+  .getRecentTransactions(
+    this.selectedMonth,
+    this.selectedYear
+  )
+  .subscribe({
     next: (data) => {
       this.recentTransactions = data;
       this.cdr.detectChanges();
@@ -127,109 +237,158 @@ goTo(route: string) {
 
   loadExpenseCategories() {
 
-  this.dashboardService.getExpenseByCategory().subscribe({
+  this.dashboardService
+    .getExpenseByCategory(
+      this.selectedMonth,
+      this.selectedYear
+    )
+    .subscribe({
 
-    next: (data) => {
+      next: (data) => {
 
-      this.expenseCategories = data;
-      this.cdr.detectChanges();
+        this.expenseCategories = data;
 
-      setTimeout(() => {
-        this.createCategoryChart();
-      });
+        // Find highest spending category
+        if (data.length > 0) {
 
-    },
+          const topCategory = [...data].sort(
+            (a, b) => b.totalAmount - a.totalAmount
+          )[0];
 
-    error: (err) => {
-      console.error("Expense Category Error:", err);
-    }
+          this.topExpenseCategory =
+            topCategory.categoryName;
 
-  });
+          this.topExpenseAmount =
+            topCategory.totalAmount;
 
-}
-  //---------------- Financial Chart ----------------//
+        } else {
 
-  createFinancialChart() {
+          this.topExpenseCategory = '';
+          this.topExpenseAmount = 0;
 
-    const canvas = document.getElementById(
-      'financialFlowChart'
-    ) as HTMLCanvasElement;
+        }
 
-    if (!canvas) return;
+        this.cdr.detectChanges();
 
-    this.financialChart?.destroy();
-
-    this.financialChart = new Chart(canvas, {
-
-      type: 'line',
-
-      data: {
-
-        labels: [
-
-          'Jan',
-
-          'Feb',
-
-          'Mar',
-
-          'Apr',
-
-          'May',
-
-          'Jun'
-
-        ],
-
-        datasets: [
-
-          {
-
-            label: 'Income',
-
-            data: [25000, 32000, 28000, 35000, 41000, 50000],
-
-            borderColor: '#2563EB',
-
-            backgroundColor: 'rgba(37,99,235,.15)',
-
-            fill: true,
-
-            tension: .4
-
-          },
-
-          {
-
-            label: 'Expense',
-
-            data: [12000, 15000, 11000, 18000, 16000, 22000],
-
-            borderColor: '#EF4444',
-
-            backgroundColor: 'rgba(239,68,68,.12)',
-
-            fill: true,
-
-            tension: .4
-
-          }
-
-        ]
+        setTimeout(() => {
+          this.createCategoryChart();
+        });
 
       },
 
-      options: {
+      error: (err) => {
+        console.error(
+          "Expense Category Error:",
+          err
+        );
+      }
 
-        responsive: true,
+    });
+}
+  //---------------- Financial Chart ----------------//
 
-        maintainAspectRatio: false,
+  createFinancialChart(): void {
 
-        plugins: {
+  const canvas = document.getElementById(
+    'financialFlowChart'
+  ) as HTMLCanvasElement;
 
-          legend: {
+  if (!canvas) return;
 
-            position: 'bottom'
+  this.financialChart?.destroy();
+
+  this.financialChart = new Chart(canvas, {
+
+    type: 'line',
+
+    data: {
+
+      labels: this.monthlyReport.map(
+        item => item.month.substring(0, 3)
+      ),
+
+      datasets: [
+
+        {
+          label: 'Income',
+
+          data: this.monthlyReport.map(
+            item => item.income
+          ),
+
+          borderColor: '#2563EB',
+
+          backgroundColor: 'rgba(37,99,235,.15)',
+
+          fill: true,
+
+          tension: .4
+        },
+
+        {
+          label: 'Expense',
+
+          data: this.monthlyReport.map(
+            item => item.expense
+          ),
+
+          borderColor: '#EF4444',
+
+          backgroundColor: 'rgba(239,68,68,.12)',
+
+          fill: true,
+
+          tension: .4
+        }
+
+      ]
+
+    },
+
+    options: {
+
+      responsive: true,
+
+      maintainAspectRatio: false,
+
+      plugins: {
+
+        legend: {
+          position: 'bottom'
+        },
+
+        tooltip: {
+
+          callbacks: {
+
+            label: (context) => {
+
+              const value = Number(context.raw);
+
+              return ` ₹${value.toLocaleString('en-IN')}`;
+
+            }
+
+          }
+
+        }
+
+      },
+
+      scales: {
+
+        y: {
+
+          beginAtZero: true,
+
+          ticks: {
+
+            callback: (value) => {
+
+              return '₹' +
+                Number(value).toLocaleString('en-IN');
+
+            }
 
           }
 
@@ -237,9 +396,10 @@ goTo(route: string) {
 
       }
 
-    });
+    }
 
-  }
+  });
+}
 
   //---------------- Category Chart ----------------//
 

@@ -51,7 +51,25 @@ latestIncomeSource = '';
 
 incomes: any[] = [];
 categories: any[] = [];
+selectedMonth = new Date().getMonth() + 1;
+selectedYear = new Date().getFullYear();
 
+years: number[] = [];
+
+months = [
+  { value: 1, name: 'January' },
+  { value: 2, name: 'February' },
+  { value: 3, name: 'March' },
+  { value: 4, name: 'April' },
+  { value: 5, name: 'May' },
+  { value: 6, name: 'June' },
+  { value: 7, name: 'July' },
+  { value: 8, name: 'August' },
+  { value: 9, name: 'September' },
+  { value: 10, name: 'October' },
+  { value: 11, name: 'November' },
+  { value: 12, name: 'December' }
+];
 constructor(
   private incomeService: IncomeService,
   private categoryService: CategoryService,
@@ -59,17 +77,34 @@ constructor(
 ) {}
 incomeChart: any;
 incomePieChart: any;
+
 ngOnInit(): void {
-this.loadCategories();
 
-this.loadIncomes();}
+  this.loadCategories();
 
+  const currentYear = new Date().getFullYear();
+
+  for (let year = currentYear - 2; year <= currentYear; year++) {
+    this.years.push(year);
+  }
+
+  this.loadIncomes();
+}
+onFilterChange(): void {
+
+  this.loadIncomes();
+
+}
 loadIncomes() {
 
   console.log("Loading incomes...");
 
-  this.incomeService.getIncomes().subscribe({
-
+this.incomeService
+  .getIncomes(
+    this.selectedMonth,
+    this.selectedYear
+  )
+  .subscribe({
     next: (data: any[]) => {
 
   this.incomes = data;
@@ -202,29 +237,27 @@ loadIncomeChart() {
     this.incomeChart.destroy();
   }
 
-  const monthTotals: any = {};
+  const daysInMonth = new Date(
+    this.selectedYear,
+    this.selectedMonth,
+    0
+  ).getDate();
+
+  const dailyTotals = new Array(daysInMonth).fill(0);
 
   this.incomes.forEach(income => {
 
-    const month = new Date(income.transactionDate)
-      .toLocaleString('default', { month: 'short' });
+    const date = new Date(income.transactionDate);
 
-    if (!monthTotals[month]) {
-      monthTotals[month] = 0;
-    }
+    const day = date.getDate();
 
-    monthTotals[month] += income.amount;
+    dailyTotals[day - 1] += Number(income.amount);
 
   });
 
-  const monthOrder = [
-    'Jan','Feb','Mar','Apr','May','Jun',
-    'Jul','Aug','Sep','Oct','Nov','Dec'
-  ];
-
-  const labels = monthOrder.filter(month => monthTotals[month]);
-
-  const values = labels.map(month => monthTotals[month]);
+  const labels = dailyTotals.map(
+    (_, index) => `${index + 1}`
+  );
 
   this.incomeChart = new Chart('incomeChart', {
 
@@ -237,10 +270,9 @@ loadIncomeChart() {
       datasets: [
 
         {
-
           label: 'Income',
 
-          data: values,
+          data: dailyTotals,
 
           borderColor: '#4CAF50',
 
@@ -252,7 +284,7 @@ loadIncomeChart() {
 
           tension: 0.4,
 
-          pointRadius: 5,
+          pointRadius: 4,
 
           pointBackgroundColor: '#2E7D32'
 
@@ -271,8 +303,52 @@ loadIncomeChart() {
       plugins: {
 
         legend: {
-
           display: true
+        },
+
+        tooltip: {
+
+          callbacks: {
+
+            label: (context) => {
+
+              const value = Number(context.raw);
+
+              return ` ₹${value.toLocaleString('en-IN')}`;
+
+            }
+
+          }
+
+        }
+
+      },
+
+      scales: {
+
+        x: {
+
+          title: {
+            display: true,
+            text: 'Day'
+          }
+
+        },
+
+        y: {
+
+          beginAtZero: true,
+
+          ticks: {
+
+            callback: (value) => {
+
+              return '₹' +
+                Number(value).toLocaleString('en-IN');
+
+            }
+
+          }
 
         }
 
@@ -549,16 +625,35 @@ deleteIncome(id: number) {
 
 }
 
- saveIncome() {
+saveIncome() {
 
-  // Your existing validations
-  // Example:
-  // if (this.newIncome.source.trim() === '') return;
-  // if (this.newIncome.categoryId === 0) return;
-if (!this.isEditMode) {
-  this.newIncome.transactionDate =
-    new Date().toISOString().split('T')[0];
-}
+  // Validate transaction date
+  if (!this.newIncome.transactionDate) {
+
+    alert('Please select a transaction date.');
+
+    return;
+  }
+
+  // Validate that date belongs to selected month/year
+  const selectedDate = new Date(
+    this.newIncome.transactionDate
+  );
+
+  if (
+    selectedDate.getMonth() + 1 !== this.selectedMonth ||
+    selectedDate.getFullYear() !== this.selectedYear
+  ) {
+
+    alert(
+      `Please select a date within ${this.months[this.selectedMonth - 1].name} ${this.selectedYear}.`
+    );
+
+    return;
+  }
+
+
+  // ================= EDIT INCOME =================
 
   if (this.isEditMode) {
 
@@ -582,29 +677,7 @@ if (!this.isEditMode) {
 
       error: (err) => {
 
-        console.error(err);
-
-      }
-
-    });
-
-  } else {
-
-    this.incomeService.addIncome(this.newIncome).subscribe({
-
-      next: () => {
-
-        alert("Income Added Successfully");
-
-        this.closeModal();
-
-        this.loadIncomes();
-
-      },
-
-      error: (err) => {
-
-        console.error(err);
+        console.error("Update Income Error:", err);
 
       }
 
@@ -612,5 +685,77 @@ if (!this.isEditMode) {
 
   }
 
+
+  // ================= ADD INCOME =================
+
+  else {
+
+    this.incomeService
+      .addIncome(this.newIncome)
+      .subscribe({
+
+        next: () => {
+
+          alert("Income Added Successfully");
+
+          this.closeModal();
+
+          this.loadIncomes();
+
+        },
+
+        error: (err) => {
+
+          console.error("Add Income Error:", err);
+
+        }
+
+      });
+
+  }
+
+}
+openAddIncome(): void {
+
+  this.isEditMode = false;
+  this.editingIncomeId = null;
+
+  const today = new Date();
+
+  const daysInMonth = new Date(
+    this.selectedYear,
+    this.selectedMonth,
+    0
+  ).getDate();
+
+  const day = Math.min(
+    today.getDate(),
+    daysInMonth
+  );
+
+  const month = this.selectedMonth
+    .toString()
+    .padStart(2, '0');
+
+  const date = day
+    .toString()
+    .padStart(2, '0');
+
+  this.newIncome.transactionDate =
+    `${this.selectedYear}-${month}-${date}`;
+
+  this.showModal = true;
+}
+getDaysInSelectedMonth(): string {
+
+  const days = new Date(
+    this.selectedYear,
+    this.selectedMonth,
+    0
+  ).getDate();
+
+  return days < 10
+    ? '0' + days
+    : days.toString();
 }
 }

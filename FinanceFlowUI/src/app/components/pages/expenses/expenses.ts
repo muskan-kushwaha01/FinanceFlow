@@ -7,7 +7,7 @@ import { CategoryService } from '../../../services/category.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import {DashboardService} from '../../../services/dashboard.service';
 @Component({
   selector: 'app-expense',
   standalone: true,
@@ -22,16 +22,37 @@ import { FormsModule } from '@angular/forms';
 export class ExpenseComponent implements OnInit{
   
 categories: Category[] = [];
+selectedMonth = new Date().getMonth() + 1;
+selectedYear = new Date().getFullYear();
+
+years: number[] = [];
+
+months = [
+  { value: 1, name: 'January' },
+  { value: 2, name: 'February' },
+  { value: 3, name: 'March' },
+  { value: 4, name: 'April' },
+  { value: 5, name: 'May' },
+  { value: 6, name: 'June' },
+  { value: 7, name: 'July' },
+  { value: 8, name: 'August' },
+  { value: 9, name: 'September' },
+  { value: 10, name: 'October' },
+  { value: 11, name: 'November' },
+  { value: 12, name: 'December' }
+];
+highestExpense = 0;
+highestExpenseMerchant = '';
 showModal = false;
 topExpenseCategory = '';
 topExpenseAmount = 0;
-
 activeCategories = 0;
 categoryList = '';
-
+monthlyBudget = 0;
+budgetSpent = 0;
+budgetPercentage = 0;
 latestExpenseDate = '';
 latestExpenseMerchant = '';
-
 expenseChart: Chart | null = null;
 expensePieChart: Chart | null = null;
 totalExpense = 0;
@@ -58,10 +79,19 @@ newExpense: Expense = {
 constructor(
   private expenseService: ExpenseService,
   private categoryService: CategoryService,
+  private dashboardService: DashboardService,
   private cdr: ChangeDetectorRef
 ) {}
-  ngOnInit() {
+ngOnInit() {
+
   this.loadCategories();
+
+  const currentYear = new Date().getFullYear();
+
+  for (let year = currentYear - 2; year <= currentYear; year++) {
+    this.years.push(year);
+  }
+
   this.loadExpenses();
 }
   // ==========================
@@ -78,15 +108,91 @@ getCategoryName(categoryId: number): string {
     : "Unknown";
 
 }
-  openModal() {
+openModal() {
+
   this.resetExpense();
+
+  const today = new Date();
+
+  const daysInMonth = new Date(
+    this.selectedYear,
+    this.selectedMonth,
+    0
+  ).getDate();
+
+  const day = Math.min(
+    today.getDate(),
+    daysInMonth
+  );
+
+  const month = this.selectedMonth
+    .toString()
+    .padStart(2, '0');
+
+  const date = day
+    .toString()
+    .padStart(2, '0');
+
+  this.newExpense.transactionDate =
+    `${this.selectedYear}-${month}-${date}`;
+
   this.showModal = true;
 }
 
   // ==========================
   // Close Modal
   // ==========================
+loadBudgetProgress(): void {
 
+  const userId = Number(
+    localStorage.getItem('userId')
+  );
+
+  this.dashboardService
+    .getBudgetSummary(
+      userId,
+      this.selectedMonth,
+      this.selectedYear
+    )
+    .subscribe({
+
+      next: (data: any[]) => {
+
+        this.monthlyBudget = data.reduce(
+          (sum, item) =>
+            sum + Number(item.budgetAmount),
+          0
+        );
+
+        this.budgetSpent = data.reduce(
+          (sum, item) =>
+            sum + Number(item.spentAmount),
+          0
+        );
+
+        this.budgetPercentage =
+          this.monthlyBudget > 0
+            ? Math.round(
+                (this.budgetSpent /
+                  this.monthlyBudget) * 100
+              )
+            : 0;
+
+        this.cdr.detectChanges();
+
+      },
+
+      error: (err) => {
+
+        console.error(
+          'Budget Progress Error:',
+          err
+        );
+
+      }
+
+    });
+}
   closeModal() {
 
     this.showModal = false;
@@ -94,33 +200,54 @@ getCategoryName(categoryId: number): string {
   }
  loadExpenses() {
 
-const userId = Number(localStorage.getItem('userId'));
+  const userId = Number(
+    localStorage.getItem('userId')
+  );
 
-this.expenseService.getExpenses(userId).subscribe({
-    next: (data: Expense[]) => {
+  this.expenseService
+    .getExpenses(
+      userId,
+      this.selectedMonth,
+      this.selectedYear
+    )
+    .subscribe({
 
-  this.expenses = data;
+      next: (data: Expense[]) => {
 
-  this.calculateSummary();
+        this.expenses = data;
 
-  this.cdr.detectChanges();
+        this.calculateSummary();
+        this.loadBudgetProgress();
 
-  this.loadExpenseChart();
+        this.cdr.detectChanges();
 
-  this.loadExpensePieChart();
+        setTimeout(() => {
 
-},
+          this.loadExpenseChart();
 
-    error: (err: any) => {
+          this.loadExpensePieChart();
 
-      console.error(err);
+        });
 
-    }
+      },
 
-  });
+      error: (err: any) => {
+
+        console.error(
+          "Expense Error:",
+          err
+        );
+
+      }
+
+    });
 
 }
+onFilterChange(): void {
 
+  this.loadExpenses();
+
+}
 calculateSummary() {
 
   // ==========================
@@ -128,42 +255,80 @@ calculateSummary() {
   // ==========================
 
   this.totalExpense = this.expenses.reduce(
-    (sum, expense) => sum + expense.amount,
+    (sum, expense) => sum + Number(expense.amount),
     0
   );
+
 
   // ==========================
   // Average Expense
   // ==========================
 
   this.averageExpense = this.expenses.length
-    ? Math.round(this.totalExpense / this.expenses.length)
+    ? Math.round(
+        this.totalExpense / this.expenses.length
+      )
     : 0;
+
+
+  // ==========================
+  // Highest Expense
+  // ==========================
+
+  if (this.expenses.length > 0) {
+
+    const highestExpense = this.expenses.reduce(
+      (max, expense) =>
+        Number(expense.amount) > Number(max.amount)
+          ? expense
+          : max
+    );
+
+    this.highestExpense =
+      Number(highestExpense.amount);
+
+    this.highestExpenseMerchant =
+      highestExpense.merchant;
+
+  } else {
+
+    this.highestExpense = 0;
+    this.highestExpenseMerchant = '';
+
+  }
+
 
   // ==========================
   // Total Categories
   // ==========================
 
   const uniqueCategories = new Set(
-    this.expenses.map(expense => expense.categoryId)
+    this.expenses.map(
+      expense => expense.categoryId
+    )
   );
 
-  this.totalCategories = uniqueCategories.size;
+  this.totalCategories =
+    uniqueCategories.size;
+
 
   // ==========================
   // Category-wise Totals
   // ==========================
 
-  const categoryTotals = new Map<number, number>();
+  const categoryTotals =
+    new Map<number, number>();
 
   this.expenses.forEach(expense => {
 
     categoryTotals.set(
       expense.categoryId,
-      (categoryTotals.get(expense.categoryId) || 0) + expense.amount
+      (categoryTotals.get(expense.categoryId) || 0)
+        + Number(expense.amount)
     );
 
   });
+
 
   // ==========================
   // Top Spending Category
@@ -172,29 +337,40 @@ calculateSummary() {
   let highestAmount = 0;
   let highestCategoryId = 0;
 
-  categoryTotals.forEach((amount, categoryId) => {
+  categoryTotals.forEach(
+    (amount, categoryId) => {
 
-    if (amount > highestAmount) {
+      if (amount > highestAmount) {
 
-      highestAmount = amount;
-      highestCategoryId = categoryId;
+        highestAmount = amount;
+        highestCategoryId = categoryId;
+
+      }
 
     }
+  );
 
-  });
+  this.topExpenseAmount =
+    highestAmount;
 
-  this.topExpenseAmount = highestAmount;
-  this.topExpenseCategory = this.getCategoryName(highestCategoryId);
+  this.topExpenseCategory =
+    highestCategoryId
+      ? this.getCategoryName(highestCategoryId)
+      : 'No expenses';
+
 
   // ==========================
   // Active Categories
   // ==========================
 
-  this.activeCategories = categoryTotals.size;
+  this.activeCategories =
+    categoryTotals.size;
 
-  this.categoryList = Array.from(categoryTotals.keys())
-    .map(id => this.getCategoryName(id))
-    .join(', ');
+  this.categoryList =
+    Array.from(categoryTotals.keys())
+      .map(id => this.getCategoryName(id))
+      .join(', ');
+
 
   // ==========================
   // Latest Expense
@@ -202,19 +378,26 @@ calculateSummary() {
 
   if (this.expenses.length > 0) {
 
-    const latestExpense = [...this.expenses].sort(
-      (a, b) =>
-        new Date(b.transactionDate).getTime() -
-        new Date(a.transactionDate).getTime()
-    )[0];
+    const latestExpense =
+      [...this.expenses].sort(
+        (a, b) =>
+          new Date(b.transactionDate).getTime() -
+          new Date(a.transactionDate).getTime()
+      )[0];
 
-    this.latestExpenseDate = new Date(latestExpense.transactionDate)
-      .toLocaleDateString('en-IN', {
-        day: 'numeric',
-        month: 'short'
-      });
+    this.latestExpenseDate =
+      new Date(
+        latestExpense.transactionDate
+      ).toLocaleDateString(
+        'en-IN',
+        {
+          day: 'numeric',
+          month: 'short'
+        }
+      );
 
-    this.latestExpenseMerchant = latestExpense.merchant;
+    this.latestExpenseMerchant =
+      latestExpense.merchant;
 
   } else {
 
@@ -233,9 +416,6 @@ loadCategories() {
 
       this.categories = data;
 
-      this.calculateSummary();
-      this.loadExpensePieChart();
-
     },
 
     error: (err) => {
@@ -251,85 +431,147 @@ loadCategories() {
   // EXPENSE TREND CHART
   // ======================================
 
- loadExpenseChart() {
+loadExpenseChart() {
 
   if (this.expenseChart) {
     this.expenseChart.destroy();
   }
 
-  // Group expenses by month
-  const monthlyTotals = new Map<string, number>();
+  const daysInMonth = new Date(
+    this.selectedYear,
+    this.selectedMonth,
+    0
+  ).getDate();
+
+  const dailyTotals = new Array(
+    daysInMonth
+  ).fill(0);
 
   this.expenses.forEach(expense => {
 
-    const month = new Date(expense.transactionDate)
-      .toLocaleString('default', { month: 'short' });
+    const date = new Date(
+      expense.transactionDate
+    );
 
-    monthlyTotals.set(
-      month,
-      (monthlyTotals.get(month) || 0) + expense.amount
+    const day = date.getDate();
+
+    dailyTotals[day - 1] += Number(
+      expense.amount
     );
 
   });
 
-  const labels = Array.from(monthlyTotals.keys());
-  const data = Array.from(monthlyTotals.values());
+  const labels = dailyTotals.map(
+    (_, index) => `${index + 1}`
+  );
 
-  this.expenseChart = new Chart('expenseChart', {
+  this.expenseChart = new Chart(
+    'expenseChart',
+    {
 
-    type: 'line',
+      type: 'line',
 
-    data: {
+      data: {
 
-      labels: labels,
+        labels: labels,
 
-      datasets: [
+        datasets: [
 
-        {
+          {
 
-          label: 'Expenses',
+            label: 'Expenses',
 
-          data: data,
+            data: dailyTotals,
 
-          borderColor: '#43A047',
+            borderColor: '#43A047',
 
-          backgroundColor: 'rgba(167,196,160,0.25)',
+            backgroundColor:
+              'rgba(167,196,160,0.25)',
 
-          borderWidth: 3,
+            borderWidth: 3,
 
-          fill: true,
+            fill: true,
 
-          tension: 0.4,
+            tension: 0.4,
 
-          pointRadius: 5,
+            pointRadius: 4,
 
-          pointBackgroundColor: '#2E7D32'
+            pointBackgroundColor: '#2E7D32'
 
-        }
+          }
 
-      ]
+        ]
 
-    },
+      },
 
-    options: {
+      options: {
 
-      responsive: true,
+        responsive: true,
 
-      maintainAspectRatio: false,
+        maintainAspectRatio: false,
 
-      plugins: {
+        plugins: {
 
-        legend: {
+          legend: {
+            display: true
+          },
 
-          display: true
+          tooltip: {
+
+            callbacks: {
+
+              label: (context) => {
+
+                const value =
+                  Number(context.raw);
+
+                return ` ₹${value.toLocaleString(
+                  'en-IN'
+                )}`;
+
+              }
+
+            }
+
+          }
+
+        },
+
+        scales: {
+
+          x: {
+
+            title: {
+              display: true,
+              text: 'Day'
+            }
+
+          },
+
+          y: {
+
+            beginAtZero: true,
+
+            ticks: {
+
+              callback: (value) => {
+
+                return '₹' +
+                  Number(value)
+                    .toLocaleString('en-IN');
+
+              }
+
+            }
+
+          }
 
         }
 
       }
 
     }
-
-  });
+  );
 
 }
 
@@ -422,13 +664,6 @@ loadExpensePieChart() {
   // FILTER
   // ======================================
 
-  changeFilter(event:any){
-
-    const value = event.target.value;
-
-    console.log("Selected :", value);
-
-  }
 
   // ======================================
   // VIEW ALL
@@ -488,6 +723,30 @@ deleteExpense(expenseId: number) {
   // ======================================
 
  saveExpense() {
+  if (!this.newExpense.transactionDate) {
+
+  alert("Please select a transaction date.");
+
+  return;
+
+}
+
+const selectedDate = new Date(
+  this.newExpense.transactionDate
+);
+
+if (
+  selectedDate.getMonth() + 1 !== this.selectedMonth ||
+  selectedDate.getFullYear() !== this.selectedYear
+) {
+
+  alert(
+    `Please select a date within ${this.months[this.selectedMonth - 1].name} ${this.selectedYear}.`
+  );
+
+  return;
+
+}
 
   if (this.newExpense.categoryId == 0) {
 
@@ -520,9 +779,7 @@ deleteExpense(expenseId: number) {
   merchant: this.newExpense.merchant,
   amount: this.newExpense.amount,
   paymentMethod: this.newExpense.paymentMethod,
-  transactionDate: this.isEditMode
-    ? this.newExpense.transactionDate
-    : new Date().toISOString().split('T')[0],
+transactionDate: this.newExpense.transactionDate,
   description: this.newExpense.description,
   receiptImage: this.newExpense.receiptImage
 };
@@ -602,4 +859,17 @@ resetExpense() {
   this.editingExpenseId = null;
 
 }
+getDaysInSelectedMonth(): string {
+
+  const days = new Date(
+    this.selectedYear,
+    this.selectedMonth,
+    0
+  ).getDate();
+
+  return days < 10
+    ? '0' + days
+    : days.toString();
+}
+
 }

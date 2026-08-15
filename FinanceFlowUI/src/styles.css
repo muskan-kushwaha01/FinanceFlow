@@ -47,3 +47,44 @@ a,
 .summary-card{
     transition:.25s ease;
 }
+
+body.dark-theme {
+  background: #111827 !important;
+  color: #f9fafb !important;
+}
+
+body.dark-theme .main-content {
+  background: #111827 !important;
+}
+
+body.dark-theme .settings-page {
+  background: #111827 !important;
+}
+
+body.dark-theme .settings-card {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4 {
+  color: #f9fafb !important;
+}
+
+body.dark-theme p {
+  color: #9ca3af !important;
+}
+
+body.dark-theme .setting-row {
+  border-color: #374151 !important;
+}
+
+body.dark-theme select,
+body.dark-theme input,
+body.dark-theme textarea {
+  background: #374151 !important;
+  color: #f9fafb !important;
+  border-color: #4b5563 !important;
+}

@@ -63,26 +63,77 @@ constructor(
   private subscriptionService: SubscriptionService,
   private cdr: ChangeDetectorRef
 ) {}
-  ngOnInit(): void {
-    this.loadSubscriptions();
-    this.loadSummary();
-  }
+ngOnInit(): void {
 
-  loadSubscriptions(): void {
+  const userId = Number(
+    localStorage.getItem('userId')
+  );
 
-  this.subscriptionService.getSubscriptions(this.userId).subscribe({
+  this.subscriptionService
+    .processRenewals(userId)
+    .subscribe({
 
-    next: (data) => {
+      next: () => {
 
-      this.subscriptions = data;
+        this.loadSubscriptions();
+        this.loadSummary();
 
-      this.createChart();
+      },
 
-    },
+      error: (err) => {
 
-    error: (err) => console.error(err)
+        console.error(
+          'Recurring payment processing failed:',
+          err
+        );
 
-  });
+        // Still load subscriptions
+        this.loadSubscriptions();
+        this.loadSummary();
+
+      }
+
+    });
+
+}
+
+loadSubscriptions(): void {
+
+  const userId = Number(
+    localStorage.getItem('userId')
+  );
+
+  this.subscriptionService
+    .getSubscriptions(userId)
+    .subscribe({
+
+      next: (data) => {
+
+        this.subscriptions = data;
+
+        console.log(
+          'Subscriptions loaded:',
+          this.subscriptions
+        );
+
+        this.cdr.detectChanges();
+
+        setTimeout(() => {
+          this.createChart();
+        }, 0);
+
+      },
+
+      error: (err) => {
+
+        console.error(
+          'Subscription loading error:',
+          err
+        );
+
+      }
+
+    });
 
 }
 createChart(): void {
@@ -167,11 +218,36 @@ get upcomingSubscriptions(): Subscription[] {
 
   const today = new Date();
 
+  today.setHours(0, 0, 0, 0);
+
+  const next7Days = new Date(today);
+
+  next7Days.setDate(
+    next7Days.getDate() + 7
+  );
+
   return this.subscriptions
-    .filter(sub => sub.status === 'Active')
-    .sort((a, b) =>
-      new Date(a.nextPayment).getTime() -
-      new Date(b.nextPayment).getTime()
+    .filter(subscription => {
+
+      if (subscription.status !== 'Active') {
+        return false;
+      }
+
+      const paymentDate =
+        new Date(subscription.nextPayment);
+
+      paymentDate.setHours(0, 0, 0, 0);
+
+      return (
+        paymentDate >= today &&
+        paymentDate <= next7Days
+      );
+
+    })
+    .sort(
+      (a, b) =>
+        new Date(a.nextPayment).getTime() -
+        new Date(b.nextPayment).getTime()
     )
     .slice(0, 5);
 
@@ -217,16 +293,36 @@ get filteredSubscriptions(): Subscription[] {
   });
 
 }
-  loadSummary(): void {
-    this.subscriptionService.getSummary(this.userId).subscribe({
+loadSummary(): void {
+
+  const userId = Number(
+    localStorage.getItem('userId')
+  );
+
+  this.subscriptionService
+    .getSummary(userId)
+    .subscribe({
+
       next: (data) => {
-this.summary = data;
-this.cdr.detectChanges();      },
+
+        this.summary = data;
+
+        this.cdr.detectChanges();
+
+      },
+
       error: (err) => {
-        console.error(err);
+
+        console.error(
+          'Subscription summary error:',
+          err
+        );
+
       }
+
     });
-  }
+
+}
 
   deleteSubscription(id: number): void {
 

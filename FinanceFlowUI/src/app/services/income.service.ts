@@ -11,11 +11,16 @@ export class IncomeService {
 private apiUrl = 'https://localhost:7144/api/Incomes';
   constructor(private http: HttpClient) { }
 
-  getIncomes(): Observable<Income[]> {
+getIncomes(
+  month: number,
+  year: number
+): Observable<Income[]> {
 
   const userId = localStorage.getItem("userId");
 
-  return this.http.get<Income[]>(`${this.apiUrl}?userId=${userId}`);
+  return this.http.get<Income[]>(
+    `${this.apiUrl}?userId=${userId}&month=${month}&year=${year}`
+  );
 
 }
   getIncome(id: number): Observable<Income> {

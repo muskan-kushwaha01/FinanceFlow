@@ -1,4 +1,4 @@
-using FinanceTrackerApp;
+using FinanceTrackerApp.DTO.Profile;
 using FinanceTrackerApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +34,102 @@ public class UsersController : ControllerBase
         }
 
         return user;
+    }
+    // GET: api/Users/profile/5
+    [HttpGet("profile/{userid}")]
+    public async Task<ActionResult<UserProfileDTO>> GetProfile(int userid)
+    {
+        var user = await _context.Users
+            .Where(u => u.UserId == userid)
+            .Select(u => new UserProfileDTO
+            {
+                UserId = u.UserId,
+                FullName = u.FullName,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                DateOfBirth = u.DateOfBirth,
+                Gender = u.Gender
+            })
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(user);
+    }
+    // PUT: api/Users/profile/5
+    [HttpPut("profile/{userid}")]
+    public async Task<IActionResult> UpdateProfile(
+        int userid,
+        UserProfileDTO profile)
+    {
+        if (userid != profile.UserId)
+        {
+            return BadRequest();
+        }
+
+        var user = await _context.Users.FindAsync(userid);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        user.FullName = profile.FullName;
+        user.PhoneNumber = profile.PhoneNumber;
+        user.DateOfBirth = profile.DateOfBirth;
+        user.Gender = profile.Gender;
+        user.UpdatedAt = DateTime.Now;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+    // PUT: api/Users/change-password
+    [HttpPut("change-password")]
+    public async Task<IActionResult> ChangePassword(ChangePasswordDTO request)
+    {
+        var user = await _context.Users.FindAsync(request.UserId);
+
+        if (user == null)
+        {
+            return NotFound(new
+            {
+                message = "User not found."
+            });
+        }
+
+        var passwordHasher = new PasswordHasher<User>();
+
+        var passwordResult = passwordHasher.VerifyHashedPassword(
+            user,
+            user.PasswordHash,
+            request.CurrentPassword
+        );
+
+        if (passwordResult == PasswordVerificationResult.Failed)
+        {
+            return BadRequest(new
+            {
+                message = "Current password is incorrect."
+            });
+        }
+
+        user.PasswordHash = passwordHasher.HashPassword(
+            user,
+            request.NewPassword
+        );
+
+        user.UpdatedAt = DateTime.Now;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "Password changed successfully."
+        });
     }
 
     // POST: api/Users/register

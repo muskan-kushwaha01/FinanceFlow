@@ -1340,3 +1340,81 @@ textarea{
     }
 
 }
+
+/* =========================
+   EXPENSE MONTH/YEAR FILTER
+========================= */
+
+.expense-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.expense-filter {
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 0 12px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 9px;
+
+    transition: all 0.2s ease;
+}
+
+.expense-filter:hover {
+    border-color: #43A047;
+}
+
+.expense-filter:focus-within {
+    border-color: #43A047;
+
+    box-shadow:
+        0 0 0 3px rgba(67, 160, 71, 0.1);
+}
+
+.expense-filter i {
+    color: #43A047;
+    font-size: 15px;
+}
+
+.expense-filter select {
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    color: #1e293b;
+
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+
+    .expense-header-actions {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .expense-filter {
+        flex: 1;
+    }
+
+    .expense-filter select {
+        width: 100%;
+    }
+
+    .add-btn {
+        width: 100%;
+    }
+}

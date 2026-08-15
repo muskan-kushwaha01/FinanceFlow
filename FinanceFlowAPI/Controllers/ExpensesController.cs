@@ -14,11 +14,19 @@ public class ExpensesController : ControllerBase
     }
 
     // GET: api/Expense
+    // GET: api/Expenses?userId=2&month=8&year=2026
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetExpensesByUser([FromQuery] int userId)
+    public async Task<ActionResult<IEnumerable<ExpenseDto>>> GetExpensesByUser(
+     [FromQuery] int userId,
+     [FromQuery] int month,
+     [FromQuery] int year)
     {
         var expenses = await _context.Expenses
-            .Where(e => e.UserId == userId)
+            .Where(e =>
+                e.UserId == userId &&
+                e.TransactionDate.Month == month &&
+                e.TransactionDate.Year == year)
             .Select(e => new ExpenseDto
             {
                 ExpenseId = e.ExpenseId,
@@ -31,6 +39,7 @@ public class ExpensesController : ControllerBase
                 Description = e.Description,
                 ReceiptImage = e.ReceiptImage
             })
+            .OrderByDescending(e => e.TransactionDate)
             .ToListAsync();
 
         return Ok(expenses);

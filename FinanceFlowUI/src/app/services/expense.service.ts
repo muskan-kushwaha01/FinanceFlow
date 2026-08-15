@@ -12,9 +12,14 @@ export class ExpenseService {
 
   constructor(private http: HttpClient) {}
 
-getExpenses(userId: number): Observable<Expense[]> {
+getExpenses(
+  userId: number,
+  month: number,
+  year: number
+): Observable<Expense[]> {
+
   return this.http.get<Expense[]>(
-    `${this.apiUrl}?userId=${userId}`
+    `${this.apiUrl}?userId=${userId}&month=${month}&year=${year}`
   );
 }
 

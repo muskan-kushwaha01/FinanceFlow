@@ -1,1 +1,331 @@
-<p>reports works!</p>
+<div class="reports-page">
+
+  <!-- HEADER -->
+  <div class="reports-header">
+
+    <div class="header-content">
+      <h1>Financial Reports</h1>
+      <p>
+        Analyze your income, expenses, budgets and savings.
+      </p>
+    </div>
+
+    <div class="report-filters">
+
+      <select
+        [(ngModel)]="selectedMonth"
+        (change)="onFilterChange()">
+
+        <option
+          *ngFor="let month of months"
+          [value]="month.value">
+
+          {{ month.name }}
+
+        </option>
+
+      </select>
+
+      <select
+        [(ngModel)]="selectedYear"
+        (change)="onFilterChange()">
+
+        <option
+          *ngFor="let year of years"
+          [value]="year">
+
+          {{ year }}
+
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- SUMMARY CARDS -->
+
+  <div class="summary-grid">
+
+    <div class="summary-card income-card">
+
+      <div class="card-label">
+        Total Income
+      </div>
+
+      <div class="card-value">
+        ₹{{ summary?.totalIncome | number:'1.0-0' }}
+      </div>
+
+      <div class="card-subtext">
+        {{ months[selectedMonth - 1].name }} {{ selectedYear }}
+      </div>
+
+    </div>
+
+
+    <div class="summary-card expense-card">
+
+      <div class="card-label">
+        Total Expenses
+      </div>
+
+      <div class="card-value">
+        ₹{{ summary?.totalExpense | number:'1.0-0' }}
+      </div>
+
+      <div class="card-subtext">
+        {{ months[selectedMonth - 1].name }} {{ selectedYear }}
+      </div>
+
+    </div>
+
+
+    <div class="summary-card savings-card">
+
+      <div class="card-label">
+        Net Savings
+      </div>
+
+      <div class="card-value">
+        ₹{{ summary?.netSavings | number:'1.0-0' }}
+      </div>
+
+      <div class="card-subtext">
+        Income − Expenses
+      </div>
+
+    </div>
+
+
+    <div class="summary-card rate-card">
+
+      <div class="card-label">
+        Savings Rate
+      </div>
+
+      <div class="card-value">
+        {{ summary?.savingsRate }}%
+      </div>
+
+      <div class="card-subtext">
+        Of your total income
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- INCOME VS EXPENSE -->
+
+  <div class="report-card full-width">
+
+    <div class="section-header">
+
+      <div>
+        <h2>Income vs Expense</h2>
+
+        <p>
+          Monthly financial activity for {{ selectedYear }}
+        </p>
+      </div>
+
+    </div>
+
+    <div class="chart-container large-chart">
+      <canvas id="incomeExpenseChart"></canvas>
+    </div>
+
+  </div>
+
+
+  <!-- TWO COLUMN ROW -->
+
+  <div class="report-grid">
+
+
+    <!-- EXPENSE BREAKDOWN -->
+
+    <div class="report-card">
+
+      <div class="section-header">
+
+        <div>
+          <h2>Expense Breakdown</h2>
+
+          <p>
+            Spending by category
+          </p>
+        </div>
+
+      </div>
+
+      <div class="chart-container">
+        <canvas id="expenseCategoryChart"></canvas>
+      </div>
+
+    </div>
+
+
+    <!-- BUDGET VS ACTUAL -->
+
+    <div class="report-card">
+
+      <div class="section-header">
+
+        <div>
+          <h2>Budget vs Actual</h2>
+
+          <p>
+            Planned vs actual spending
+          </p>
+        </div>
+
+      </div>
+
+      <div class="chart-container">
+        <canvas id="budgetChart"></canvas>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- SECOND TWO COLUMN ROW -->
+
+  <div class="report-grid">
+
+
+    <!-- PAYMENT METHODS -->
+
+    <div class="report-card">
+
+      <div class="section-header">
+
+        <div>
+          <h2>Payment Methods</h2>
+
+          <p>
+            How you paid for expenses
+          </p>
+        </div>
+
+      </div>
+
+      <div class="chart-container">
+        <canvas id="paymentMethodChart"></canvas>
+      </div>
+
+    </div>
+
+
+    <!-- SAVINGS GOALS -->
+
+    <div class="report-card savings-goal-card">
+
+      <div class="section-header">
+
+        <div>
+          <h2>Savings Goals</h2>
+
+          <p>
+            Overall progress across your goals
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="goal-amount">
+
+        <strong>
+          ₹{{ summary?.totalSavingsGoalSaved | number:'1.0-0' }}
+        </strong>
+
+        <span>
+          of ₹{{ summary?.totalSavingsGoalTarget | number:'1.0-0' }}
+        </span>
+
+      </div>
+
+
+      <div class="progress-track">
+
+        <div
+          class="progress-fill"
+          [style.width.%]="summary?.savingsGoalProgress">
+        </div>
+
+      </div>
+
+
+      <div class="progress-info">
+
+        <span>
+          Goal Progress
+        </span>
+
+        <strong>
+          {{ summary?.savingsGoalProgress }}%
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- SUBSCRIPTIONS -->
+
+  <div class="report-card subscription-card">
+
+    <div class="section-header">
+
+      <div>
+        <h2>Subscription Spending</h2>
+
+        <p>
+          Your active recurring expenses
+        </p>
+      </div>
+
+    </div>
+
+
+    <div class="subscription-stats">
+
+      <div class="subscription-stat">
+
+        <span>
+          Monthly Cost
+        </span>
+
+        <strong>
+          ₹{{ summary?.monthlySubscriptionCost | number:'1.0-0' }}
+        </strong>
+
+      </div>
+
+
+      <div class="subscription-stat">
+
+        <span>
+          Yearly Cost
+        </span>
+
+        <strong>
+          ₹{{ summary?.yearlySubscriptionCost | number:'1.0-0' }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

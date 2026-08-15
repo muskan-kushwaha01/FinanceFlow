@@ -287,3 +287,18 @@
     }
 
 }
+
+.bottom-section .profile {
+  cursor: pointer;
+  border-radius: 12px;
+  padding: 8px;
+  transition: 0.2s ease;
+}
+
+.bottom-section .profile:hover {
+  background: #f5f7ff;
+}
+
+.bottom-section .profile-active {
+  background: #f5f7ff;
+}

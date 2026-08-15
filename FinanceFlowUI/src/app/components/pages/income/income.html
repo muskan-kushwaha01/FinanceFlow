@@ -12,19 +12,59 @@
 
         </div>
 
-        <div class="nav-right">
+       <div class="nav-right income-header-actions">
 
-            <button class="add-btn" (click)="showModal=true">
+    <div class="income-filter">
 
-                <i class="fa-solid fa-plus"></i>
+        <i class="fa-solid fa-calendar-days"></i>
 
-                 Add Income
+        <select
+            [(ngModel)]="selectedMonth"
+            (change)="onFilterChange()">
 
-            </button>
+            <option
+                *ngFor="let month of months"
+                [value]="month.value">
 
-            
+                {{ month.name }}
 
-        </div>
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="income-filter">
+
+        <select
+            [(ngModel)]="selectedYear"
+            (change)="onFilterChange()">
+
+            <option
+                *ngFor="let year of years"
+                [value]="year">
+
+                {{ year }}
+
+            </option>
+
+        </select>
+
+    </div>
+
+
+   <button
+    class="add-btn"
+    (click)="openAddIncome()">
+
+    <i class="fa-solid fa-plus"></i>
+
+    Add Income
+
+</button>
+
+</div>
 
     </div>
 
@@ -48,8 +88,10 @@
 
 <h2>₹{{ totalIncome }}</h2>
 
-                <small>Current Month</small>
-
+<small>
+    {{ months[selectedMonth - 1].name }}
+    {{ selectedYear }}
+</small>
             </div>
 
         </div>
@@ -110,8 +152,9 @@
 
             <div>
 
-                <p>This Month</p>
-
+<p>
+    {{ months[selectedMonth - 1].name }}
+</p>
 <h2>{{ totalEntries }}</h2>
                 <small>Income Entries</small>
 
@@ -127,39 +170,29 @@
 
         <!-- Line Chart -->
 
-        <div class="line-chart">
+       <!-- Line Chart -->
 
-            <div class="section-header">
+<div class="line-chart">
 
-                <h3>Income Trend</h3>
+    <div class="section-header">
 
-                <select (change)="changeFilter($event)">
+        <div>
 
-                    <option value="6">
+            <h3>Income Trend</h3>
 
-                        Last 6 Months
-
-                    </option>
-
-                    <option value="12">
-
-                        Last 12 Months
-
-                    </option>
-
-                    <option value="all">
-
-                        View All
-
-                    </option>
-
-                </select>
-
-            </div>
-
-            <canvas id="incomeChart"></canvas>
+            <p>
+                Daily income for
+                {{ months[selectedMonth - 1].name }}
+                {{ selectedYear }}
+            </p>
 
         </div>
+
+    </div>
+
+    <canvas id="incomeChart"></canvas>
+
+</div>
 
         <!-- Pie Chart -->
 
@@ -453,12 +486,27 @@
     </textarea>
 
 </div>
+<div class="form-group transaction-date-group">
+
+    <label>Transaction Date</label>
+
+    <input
+        type="date"
+        [(ngModel)]="newIncome.transactionDate"
+        name="transactionDate"
+        [min]="selectedYear + '-' + (selectedMonth < 10 ? '0' : '') + selectedMonth + '-01'"
+        [max]="selectedYear + '-' + (selectedMonth < 10 ? '0' : '') + selectedMonth + '-' + getDaysInSelectedMonth()">
+
+</div>
+
 <div class="form-note">
 
     <i class="fa-solid fa-circle-info"></i>
 
     <span>
-        Transaction date will be added automatically.
+        Select a date within
+        {{ months[selectedMonth - 1].name }}
+        {{ selectedYear }}.
     </span>
 
 </div>

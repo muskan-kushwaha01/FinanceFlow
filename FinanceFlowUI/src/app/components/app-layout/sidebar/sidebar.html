@@ -102,18 +102,21 @@
   <!-- Bottom -->
   <div class="bottom-section">
 
-    <div class="profile">
+    <div
+  class="profile"
+  routerLink="/app/profile"
+  routerLinkActive="profile-active">
 
-      <div class="avatar">
-        {{ userInitial }}
-      </div>
+  <div class="avatar">
+    {{ userInitial }}
+  </div>
 
-      <div>
-        <h4>{{ userName }}</h4>
-        <p>Premium User</p>
-      </div>
+  <div>
+    <h4>{{ userName }}</h4>
+    <p>Premium User</p>
+  </div>
 
-    </div>
+</div>
 
     <button
       class="logout-btn"

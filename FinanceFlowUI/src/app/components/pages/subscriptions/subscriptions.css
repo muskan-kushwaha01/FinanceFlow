@@ -745,3 +745,199 @@
     box-shadow:0 10px 25px rgba(37,99,235,.25);
 
 }
+
+/* =========================
+   SUBSCRIPTION CARD ACTIONS
+========================= */
+
+.card-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #eef1f5;
+}
+
+.card-actions button {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.card-actions button:hover {
+    transform: translateY(-2px);
+}
+
+.card-actions i {
+    font-size: 14px;
+}
+
+
+/* Edit */
+
+.edit-btn {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.edit-btn:hover {
+    background: #2563eb;
+    color: white;
+}
+
+
+/* Delete */
+
+.delete-btn {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+.delete-btn:hover {
+    background: #ef4444;
+    color: white;
+}
+
+/* =========================
+   SUBSCRIPTION ICON
+========================= */
+
+.subscription-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    flex-shrink: 0;
+}
+
+
+/* Entertainment */
+
+.icon-entertainment {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+
+/* Streaming */
+
+.icon-streaming {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+
+/* Music */
+
+.icon-music {
+    background: #fce7f3;
+    color: #db2777;
+}
+
+
+/* Gaming */
+
+.icon-gaming {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+
+/* Technology */
+
+.icon-technology {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+/* Education */
+
+.icon-education {
+    background: #f3e8ff;
+    color: #9333ea;
+}
+
+
+/* Productivity */
+
+.icon-productivity {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+
+/* Books */
+
+.icon-books {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+
+/* Health & Fitness */
+
+.icon-health-\&-fitness {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+/* Travel */
+
+.icon-travel {
+    background: #ecfeff;
+    color: #0891b2;
+}
+
+
+/* Shopping */
+
+.icon-shopping {
+    background: #fdf2f8;
+    color: #c026d3;
+}
+
+
+/* Bills */
+
+.icon-bills {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.category i {
+    display: inline-block !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    margin-right: 6px;
+}
+
+.next-payment i {
+    display: inline-block !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}

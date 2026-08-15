@@ -13,19 +13,48 @@
             <p>Manage your finances with real-time insights and stay on track with your goals.</p>
         </div>
 
-        <div class="header-right">
+        <div class="header-right dashboard-filters">
 
-            <button class="filter-btn">
+    <div class="filter-select">
 
-                <mat-icon>calendar_month</mat-icon>
+        <mat-icon>calendar_month</mat-icon>
 
-                This Month
+        <select
+            [(ngModel)]="selectedMonth"
+            (change)="onFilterChange()">
 
-                <mat-icon>keyboard_arrow_down</mat-icon>
+            <option
+                *ngFor="let month of months"
+                [value]="month.value">
 
-            </button>
+                {{ month.name }}
 
-        </div>
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="filter-select">
+
+        <select
+            [(ngModel)]="selectedYear"
+            (change)="onFilterChange()">
+
+            <option
+                *ngFor="let year of years"
+                [value]="year">
+
+                {{ year }}
+
+            </option>
+
+        </select>
+
+    </div>
+
+</div>
 
     </div>
 
@@ -46,12 +75,9 @@
                 </div>
 
                 <span class="trend positive">
-
-                    <mat-icon>trending_up</mat-icon>
-
-                    12.4%
-
-                </span>
+    <mat-icon>calendar_month</mat-icon>
+    {{ months[selectedMonth - 1].name }}
+</span>
 
             </div>
 
@@ -84,12 +110,9 @@
                 </div>
 
                 <span class="trend positive">
-
-                    <mat-icon>trending_up</mat-icon>
-
-                    8.2%
-
-                </span>
+    <mat-icon>calendar_month</mat-icon>
+    {{ months[selectedMonth - 1].name }}
+</span>
 
             </div>
 
@@ -103,8 +126,7 @@
 
                 </h2>
 
-                <small>Compared to last month</small>
-
+<small>{{ months[selectedMonth - 1].name }} income</small>
             </div>
 
         </div>
@@ -121,13 +143,10 @@
 
                 </div>
 
-                <span class="trend negative">
-
-                    <mat-icon>trending_down</mat-icon>
-
-                    5.1%
-
-                </span>
+                <span class="trend positive">
+    <mat-icon>calendar_month</mat-icon>
+    {{ months[selectedMonth - 1].name }}
+</span>
 
             </div>
 
@@ -202,15 +221,14 @@
 
                 <h3>Financial Overview</h3>
 
-                <p>Track your income and expenses over the last 6 months</p>
-
+<p>
+  Track your income and expenses throughout {{ selectedYear }}
+</p>
             </div>
 
-            <button class="chart-btn">
-
-                Monthly
-
-            </button>
+           <span class="chart-year">
+    {{ selectedYear }}
+</span>
 
         </div>
 
@@ -368,16 +386,25 @@
 
             <h3>Budget Progress</h3>
 
-            <span class="progress-value">72%</span>
+            <span class="progress-value">
+    {{ budgetPercentage }}%
+</span>
 
-            <div class="progress-bar">
+<div class="progress-bar">
 
-                <div class="progress-fill"></div>
+   <div
+    class="progress-fill"
+    [style.width.%]="budgetPercentage > 100 ? 100 : budgetPercentage">
+</div>
 
-            </div>
+</div>
 
-            <p>₹72,000 of ₹1,00,000 budget used</p>
-
+<p>
+    ₹{{ totalBudgetSpent | number:'1.0-0' }}
+    of
+    ₹{{ totalBudget | number:'1.0-0' }}
+    budget used
+</p>
         </div>
 
         <div class="widget-card">
@@ -401,31 +428,49 @@
 </div>
         <div class="widget-card ai-card">
 
-            <div class="ai-header">
+    <div class="ai-header">
 
-                <mat-icon>auto_awesome</mat-icon>
+        <mat-icon>auto_awesome</mat-icon>
 
-                <h3>AI Insight</h3>
+        <h3>Spending Insight</h3>
+    </div>
 
-            </div>
+    <ng-container *ngIf="topExpenseCategory; else noInsight">
 
-            <p>
+        <p>
+            Your highest spending category this month is
+            <strong>{{ topExpenseCategory }}</strong>,
+            with
+            <strong>
+                {{ topExpenseAmount | currency:'INR':'symbol':'1.0-0' }}
+            </strong>
+            spent.
+        </p>
 
-                Your Food expenses increased by
+        <div class="tip">
 
-                <strong>18%</strong>
-
-                this month.
-
-            </p>
-
-            <div class="tip">
-
-                💡 Try limiting food delivery to twice a week to improve monthly savings.
-
-            </div>
+            💡 Keep an eye on your
+            <strong>{{ topExpenseCategory }}</strong>
+            spending to improve your monthly savings.
 
         </div>
+
+    </ng-container>
+
+    <ng-template #noInsight>
+
+        <p>
+            No expense data is available for
+            {{ months[selectedMonth - 1].name }} {{ selectedYear }}.
+        </p>
+
+        <div class="tip">
+            💡 Add some expenses to start receiving spending insights.
+        </div>
+
+    </ng-template>
+
+</div>
 
     </div>
 
