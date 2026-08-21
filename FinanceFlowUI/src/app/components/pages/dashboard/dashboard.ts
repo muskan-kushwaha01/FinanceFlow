@@ -149,21 +149,38 @@ onFilterChange(): void {
   this.loadDashboard();
 }
   //---------------- Summary ----------------//
-loadSummary() {
+loadSummary(): void {
 
-this.dashboardService.getSummary(this.selectedMonth,this.selectedYear).subscribe({
-    next: (data) => {
-      this.summary = data;
-      this.cdr.detectChanges();
-    },
+  this.dashboardService
+    .getSummary(
+      this.userId,
+      this.selectedMonth,
+      this.selectedYear
+    )
+    .subscribe({
 
-    error: (err) => {
-      console.error("Summary Error:", err);
-    }
+      next: (data) => {
 
-  });
+        console.log('Dashboard Summary:', data);
 
+        this.summary = data;
+
+        this.cdr.detectChanges();
+
+      },
+
+      error: (err) => {
+
+        console.error(
+          'Summary Error:',
+          err
+        );
+
+      }
+
+    });
 }
+
 goTo(route: string) {
   this.router.navigate(['/app', route]);
 }
@@ -213,32 +230,11 @@ this.budgetPercentage = Math.round(actualPercentage);
 }
   //---------------- Transactions ----------------//
 
- loadRecentTransactions() {
-
-this.dashboardService
-  .getRecentTransactions(
-    this.selectedMonth,
-    this.selectedYear
-  )
-  .subscribe({
-    next: (data) => {
-      this.recentTransactions = data;
-      this.cdr.detectChanges();
-    },
-
-    error: (err) => {
-      console.error("Recent Transaction Error:", err);
-    }
-
-  });
-
-}
-  //---------------- Expense Categories ----------------//
-
-  loadExpenseCategories() {
+loadRecentTransactions(): void {
 
   this.dashboardService
-    .getExpenseByCategory(
+    .getRecentTransactions(
+      this.userId,
       this.selectedMonth,
       this.selectedYear
     )
@@ -246,14 +242,57 @@ this.dashboardService
 
       next: (data) => {
 
+        console.log(
+          'Recent Transactions:',
+          data
+        );
+
+        this.recentTransactions = data;
+
+        this.cdr.detectChanges();
+
+      },
+
+      error: (err) => {
+
+        console.error(
+          'Recent Transaction Error:',
+          err
+        );
+
+      }
+
+    });
+}
+  //---------------- Expense Categories ----------------//
+
+  loadExpenseCategories(): void {
+
+  this.dashboardService
+    .getExpenseByCategory(
+      this.userId,
+      this.selectedMonth,
+      this.selectedYear
+    )
+    .subscribe({
+
+      next: (data) => {
+
+        console.log(
+          'Expense Categories:',
+          data
+        );
+
         this.expenseCategories = data;
 
-        // Find highest spending category
         if (data.length > 0) {
 
-          const topCategory = [...data].sort(
-            (a, b) => b.totalAmount - a.totalAmount
-          )[0];
+          const topCategory =
+            [...data].sort(
+              (a, b) =>
+                b.totalAmount -
+                a.totalAmount
+            )[0];
 
           this.topExpenseCategory =
             topCategory.categoryName;
@@ -272,15 +311,17 @@ this.dashboardService
 
         setTimeout(() => {
           this.createCategoryChart();
-        });
+        }, 0);
 
       },
 
       error: (err) => {
+
         console.error(
-          "Expense Category Error:",
+          'Expense Category Error:',
           err
         );
+
       }
 
     });

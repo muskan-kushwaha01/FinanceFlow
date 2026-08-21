@@ -11,13 +11,25 @@ import { SubscriptionsComponent } from './components/pages/subscriptions/subscri
 import { SavingGoalsComponent } from './components/pages/saving-goals/saving-goals';
 import { SettingsComponent } from './components/pages/settings/settings';
 import { ProfileComponent } from './components/pages/profile/profile';
-
+import { RegisterComponent } from './components/auth/register/register';
+import { ForgotPasswordComponent } from './components/auth/forget-pass/forget-pass';
+import { SplitBillComponent } from './components/pages/split-bill/split-bill';
 
 export const routes: Routes = [
 
   {
     path: '',
     component: LoginComponent
+  },
+
+  {
+    path: 'register',
+    component: RegisterComponent
+  },
+
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent
   },
 
   {
@@ -67,6 +79,10 @@ export const routes: Routes = [
   {
   path: 'profile',
   component: ProfileComponent
+},
+{
+  path: 'split-bill',
+  component: SplitBillComponent
 }
 
     ]

@@ -84,8 +84,8 @@ namespace FinanceTrackerApp.Controllers
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: creds);
+expires: DateTime.UtcNow.AddHours(1),
+signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

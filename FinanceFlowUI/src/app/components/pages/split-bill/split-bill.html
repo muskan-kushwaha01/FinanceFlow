@@ -1,0 +1,1537 @@
+<div class="split-bill-page">
+
+    <!-- ================================================= -->
+    <!-- HEADER -->
+    <!-- ================================================= -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Split Bills
+            </h1>
+
+            <p>
+                Easily split expenses and keep track of who owes what.
+            </p>
+
+        </div>
+
+
+        <button
+            class="add-btn"
+            type="button"
+            (click)="openAddPanel()">
+
+            <span>+</span>
+
+            Split New Bill
+
+        </button>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- SUMMARY -->
+    <!-- ================================================= -->
+
+    <div class="summary-grid">
+
+
+        <!-- TOTAL AMOUNT -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon blue">
+                ₹
+            </div>
+
+            <div>
+
+                <span>
+                    Total Split Amount
+                </span>
+
+                <h2>
+                    ₹{{ totalAmount | number:'1.2-2' }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL BILLS -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon purple">
+                ⇄
+            </div>
+
+            <div>
+
+                <span>
+                    Total Bills
+                </span>
+
+                <h2>
+                    {{ totalBills }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- PENDING BILLS -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon orange">
+                ⏳
+            </div>
+
+            <div>
+
+                <span>
+                    Pending Bills
+                </span>
+
+                <h2>
+                    {{ activeBills }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- SETTLED BILLS -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon green">
+                ✓
+            </div>
+
+            <div>
+
+                <span>
+                    Settled Bills
+                </span>
+
+                <h2>
+                    {{ totalBills - activeBills }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- PERSONAL SUMMARY -->
+    <!-- ================================================= -->
+
+    <div class="personal-summary">
+
+
+        <!-- YOU OWE -->
+
+        <div class="personal-card owe-card">
+
+            <div class="personal-card-icon">
+                ↓
+            </div>
+
+            <div>
+
+                <span>
+                    You Owe
+                </span>
+
+                <h3>
+                    ₹{{ totalYouOwe | number:'1.2-2' }}
+                </h3>
+
+                <small>
+                    Across your split bills
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- YOU SHOULD RECEIVE -->
+
+        <div class="personal-card receive-card">
+
+            <div class="personal-card-icon">
+                ↑
+            </div>
+
+            <div>
+
+                <span>
+                    You Should Receive
+                </span>
+
+                <h3>
+                    ₹{{ totalYouShouldReceive | number:'1.2-2' }}
+                </h3>
+
+                <small>
+                    Money others owe you
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL PENDING -->
+
+        <div class="personal-card pending-card">
+
+            <div class="personal-card-icon">
+                ⏳
+            </div>
+
+            <div>
+
+                <span>
+                    Total Pending
+                </span>
+
+                <h3>
+                    ₹{{ totalPending | number:'1.2-2' }}
+                </h3>
+
+                <small>
+                    Yet to be settled
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- BILLS SECTION -->
+    <!-- ================================================= -->
+
+    <div class="bills-section">
+
+
+        <!-- SECTION HEADER -->
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    Your Split Bills
+                </h2>
+
+                <p>
+                    Manage and track your shared expenses.
+                </p>
+
+            </div>
+
+
+            <span class="bill-count">
+
+                {{ filteredSplitBills.length }} Bills
+
+            </span>
+
+        </div>
+
+
+
+        <!-- ================================================= -->
+        <!-- SEARCH & FILTERS -->
+        <!-- ================================================= -->
+
+        <div class="bill-filters">
+
+
+            <!-- SEARCH -->
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    🔍
+                </span>
+
+                <input
+                    type="text"
+                    placeholder="Search bills..."
+                    [(ngModel)]="searchText">
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <select
+                [(ngModel)]="statusFilter">
+
+                <option value="All">
+                    All Status
+                </option>
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+                <option value="Settled">
+                    Settled
+                </option>
+
+            </select>
+
+
+            <!-- SPLIT TYPE -->
+
+            <select
+                [(ngModel)]="splitTypeFilter">
+
+                <option value="All">
+                    All Split Types
+                </option>
+
+                <option value="Equal">
+                    Equal
+                </option>
+
+                <option value="Unequal">
+                    Unequal
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- ================================================= -->
+        <!-- EMPTY STATE -->
+        <!-- ================================================= -->
+
+        <div
+            class="empty-state"
+            *ngIf="splitBills.length === 0">
+
+            <div class="empty-icon">
+                ⇄
+            </div>
+
+            <h3>
+                No split bills yet
+            </h3>
+
+            <p>
+                Create your first split bill to start
+                tracking shared expenses.
+            </p>
+
+            <button
+                class="add-btn"
+                type="button"
+                (click)="openAddPanel()">
+
+                + Create Split Bill
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ================================================= -->
+        <!-- FILTER EMPTY STATE -->
+        <!-- ================================================= -->
+
+        <div
+            class="empty-state filter-empty"
+            *ngIf="
+                splitBills.length > 0 &&
+                filteredSplitBills.length === 0
+            ">
+
+            <div class="empty-icon">
+                🔍
+            </div>
+
+            <h3>
+                No matching bills
+            </h3>
+
+            <p>
+                Try changing your search or filters.
+            </p>
+
+            <button
+                type="button"
+                class="clear-filter-btn"
+                (click)="
+                    searchText = '';
+                    statusFilter = 'All';
+                    splitTypeFilter = 'All'
+                ">
+
+                Clear Filters
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ================================================= -->
+        <!-- BILL GRID -->
+        <!-- ================================================= -->
+
+        <div
+            class="bill-grid"
+            *ngIf="
+                splitBills.length > 0 &&
+                filteredSplitBills.length > 0
+            ">
+
+
+            <!-- ================================================= -->
+            <!-- BILL CARD -->
+            <!-- ================================================= -->
+
+            <div
+                class="bill-card"
+                *ngFor="let bill of filteredSplitBills">
+
+
+                <!-- ================= BILL TOP ================= -->
+
+                <div class="bill-top">
+
+                    <div class="bill-icon">
+                        ⇄
+                    </div>
+
+
+                    <div class="bill-actions">
+
+
+                        <!-- EDIT -->
+
+                        <button
+                            type="button"
+                            class="icon-btn edit"
+                            (click)="openEditPanel(bill)"
+                            title="Edit">
+
+                            ✎
+
+                        </button>
+
+
+                        <!-- DELETE -->
+
+                        <button
+                            type="button"
+                            class="icon-btn delete"
+                            (click)="deleteSplitBill(bill.splitBillId!)"
+                            title="Delete">
+
+                            ×
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================= BILL INFO ================= -->
+
+                <div class="bill-info">
+
+                    <h3>
+                        {{ bill.billName }}
+                    </h3>
+
+                    <p class="date">
+
+                        {{ bill.billDate | date:'dd MMM yyyy' }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- ================= TOTAL + STATUS ================= -->
+
+                <div class="amount-row">
+
+                    <div>
+
+                        <span>
+                            Total Bill
+                        </span>
+
+                        <strong>
+                            ₹{{ bill.totalAmount | number:'1.2-2' }}
+                        </strong>
+
+                    </div>
+
+
+                    <span
+                        class="status"
+                        [class.settled]="
+                            getBillStatus(bill) === 'Settled'
+                        ">
+
+                        {{ getBillStatus(bill) }}
+
+                    </span>
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- PERSONAL BALANCE -->
+                <!-- ================================================= -->
+
+                <div
+                    class="personal-balance"
+                    *ngIf="getCurrentUserParticipant(bill)">
+
+                    <div class="balance-content">
+
+                        <span>
+                            {{ getUserBalanceLabel(bill) }}
+                        </span>
+
+
+                        <strong
+                            [class.receive]="
+                                getUserBalance(bill) > 0.01
+                            "
+                            [class.owe]="
+                                getUserBalance(bill) < -0.01
+                            "
+                            [class.settled-balance]="
+                                getUserBalance(bill) >= -0.01 &&
+                                getUserBalance(bill) <= 0.01
+                            ">
+
+
+                            <!-- RECEIVE -->
+
+                            <ng-container
+                                *ngIf="
+                                    getUserBalance(bill) > 0.01
+                                ">
+
+                                +₹{{
+                                    getUserBalance(bill)
+                                    | number:'1.2-2'
+                                }}
+
+                            </ng-container>
+
+
+                            <!-- OWE -->
+
+                            <ng-container
+                                *ngIf="
+                                    getUserBalance(bill) < -0.01
+                                ">
+
+                                ₹{{
+                                    Math.abs(
+                                        getUserBalance(bill)
+                                    )
+                                    | number:'1.2-2'
+                                }}
+
+                            </ng-container>
+
+
+                            <!-- SETTLED -->
+
+                            <ng-container
+                                *ngIf="
+                                    getUserBalance(bill) >= -0.01 &&
+                                    getUserBalance(bill) <= 0.01
+                                ">
+
+                                ✓
+
+                            </ng-container>
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- PARTICIPANTS -->
+                <!-- ================================================= -->
+
+                <div class="participants">
+
+
+                    <!-- PARTICIPANTS HEADER -->
+
+                    <div class="participants-header">
+
+                        <span>
+                            Participants
+                        </span>
+
+                        <span>
+                            {{ bill.participants.length }}
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- PARTICIPANT ITEM -->
+
+                    <div
+                        class="participant-item"
+                        *ngFor="
+                            let participant of bill.participants
+                        ">
+
+
+                        <!-- ================= PARTICIPANT INFO ================= -->
+
+                        <div class="participant-info">
+
+
+                            <!-- AVATAR -->
+
+                            <div class="participant-avatar">
+
+                                {{
+                                    participant.participantName
+                                        .charAt(0)
+                                        .toUpperCase()
+                                }}
+
+                            </div>
+
+
+                            <!-- DETAILS -->
+
+                            <div class="participant-details">
+
+
+                                <strong>
+                                    {{ participant.participantName }}
+                                </strong>
+
+
+                                <!-- PAYER -->
+
+                                <span
+                                    *ngIf="
+                                        isPayer(
+                                            bill,
+                                            participant
+                                        )
+                                    "
+                                    class="paid-by-label">
+
+                                    ✓ Paid the bill
+
+                                </span>
+
+
+                                <!-- NORMAL PARTICIPANT -->
+
+                                <span
+                                    *ngIf="
+                                        !isPayer(
+                                            bill,
+                                            participant
+                                        )
+                                    ">
+
+                                    Owes
+                                    ₹{{
+                                        participant.amountOwed
+                                        | number:'1.2-2'
+                                    }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ================= PAYMENT ================= -->
+
+                        <div class="participant-payment">
+
+
+                            <div class="payment-numbers">
+
+
+                                <!-- PAYER -->
+
+                                <ng-container
+                                    *ngIf="
+                                        isPayer(
+                                            bill,
+                                            participant
+                                        );
+                                        else normalParticipant
+                                    ">
+
+                                    <span class="paid-status">
+
+                                        ✓ Paid by
+                                        {{ participant.participantName }}
+
+                                    </span>
+
+                                </ng-container>
+
+
+
+                                <!-- NORMAL PARTICIPANT -->
+
+                                <ng-template
+                                    #normalParticipant>
+
+
+                                    <!-- PAID -->
+
+                                    <span>
+
+                                        Paid:
+
+                                        <strong>
+
+                                            ₹{{
+                                                (participant.amountPaid || 0)
+                                                | number:'1.2-2'
+                                            }}
+
+                                        </strong>
+
+                                    </span>
+
+
+                                    <!-- REMAINING -->
+
+                                    <span
+                                        *ngIf="
+                                            getParticipantRemaining(
+                                                bill,
+                                                participant
+                                            ) > 0
+                                        ">
+
+                                        Remaining:
+
+                                        <strong class="remaining">
+
+                                            ₹{{
+                                                getParticipantRemaining(
+                                                    bill,
+                                                    participant
+                                                )
+                                                | number:'1.2-2'
+                                            }}
+
+                                        </strong>
+
+                                    </span>
+
+
+                                    <!-- PAID STATUS -->
+
+                                    <span
+                                        *ngIf="
+                                            getParticipantRemaining(
+                                                bill,
+                                                participant
+                                            ) <= 0
+                                        "
+                                        class="paid-status">
+
+                                        ✓ Paid
+
+                                    </span>
+
+                                </ng-template>
+
+                            </div>
+
+
+
+                            <!-- MARK PAID -->
+
+                            <button
+                                *ngIf="
+                                    !isPayer(
+                                        bill,
+                                        participant
+                                    ) &&
+                                    getParticipantRemaining(
+                                        bill,
+                                        participant
+                                    ) > 0
+                                "
+                                type="button"
+                                class="mark-paid-btn"
+                                (click)="
+                                    markParticipantPaid(
+                                        bill,
+                                        participant
+                                    )
+                                ">
+
+                                Mark Paid
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- SETTLEMENT -->
+                <!-- ================================================= -->
+
+                <div
+                    class="settlement-section"
+                    *ngIf="
+                        getSettlement(bill).length > 0
+                    ">
+
+
+                    <!-- HEADER -->
+
+                    <div class="settlement-header">
+
+                        <div>
+
+                            <h4>
+                                Who Pays Whom
+                            </h4>
+
+                            <p>
+                                Remaining settlements for this bill
+                            </p>
+
+                        </div>
+
+
+                        <span class="settlement-count">
+
+                            {{ getSettlement(bill).length }}
+
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- SETTLEMENT ITEMS -->
+
+                    <div
+                        class="settlement-item"
+                        *ngFor="
+                            let settlement of getSettlement(bill)
+                        ">
+
+
+                        <!-- FROM -->
+
+                        <div class="settlement-user">
+
+
+                            <div class="settlement-avatar from">
+
+                                {{
+                                    settlement.from
+                                        .charAt(0)
+                                        .toUpperCase()
+                                }}
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    {{ settlement.from }}
+                                </strong>
+
+                                <small>
+                                    Pays
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- AMOUNT -->
+
+                        <div class="settlement-middle">
+
+                            <span class="settlement-amount">
+
+                                ₹{{
+                                    settlement.amount
+                                    | number:'1.2-2'
+                                }}
+
+                            </span>
+
+                            <span class="settlement-arrow">
+                                →
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- TO -->
+
+                        <div class="settlement-user">
+
+
+                            <div class="settlement-avatar to">
+
+                                {{
+                                    settlement.to
+                                        .charAt(0)
+                                        .toUpperCase()
+                                }}
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    {{ settlement.to }}
+                                </strong>
+
+                                <small>
+                                    Receives
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- FULLY SETTLED -->
+                <!-- ================================================= -->
+
+                <div
+                    class="settled-message"
+                    *ngIf="
+                        getSettlement(bill).length === 0 &&
+                        getBillStatus(bill) === 'Settled'
+                    ">
+
+
+                    <span class="settled-check">
+                        ✓
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            Fully Settled
+                        </strong>
+
+                        <small>
+                            Everyone has paid their share.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- BILL FOOTER -->
+                <!-- ================================================= -->
+
+                <div class="bill-footer">
+
+                    <span>
+                        {{ bill.splitType }} Split
+                    </span>
+
+                    <span>
+                        {{ bill.participants.length }} People
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- ADD / EDIT SIDE PANEL -->
+    <!-- ================================================= -->
+
+    <div
+        class="overlay"
+        *ngIf="showPanel"
+        (click)="closePanel()">
+
+
+        <div
+            class="side-panel"
+            (click)="$event.stopPropagation()">
+
+
+            <!-- ================= PANEL HEADER ================= -->
+
+            <div class="panel-header">
+
+
+                <div>
+
+                    <h2>
+
+                        {{
+                            isEditing
+                                ? 'Edit Split Bill'
+                                : 'Split New Bill'
+                        }}
+
+                    </h2>
+
+
+                    <p>
+                        Add the bill and people involved.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="close-btn"
+                    (click)="closePanel()">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+
+            <!-- ================= PANEL BODY ================= -->
+
+            <div class="panel-body">
+
+
+                <!-- ================= BILL NAME ================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Bill Name
+                    </label>
+
+                    <input
+                        type="text"
+                        placeholder="e.g. Dinner, Trip, Movie"
+                        [(ngModel)]="splitBill.billName">
+
+                </div>
+
+
+
+                <!-- ================= AMOUNT + DATE ================= -->
+
+                <div class="form-row">
+
+
+                    <!-- AMOUNT -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Total Amount
+                        </label>
+
+
+                        <div class="amount-input">
+
+                            <span>
+                                ₹
+                            </span>
+
+
+                            <input
+                                type="number"
+                                min="0"
+                                placeholder="0.00"
+                                [(ngModel)]="
+                                    splitBill.totalAmount
+                                "
+                                (ngModelChange)="
+                                    calculateEqualSplit()
+                                ">
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DATE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Date
+                        </label>
+
+                        <input
+                            type="date"
+                            [(ngModel)]="
+                                splitBill.billDate
+                            ">
+
+                    </div>
+
+                </div>
+
+<!-- ================================================= -->
+<!-- CATEGORY -->
+<!-- ================================================= -->
+
+<div class="form-group">
+
+    <label>
+        Category
+    </label>
+
+    <select
+        [(ngModel)]="splitBill.categoryId"
+        name="categoryId">
+
+        <option [ngValue]="null">
+            Select expense category
+        </option>
+
+        <option
+            *ngFor="
+                let category of expenseCategories
+            "
+            [ngValue]="category.categoryId">
+
+            {{ category.categoryName }}
+
+        </option>
+
+    </select>
+
+</div>
+
+                <!-- ================================================= -->
+                <!-- PAID BY -->
+                <!-- ================================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Paid By
+                    </label>
+
+
+                    <select
+                        [(ngModel)]="
+                            splitBill.paidBy
+                        ">
+
+                        <option value="">
+                            Select who paid
+                        </option>
+
+
+                        <option
+                            *ngFor="
+                                let participant
+                                of splitBill.participants
+                            "
+                            [value]="
+                                participant.participantName
+                            ">
+
+                            {{ participant.participantName }}
+
+
+                            <ng-container
+                                *ngIf="
+                                    participant.participantName
+                                        .trim()
+                                        .toLowerCase() ===
+                                    currentUserName
+                                        .trim()
+                                        .toLowerCase()
+                                ">
+
+                                (You)
+
+                            </ng-container>
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- SPLIT TYPE -->
+                <!-- ================================================= -->
+
+                <div class="form-group">
+
+                    <label>
+                        Split Type
+                    </label>
+
+
+                    <div class="split-options">
+
+
+                        <!-- EQUAL -->
+
+                        <button
+                            type="button"
+                            [class.active]="
+                                splitBill.splitType === 'Equal'
+                            "
+                            (click)="
+                                splitBill.splitType = 'Equal';
+                                onSplitTypeChange()
+                            ">
+
+                            <strong>
+                                Equal
+                            </strong>
+
+                            <small>
+                                Divide equally
+                            </small>
+
+                        </button>
+
+
+
+                        <!-- UNEQUAL -->
+
+                        <button
+                            type="button"
+                            [class.active]="
+                                splitBill.splitType === 'Unequal'
+                            "
+                            (click)="
+                                splitBill.splitType = 'Unequal';
+                                onSplitTypeChange()
+                            ">
+
+                            <strong>
+                                Unequal
+                            </strong>
+
+                            <small>
+                                Set individual amounts
+                            </small>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- PARTICIPANTS FORM -->
+                <!-- ================================================= -->
+
+                <div class="participants-form">
+
+
+                    <!-- PARTICIPANT HEADER -->
+
+                    <div class="participants-title">
+
+
+                        <div>
+
+                            <h3>
+                                Participants
+                            </h3>
+
+                            <p>
+                                Add everyone sharing this bill.
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="add-person-btn"
+                            (click)="addParticipant()">
+
+                            + Add Person
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- ================================================= -->
+                    <!-- ADD YOURSELF -->
+                    <!-- ================================================= -->
+
+                    <button
+                        type="button"
+                        class="add-self-btn"
+                        (click)="addCurrentUser()"
+                        [disabled]="
+                            isCurrentUserAdded()
+                        ">
+
+                        {{
+                            isCurrentUserAdded()
+                                ? '✓ You Added'
+                                : '+ Add Yourself'
+                        }}
+
+                    </button>
+
+
+
+                    <!-- ================================================= -->
+                    <!-- PARTICIPANT INPUTS -->
+                    <!-- ================================================= -->
+
+                    <div
+                        class="person-input"
+                        *ngFor="
+                            let participant of splitBill.participants;
+                            let i = index
+                        ">
+
+
+                        <!-- NUMBER -->
+
+                        <div class="person-number">
+
+                            {{ i + 1 }}
+
+                        </div>
+
+
+
+                        <!-- NAME -->
+
+                        <input
+                            type="text"
+                            placeholder="Person name"
+                            [(ngModel)]="
+                                participant.participantName
+                            ">
+
+
+
+                        <!-- EQUAL AMOUNT -->
+
+                        <div
+                            class="person-amount"
+                            *ngIf="
+                                splitBill.splitType === 'Equal'
+                            ">
+
+                            ₹{{
+                                participant.amountOwed
+                                | number:'1.2-2'
+                            }}
+
+                        </div>
+
+
+
+                        <!-- UNEQUAL AMOUNT -->
+
+                        <input
+                            *ngIf="
+                                splitBill.splitType === 'Unequal'
+                            "
+                            type="number"
+                            min="0"
+                            class="unequal-input"
+                            placeholder="Amount"
+                            [(ngModel)]="
+                                participant.amountOwed
+                            ">
+
+
+
+                        <!-- REMOVE -->
+
+                        <button
+                            type="button"
+                            class="remove-person"
+                            (click)="
+                                removeParticipant(i)
+                            ">
+
+                            ×
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- ================================================= -->
+                    <!-- UNEQUAL TOTAL -->
+                    <!-- ================================================= -->
+
+                    <div
+                        class="amount-summary"
+                        *ngIf="
+                            splitBill.splitType === 'Unequal'
+                        ">
+
+
+                        <span>
+                            Participant Total
+                        </span>
+
+
+                        <strong
+                            [class.invalid]="
+                                !isUnequalAmountValid()
+                            ">
+
+                            ₹{{
+                                getParticipantsTotal()
+                                | number:'1.2-2'
+                            }}
+
+                        </strong>
+
+
+                        <small
+                            *ngIf="
+                                !isUnequalAmountValid()
+                            ">
+
+                            Must equal ₹{{
+                                splitBill.totalAmount
+                                | number:'1.2-2'
+                            }}
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- PANEL FOOTER -->
+            <!-- ================================================= -->
+
+            <div class="panel-footer">
+
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    (click)="closePanel()">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="save-btn"
+                    (click)="saveSplitBill()">
+
+                    {{
+                        isEditing
+                            ? 'Update Bill'
+                            : 'Create Bill'
+                    }}
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

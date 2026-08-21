@@ -25,7 +25,12 @@ public partial class Expense
 
     public DateTime? CreatedAt { get; set; }
 
+    // Split Bill reference
+    public int? SplitBillId { get; set; }
+
     public virtual Category Category { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+
+    public virtual SplitBill? SplitBill { get; set; }
 }

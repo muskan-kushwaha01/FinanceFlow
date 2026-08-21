@@ -1,0 +1,1274 @@
+.split-bill-page {
+    padding: 30px;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+/* ================= HEADER ================= */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.page-header h1 {
+    font-size: 30px;
+    color: #111827;
+    margin: 0 0 6px;
+}
+
+.page-header p {
+    color: #6b7280;
+    margin: 0;
+}
+
+/* ================= BUTTON ================= */
+
+.add-btn {
+    border: none;
+    background: linear-gradient(135deg, #2563eb, #1e3a8a);
+    color: white;
+    padding: 13px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+    transition: 0.25s;
+}
+
+.add-btn span {
+    font-size: 20px;
+    margin-right: 6px;
+}
+
+.add-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ================= SUMMARY ================= */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.summary-card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+}
+
+.summary-card span {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.summary-card h2 {
+    margin: 5px 0 0;
+    color: #111827;
+    font-size: 24px;
+}
+
+.summary-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.summary-icon.blue {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.summary-icon.purple {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+.summary-icon.orange {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.summary-icon.green {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+/* ================= SECTION ================= */
+
+.bills-section {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.section-header h2 {
+    margin: 0 0 4px;
+    color: #111827;
+}
+
+.section-header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.bill-count {
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 8px 13px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ================= BILL GRID ================= */
+
+.bill-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.bill-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 20px;
+    transition: 0.25s;
+}
+
+.bill-card:hover {
+    border-color: #bfdbfe;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.08);
+    transform: translateY(-2px);
+}
+
+.bill-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bill-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.bill-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    border: none;
+    cursor: pointer;
+    font-size: 17px;
+}
+
+.icon-btn.edit {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.icon-btn.delete {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.bill-info {
+    margin-top: 15px;
+}
+
+.bill-info h3 {
+    margin: 0;
+    color: #111827;
+    font-size: 18px;
+}
+
+.date {
+    color: #9ca3af;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* ================= AMOUNT ================= */
+
+.amount-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    margin-top: 12px;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.amount-row span:first-child {
+    display: block;
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.amount-row strong {
+    display: block;
+    color: #111827;
+    font-size: 21px;
+    margin-top: 3px;
+}
+
+.status {
+    background: #fff7ed;
+    color: #ea580c;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status.settled {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+/* ================= PARTICIPANTS ================= */
+
+.participants {
+    margin-top: 16px;
+}
+
+.participants-header {
+    display: flex;
+    justify-content: space-between;
+    color: #6b7280;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.participants-header span:last-child {
+    background: #f1f5f9;
+    padding: 3px 8px;
+    border-radius: 10px;
+}
+
+.participant-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.participant-name {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    color: #374151;
+}
+
+.avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.participant-amount {
+    text-align: right;
+}
+
+.participant-amount strong {
+    display: block;
+    font-size: 13px;
+    color: #111827;
+}
+
+.participant-amount small {
+    display: block;
+    color: #ea580c;
+    font-size: 10px;
+}
+
+.participant-amount small.paid {
+    color: #059669;
+}
+
+.bill-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+/* ================= EMPTY ================= */
+
+.empty-state {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.empty-icon {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 20px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+
+.empty-state h3 {
+    margin: 18px 0 7px;
+    color: #111827;
+}
+
+.empty-state p {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* ================= OVERLAY ================= */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* ================= SIDE PANEL ================= */
+
+.side-panel {
+    width: 520px;
+    max-width: 95%;
+    height: 100%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -10px 0 35px rgba(0, 0, 0, 0.12);
+}
+
+.panel-header {
+    padding: 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.panel-header h2 {
+    margin: 0;
+    color: #111827;
+}
+
+.panel-header p {
+    color: #6b7280;
+    margin: 5px 0 0;
+    font-size: 13px;
+}
+
+.close-btn {
+    border: none;
+    background: #f1f5f9;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    font-size: 22px;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.panel-body {
+    padding: 25px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* ================= FORM ================= */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.amount-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.amount-input span {
+    padding-left: 13px;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.amount-input input {
+    border: none;
+}
+
+.amount-input input:focus {
+    box-shadow: none;
+}
+
+/* ================= SPLIT OPTIONS ================= */
+
+.split-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.split-options button {
+    text-align: left;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 11px;
+    padding: 13px;
+    cursor: pointer;
+}
+
+.split-options button.active {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+.split-options strong {
+    display: block;
+    color: #111827;
+}
+
+.split-options small {
+    color: #6b7280;
+    font-size: 11px;
+}
+
+/* ================= PARTICIPANT FORM ================= */
+
+.participants-form {
+    margin-top: 8px;
+}
+
+.participants-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.participants-title h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #111827;
+}
+
+.participants-title p {
+    margin: 3px 0 0;
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+.add-person-btn {
+    border: none;
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 8px 11px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.person-input {
+    display: grid;
+    grid-template-columns: 30px 1fr 80px 30px;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 9px;
+}
+
+.person-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+}
+
+.person-input input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+    box-sizing: border-box;
+}
+
+.person-amount {
+    font-size: 12px;
+    color: #2563eb;
+    font-weight: 600;
+    text-align: right;
+}
+
+.unequal-input {
+    font-size: 12px;
+}
+
+.remove-person {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: #fef2f2;
+    color: #dc2626;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.amount-summary {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.amount-summary strong {
+    color: #059669;
+}
+
+.amount-summary strong.invalid {
+    color: #dc2626;
+}
+
+.amount-summary small {
+    color: #dc2626;
+    display: block;
+}
+
+/* ================= FOOTER ================= */
+
+.panel-footer {
+    padding: 18px 24px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancel-btn,
+.save-btn {
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+}
+
+.save-btn {
+    border: none;
+    background: linear-gradient(135deg, #2563eb, #1e3a8a);
+    color: white;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1100px) {
+
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 800px) {
+
+    .split-bill-page {
+        padding: 20px;
+    }
+
+    .page-header {
+        align-items: flex-start;
+        gap: 15px;
+        flex-direction: column;
+    }
+
+    .bill-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 550px) {
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .side-panel {
+        width: 100%;
+        max-width: 100%;
+    }
+
+}
+.participant-payment {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.mark-paid-btn {
+    border: none;
+    background: #ecfdf5;
+    color: #059669;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.mark-paid-btn:hover {
+    background: #d1fae5;
+    transform: translateY(-1px);
+}
+.personal-balance {
+    margin: 15px 0;
+    padding: 12px 14px;
+    border-radius: 11px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+}
+
+.balance-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.balance-content span {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.balance-content strong {
+    font-size: 14px;
+}
+
+.balance-content strong.receive {
+    color: #059669;
+}
+
+.balance-content strong.owe {
+    color: #dc2626;
+}
+
+.balance-content strong.settled-balance {
+    color: #059669;
+}
+
+/* ================= PERSONAL SUMMARY ================= */
+
+.personal-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.personal-card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid #eef2f7;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+}
+
+.personal-card-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.personal-card span {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.personal-card h3 {
+    margin: 4px 0;
+    font-size: 22px;
+    color: #111827;
+}
+
+.personal-card small {
+    color: #94a3b8;
+    font-size: 10px;
+}
+
+.owe-card .personal-card-icon {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.receive-card .personal-card-icon {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.pending-card .personal-card-icon {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+@media (max-width: 800px) {
+
+    .personal-summary {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* ================= SEARCH & FILTERS ================= */
+
+.bill-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+    align-items: center;
+}
+
+.search-box {
+    flex: 1;
+    position: relative;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 11px 13px 11px 38px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.search-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    z-index: 1;
+}
+
+.bill-filters select {
+    min-width: 140px;
+    padding: 11px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #374151;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.bill-filters select:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.clear-filter-btn {
+    border: none;
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 10px 16px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+
+    .bill-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .bill-filters select {
+        width: 100%;
+    }
+
+}
+
+/* ================= SETTLEMENT ================= */
+
+.settlement-section {
+    margin-top: 18px;
+    padding: 15px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+}
+
+.settlement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+}
+
+.settlement-header h4 {
+    margin: 0;
+    color: #111827;
+    font-size: 13px;
+}
+
+.settlement-header p {
+    margin: 3px 0 0;
+    color: #94a3b8;
+    font-size: 10px;
+}
+
+.settlement-count {
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.settlement-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+    border-top: 1px solid #e5e7eb;
+}
+
+.settlement-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 90px;
+}
+
+.settlement-user strong {
+    display: block;
+    color: #374151;
+    font-size: 11px;
+}
+
+.settlement-user small {
+    display: block;
+    color: #94a3b8;
+    font-size: 9px;
+    margin-top: 2px;
+}
+
+.settlement-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.settlement-avatar.from {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.settlement-avatar.to {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.settlement-middle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.settlement-amount {
+    color: #111827;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.settlement-arrow {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* ================= FULLY SETTLED ================= */
+
+.settled-message {
+    margin-top: 18px;
+    padding: 14px;
+    background: #ecfdf5;
+    border: 1px solid #d1fae5;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.settled-check {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #d1fae5;
+    color: #059669;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.settled-message strong {
+    display: block;
+    color: #047857;
+    font-size: 12px;
+}
+
+.settled-message small {
+    display: block;
+    color: #6b7280;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: #fff;
+    color: #374151;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-group select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.participant-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.participant-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.participant-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.participant-details strong {
+    display: block;
+    font-size: 12px;
+    color: #111827;
+}
+
+.participant-details span {
+    display: block;
+    margin-top: 3px;
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+.participant-payment {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.payment-numbers {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+}
+
+.payment-numbers span {
+    font-size: 10px;
+    color: #64748b;
+}
+
+.payment-numbers strong {
+    color: #374151;
+}
+
+.payment-numbers .remaining {
+    color: #dc2626;
+}
+
+.paid-status {
+    color: #059669 !important;
+    font-weight: 600;
+}
+
+.mark-paid-btn {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.mark-paid-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 650px) {
+
+    .participant-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .participant-payment {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .payment-numbers {
+        align-items: flex-start;
+    }
+}
+
+/* ==========================================
+   Add Yourself Button
+========================================== */
+
+.add-self-btn {
+    width: 100%;
+    margin: 12px 0 16px;
+
+    padding: 11px 16px;
+
+    border: 1px dashed #2563eb;
+    border-radius: 10px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.add-self-btn:hover:not(:disabled) {
+    background: #dbeafe;
+    border-color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.add-self-btn:disabled {
+    background: #f0fdf4;
+    border-color: #22c55e;
+    color: #16a34a;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+/* ==========================================
+   Category Dropdown
+========================================== */
+
+.form-group select {
+    width: 100%;
+    height: 44px;
+
+    padding: 0 14px;
+
+    border: 1px solid #dbe3ef;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #172033;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.form-group select:hover {
+    border-color: #b9c7dc;
+}
+
+.form-group select:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.form-group select option {
+    color: #172033;
+    background: #ffffff;
+}

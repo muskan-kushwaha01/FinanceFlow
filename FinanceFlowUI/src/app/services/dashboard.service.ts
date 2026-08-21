@@ -23,34 +23,40 @@ export class DashboardService {
   constructor(private http: HttpClient) { }
 
   getSummary(
-    month: number,
-    year: number
-  ): Observable<DashboardSummary> {
+  userId: number,
+  month: number,
+  year: number
+) {
 
-    return this.http.get<DashboardSummary>(
-      `${this.apiUrl}/summary?month=${month}&year=${year}`
-    );
-  }
+  return this.http.get<DashboardSummary>(
+    `${this.apiUrl}/summary?userId=${userId}&month=${month}&year=${year}`
+  );
+
+}
 
   getRecentTransactions(
-    month: number,
-    year: number
-  ): Observable<RecentTransaction[]> {
+  userId: number,
+  month: number,
+  year: number
+) {
 
-    return this.http.get<RecentTransaction[]>(
-      `${this.apiUrl}/recent-transactions?month=${month}&year=${year}`
-    );
-  }
+  return this.http.get<RecentTransaction[]>(
+    `${this.apiUrl}/recent-transactions?userId=${userId}&month=${month}&year=${year}`
+  );
 
-  getExpenseByCategory(
-    month: number,
-    year: number
-  ): Observable<ExpenseCategory[]> {
+}
 
-    return this.http.get<ExpenseCategory[]>(
-      `${this.apiUrl}/expense-by-category?month=${month}&year=${year}`
-    );
-  }
+ getExpenseByCategory(
+  userId: number,
+  month: number,
+  year: number
+) {
+
+  return this.http.get<ExpenseCategory[]>(
+    `${this.apiUrl}/expense-by-category?userId=${userId}&month=${month}&year=${year}`
+  );
+
+}
 
   getMonthlyReport(
     userId: number,

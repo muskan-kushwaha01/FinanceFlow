@@ -1,4 +1,6 @@
 using FinanceTrackerApp.DTO.Profile;
+using FinanceTrackerApp.DTOs;
+using FinanceTrackerApp.DTOs.ResetPassword;
 using FinanceTrackerApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -132,9 +134,41 @@ public class UsersController : ControllerBase
         });
     }
 
+    // PUT: api/Users/reset-password
+    [HttpPut("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordDto request)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == request.Email);
+
+        if (user == null)
+        {
+            return NotFound(new
+            {
+                message = "No account found with this email address."
+            });
+        }
+
+        var passwordHasher = new PasswordHasher<User>();
+
+        user.PasswordHash = passwordHasher.HashPassword(
+            user,
+            request.NewPassword
+        );
+
+        user.UpdatedAt = DateTime.Now;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            message = "Password reset successfully."
+        });
+    }
+
     // POST: api/Users/register
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterModel register)
+    public async Task<IActionResult> Register(RegisterDto register)
     {
         // Check if email already exists
         var existingUser = await _context.Users
@@ -171,7 +205,7 @@ public class UsersController : ControllerBase
         });
     }
 
-    
+
     // PUT: api/Users/5
     [HttpPut("{userid}")]
     public async Task<IActionResult> PutUser(int? userid, User user)

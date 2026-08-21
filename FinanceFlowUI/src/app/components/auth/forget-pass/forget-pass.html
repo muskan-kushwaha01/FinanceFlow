@@ -9,16 +9,21 @@
             <h1>FinanceFlow</h1>
 
             <h2>
-                Begin Your Financial Journey.<br>
-                Build Better Money Habits.
+                Take Control.<br>
+                Start Fresh.
             </h2>
 
             <p>
-                Create your FinanceFlow account and take control of your income,
-                expenses, budgets, subscriptions and savings goals.
+                Reset your password and get back to managing your
+                finances with FinanceFlow.
             </p>
 
             <div class="features">
+
+                <div class="feature">
+                    <div class="icon">✔</div>
+                    <span>Secure Account Access</span>
+                </div>
 
                 <div class="feature">
                     <div class="icon">✔</div>
@@ -28,11 +33,6 @@
                 <div class="feature">
                     <div class="icon">✔</div>
                     <span>Budget Planning</span>
-                </div>
-
-                <div class="feature">
-                    <div class="icon">✔</div>
-                    <span>Subscription Management</span>
                 </div>
 
                 <div class="feature">
@@ -75,7 +75,8 @@
 
     </div>
 
-    <!-- Right Panel -->
+
+    <!-- Right Section -->
 
     <div class="right-panel">
 
@@ -85,24 +86,12 @@
                 ₹
             </div>
 
-            <h2>Create Account 🚀</h2>
+            <h2>Reset Password 🔐</h2>
 
             <p class="subtitle">
-                Start your financial journey today.
+                Create a new password for your account.
             </p>
 
-            <!-- Full Name -->
-
-            <div class="input-group">
-
-                <label>Full Name</label>
-
-                <input
-                    type="text"
-                    placeholder="Enter your full name"
-                    [(ngModel)]="fullName">
-
-            </div>
 
             <!-- Email -->
 
@@ -112,23 +101,24 @@
 
                 <input
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder="Enter your registered email"
                     [(ngModel)]="email">
 
             </div>
 
-            <!-- Password -->
+
+            <!-- New Password -->
 
             <div class="input-group">
 
-                <label>Password</label>
+                <label>New Password</label>
 
                 <div class="password-box">
 
                     <input
                         [type]="showPassword ? 'text' : 'password'"
-                        placeholder="Create a password"
-                        [(ngModel)]="password">
+                        placeholder="Enter new password"
+                        [(ngModel)]="newPassword">
 
                     <button
                         type="button"
@@ -143,6 +133,7 @@
 
             </div>
 
+
             <!-- Confirm Password -->
 
             <div class="input-group">
@@ -153,7 +144,7 @@
 
                     <input
                         [type]="showConfirmPassword ? 'text' : 'password'"
-                        placeholder="Confirm password"
+                        placeholder="Confirm new password"
                         [(ngModel)]="confirmPassword">
 
                     <button
@@ -169,13 +160,17 @@
 
             </div>
 
+
+            <!-- Reset Button -->
+
             <button
                 class="login-btn"
-                (click)="register()">
+                (click)="resetPassword()">
 
-                Create Account
+                Reset Password
 
             </button>
+
 
             <div class="divider">
 
@@ -183,11 +178,15 @@
 
             </div>
 
+
             <p class="register">
 
-                Already have an account?
+                Remember your password?
 
-<a routerLink="/login">Login</a>
+                <a routerLink="/login">
+                    Login
+                </a>
+
             </p>
 
         </div>

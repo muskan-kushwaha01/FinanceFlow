@@ -28,7 +28,8 @@ builder.Services.AddOpenApi(options =>
 
 
 // JWT Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(
+    JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters =
@@ -50,6 +51,31 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         Encoding.UTF8.GetBytes(
                             builder.Configuration["Jwt:Key"]!))
             };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine(
+                    "JWT AUTHENTICATION FAILED:"
+                );
+
+                Console.WriteLine(
+                    context.Exception.Message
+                );
+
+                return Task.CompletedTask;
+            },
+
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine(
+                    "JWT TOKEN VALIDATED SUCCESSFULLY"
+                );
+
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization();

@@ -22,5 +22,9 @@ export class AuthService {
   register(registerData: any): Observable<any> {
     return this.http.post(`${this.userApi}/register`, registerData);
   }
+  // Reset Password
+resetPassword(resetData: any): Observable<any> {
+  return this.http.put(`${this.userApi}/reset-password`, resetData);
+}
 
 }

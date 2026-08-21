@@ -26,6 +26,9 @@ public partial class FinanceContext : DbContext
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<SavingGoal> SavingGoals { get; set; }
     public virtual DbSet<Subscription> Subscriptions { get; set; }
+    public virtual DbSet<SplitBill> SplitBills { get; set; }
+
+    public virtual DbSet<SplitBillParticipant> SplitBillParticipants { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -217,6 +220,59 @@ public partial class FinanceContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Subscription_User");
+        });
+
+        modelBuilder.Entity<SplitBill>(entity =>
+        {
+            entity.HasKey(e => e.SplitBillId);
+
+            entity.Property(e => e.BillName)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+
+            entity.Property(e => e.TotalAmount)
+                .HasColumnType("decimal(18,2)");
+
+            entity.Property(e => e.SplitType)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(e => e.User)
+                .WithMany(u => u.SplitBills)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(e => e.Category)
+                .WithMany()
+                .HasForeignKey(e => e.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasMany(e => e.Participants)
+                .WithOne(p => p.SplitBill)
+                .HasForeignKey(p => p.SplitBillId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+
+        modelBuilder.Entity<SplitBillParticipant>(entity =>
+        {
+            entity.HasKey(e => e.ParticipantId);
+
+            entity.Property(e => e.ParticipantName)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+            entity.Property(e => e.AmountOwed)
+                .HasColumnType("decimal(18,2)");
+
+            entity.Property(e => e.AmountPaid)
+                .HasColumnType("decimal(18,2)");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())");
         });
 
 

@@ -33,58 +33,92 @@ export class RegisterComponent {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  register() {
+ register() {
 
-    if (this.password !== this.confirmPassword) {
-      alert("Passwords do not match.");
-      return;
+  if (!this.fullName.trim()) {
+    alert("Please enter your full name.");
+    return;
+  }
+
+  if (!this.email.trim()) {
+    alert("Please enter your email.");
+    return;
+  }
+
+  if (!this.password) {
+    alert("Please enter a password.");
+    return;
+  }
+
+  if (this.password.length < 6) {
+    alert("Password must be at least 6 characters long.");
+    return;
+  }
+
+  if (!this.confirmPassword) {
+    alert("Please confirm your password.");
+    return;
+  }
+
+  if (this.password !== this.confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  const registerData = {
+    fullName: this.fullName.trim(),
+    email: this.email.trim(),
+    password: this.password
+  };
+
+  this.authService.register(registerData).subscribe({
+
+    next: () => {
+
+      const loginData = {
+        email: this.email,
+        password: this.password
+      };
+
+      this.authService.login(loginData).subscribe({
+
+        next: (response: any) => {
+
+          localStorage.setItem("token", response.access_token);
+          localStorage.setItem("userId", response.userId.toString());
+          localStorage.setItem("fullName", response.fullName);
+          localStorage.setItem("email", response.email);
+
+          alert("Registration Successful!");
+
+          this.router.navigate(['/app/dashboard']);
+        },
+
+        error: (err: any) => {
+
+          alert(
+            err.error?.message ||
+            "Registration successful, but automatic login failed."
+          );
+
+          this.router.navigate(['/login']);
+        }
+
+      });
+
+    },
+
+    error: (err: any) => {
+
+      alert(
+        err.error?.message ||
+        "Registration failed. Please try again."
+      );
+
     }
 
-    const registerData = {
-      fullName: this.fullName,
-      email: this.email,
-      password: this.password
-    };
+  });
 
-    this.authService.register(registerData).subscribe({
-
-      next: () => {
-
-        // Automatically log in after successful registration
-        const loginData = {
-          email: this.email,
-          password: this.password
-        };
-
-        this.authService.login(loginData).subscribe({
-
-          next: (response: any) => {
-
-            // Store JWT Token
-            localStorage.setItem("token", response.access_token);
-            localStorage.setItem("userId", response.userId.toString());
-            localStorage.setItem("fullName", response.fullName);
-            localStorage.setItem("email", response.email);
-
-            alert("Registration Successful!");
-
-this.router.navigate(['/app/dashboard']); 
-          },
-
-          error: (err: any) => {
-            alert(err.error.message);
-          }
-
-        });
-
-      },
-
-      error: (err: any) => {
-        alert(err.error.message);
-      }
-
-    });
-
-  }
+}
 
 }
